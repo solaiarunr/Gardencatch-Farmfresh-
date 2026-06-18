@@ -576,7 +576,7 @@ class ItemDetailsViewController: UIViewController {
         }
     }
     
-    func setBottonButton() {
+    func setBottonButtonold() {
         if (UserDefaultModule.shared.getUserData()?.user_id ?? "") == (self.itemDetails?.sellerId ?? "") {
             if (itemDetails?.itemStatus ?? "") == "onsale" {
                 if (self.itemDetails?.promotionType ?? "") != "Normal" {
@@ -616,6 +616,61 @@ class ItemDetailsViewController: UIViewController {
             }
         }
 
+    }
+    func setBottonButton() {
+        
+        let itemStatus = self.itemDetails?.itemStatus ?? ""
+        
+        if (UserDefaultModule.shared.getUserData()?.user_id ?? "") == (self.itemDetails?.sellerId ?? "") {
+            
+            if itemStatus == "onsale" {
+                
+                if (self.itemDetails?.promotionType ?? "") != "Normal" {
+                    self.buyNowButton.setTitle(getLanguage["Promotion Details"] ?? "", for: .normal)
+                }
+                else {
+                    if (ADMIN_VIEW_MODEL.adminModel?.result.promotion ?? "") == "enable" {
+                        self.buyNowButton.setTitle(getLanguage["promote_your_product"] ?? "", for: .normal)
+                    } else {
+                        self.buyNowButton.isHidden = true
+                    }
+                }
+            }
+            else if itemStatus == "sold" {
+                self.buyNowButton.setTitle(getLanguage["back_to_sale"] ?? "", for: .normal)
+            }
+            else if itemStatus == "expired" {
+                self.buyNowButton.isHidden = true
+                self.chatButton.isHidden = true
+            }
+            
+            self.chatButton.setTitle(getLanguage["insights"] ?? "", for: .normal)
+        }
+        else {
+            
+            if itemStatus == "expired" {
+                self.buyNowButton.isHidden = true
+                self.chatButton.isHidden = true
+                return
+            }
+            
+            if BUYNOW_MODEL_FLAG {
+                
+                if (self.itemDetails?.instantBuy ?? "") == "1" && itemStatus == "onsale" {
+                    self.buyNowButton.isHidden = false
+                }
+                else {
+                    self.chatButton.backgroundColor = UIColor(named: "AppThemeColor")
+                    self.chatButton.setTitleColor(UIColor(named: "whitecolor"), for: .normal)
+                    self.buyNowButton.isHidden = true
+                }
+            }
+            else {
+                self.chatButton.backgroundColor = UIColor(named: "AppThemeColor")
+                self.chatButton.setTitleColor(UIColor(named: "whitecolor"), for: .normal)
+                self.buyNowButton.isHidden = true
+            }
+        }
     }
     
     @IBAction func youtubeButtonAct(_ sender: UIButton) {

@@ -20,7 +20,6 @@ class ImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var shadowView: UIView!
     @IBOutlet weak var newView: UIImageView!
-    
     @IBOutlet weak var memberShipView: UIView!
     @IBOutlet weak var memberShipLabel: UILabel!
     @IBOutlet weak var membershipImageView: UIImageView!
@@ -65,38 +64,78 @@ class ImageCollectionViewCell: UICollectionViewCell {
         }
         
         if itemData.itemStatus == "onsale" {
+            print("PROMOTION_FLAG",PROMOTION_FLAG)
             if itemData.promotionType != "Normal" && PROMOTION_FLAG {
                 self.statusButton.setTitle(itemData.promotionType, for: .normal)
+//                if itemData.promotionType == "Urgent" {
+//                    if itemData.membership_enable == "enable"{
+//                        self.statusButton.isHidden = true
+//                        self.newView.image = UIImage(named: "business_withicon")
+//                        self.newView.isHidden = false
+//                    }else{
+//                        self.statusButton.isHidden = true
+//                        self.newView.image = #imageLiteral(resourceName: "business")
+//                        self.newView.isHidden = false
+//                    }
+//                }
+//                if itemData.promotionType == "local business" {
+//                    if itemData.membership_enable == "enable"{
+//                        self.statusButton.isHidden = true
+//                        self.newView.image = UIImage(named: "businesslocalpremium")
+//                        self.newView.isHidden = false
+//                    }else{
+//                        self.statusButton.isHidden = true
+//                        self.newView.image = #imageLiteral(resourceName: "businesslocal")
+//                        self.newView.isHidden = false
+//                    }
+//                }
+//                else if itemData.promotionType == "Ad" {
+//                    if itemData.membership_enable == "enable"{
+//                        self.statusButton.isHidden = true
+//                        self.newView.image = UIImage(named: "ad_new_withicon")
+//                        self.newView.isHidden = false
+//                    }else{
+//                        self.statusButton.isHidden = true
+//                        self.newView.image = #imageLiteral(resourceName: "ad_new")
+//                        self.newView.isHidden = false
+//                    }
+//                }else{
+//                    self.newView.isHidden = true
+//
+//                }
+                
                 if itemData.promotionType == "Urgent" {
-                    if itemData.membership_enable == "enable"{
+                    if itemData.membership_enable == "enable" {
                         self.statusButton.isHidden = true
                         self.newView.image = UIImage(named: "business_withicon")
                         self.newView.isHidden = false
-                    }else{
+                    } else {
                         self.statusButton.isHidden = true
                         self.newView.image = #imageLiteral(resourceName: "business")
                         self.newView.isHidden = false
                     }
-
-//                    self.statusButton.setTitle(getLanguage["urgent"] ?? "", for: .normal)
-//                    self.statusButton.setBackgroundColor(color: UIColor(named: "UrgentColor") ?? .white, forState: .normal)
-                }
-                else if itemData.promotionType == "Ad" {
-                    if itemData.membership_enable == "enable"{
+                } else if itemData.promotionType == "local business" {
+                    if itemData.membership_enable == "enable" {
+                        self.statusButton.isHidden = true
+                        self.newView.image = UIImage(named: "businesslocalpremium")
+                        self.newView.isHidden = false
+                    } else {
+                        self.statusButton.isHidden = true
+                        self.newView.image = #imageLiteral(resourceName: "businesslocal")
+                        self.newView.isHidden = false
+                    }
+                } else if itemData.promotionType == "Ad" {
+                    if itemData.membership_enable == "enable" {
                         self.statusButton.isHidden = true
                         self.newView.image = UIImage(named: "ad_new_withicon")
                         self.newView.isHidden = false
-                    }else{
+                    } else {
                         self.statusButton.isHidden = true
                         self.newView.image = #imageLiteral(resourceName: "ad_new")
                         self.newView.isHidden = false
                     }
-//                    self.statusButton.setTitle(getLanguage["ad"] ?? "", for: .normal)
-//                    self.statusButton.backgroundColor = UIColor(named: "NameColor")
-//                    self.statusButton.setBackgroundColor(color: UIColor(named: "NameColor") ?? .white, forState: .normal)
-                }else{
+                } else {
                     self.newView.isHidden = true
-
                 }
             }
             else {

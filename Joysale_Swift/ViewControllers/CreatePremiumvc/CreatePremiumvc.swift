@@ -1,26 +1,29 @@
 //
-//  MyPromotionViewController.swift
+//  CreatePremiumvc.swift
 //  Joysale_Swift
 //
-//  Created by Hitasoft on 20/07/20.
+//  Created by Hitasoft on 22/07/20.
 //  Copyright © 2020 Hitasoft. All rights reserved.
 //
 
 import UIKit
 import MXSegmentedPager
 
-class MyPromotionViewController: MXSegmentedPagerController {
-    
-    let urgentVC = MyPromotionSubViewController()
-    let adVC = MyPromotionSubViewController()
-    let premiumVC = MyPromotionSubViewController()
-    let expiredVC = MyPromotionSubViewController()
-    var titleArray = ["urgent", "advertisement","localBusiness","expired"]
-    var promotionArr = [MyPromotionSubViewController]()
+class CreatePremiumvc: MXSegmentedPagerController {
+
+    let urgentVC = PremiumListVc()
+    let adVC = PremiumListVc()
+
+    var titleArray = ["MonthlyLocalBusiness", "YearlyLocalBusiness"]
+    var promotionArr = [PremiumListVc]()
+    var itemID = ""
+    var isTabBar = false
+    let delegate = UIApplication.shared.delegate as! AppDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configUI()
+        segmentedPager.pager.delegate = self  // ✅ must add this
         // Do any additional setup after loading the view.
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -39,13 +42,21 @@ class MyPromotionViewController: MXSegmentedPagerController {
             if isLeft == 1 {
             }
             else {
-                self.navigationController?.popViewController(animated: true)
+                if isTabBar {
+                    delegate.initVC(initialView: TabbarController())
+                }
+                else {
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
         }
     }
+
     func configUI() {
-        self.promotionArr = [urgentVC, adVC,premiumVC, expiredVC]
-        self.navigationController?.customNavigationBarView(title: "my_promotions", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 20), vc: self)
+        urgentVC.premiumType = .monthly
+        adVC.premiumType = .yearly
+        self.promotionArr = [urgentVC, adVC]
+        self.navigationController?.customNavigationBarView(title: "create_promotionn", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 20), vc: self)
         self.navigationController?.customRightBarButtonView(title: "", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 18), imageName: "detail_back", isLeft: true, vc: self, transparantView: false)
         segmentedPager.backgroundColor = UIColor(named: "BackGroundColor")
         segmentedPager.segmentedControl.backgroundColor = UIColor(named: "whitecolor")
@@ -59,8 +70,6 @@ class MyPromotionViewController: MXSegmentedPagerController {
             self.segmentedPager.pager.transform = CGAffineTransform(scaleX: -1, y: 1)
             self.urgentVC.view.transform = CGAffineTransform(scaleX: -1, y: 1)
             self.adVC.view.transform = CGAffineTransform(scaleX: -1, y: 1)
-            self.premiumVC.view.transform = CGAffineTransform(scaleX: -1, y: 1)
-            self.expiredVC.view.transform = CGAffineTransform(scaleX: -1, y: 1)
         }
     }
     
@@ -73,9 +82,32 @@ class MyPromotionViewController: MXSegmentedPagerController {
     override func numberOfPages(in segmentedPager: MXSegmentedPager) -> Int {
         return titleArray.count
     }
+
     override func segmentedPager(_ segmentedPager: MXSegmentedPager, viewControllerForPageAt index: Int) -> UIViewController {
         let vc = promotionArr[index]
         vc.view.tag = index
         return vc
+    }
+
+    // ✅ Add below this
+    override func segmentedPager(_ segmentedPager: MXSegmentedPager, didSelectViewAt index: Int) {
+        switch index {
+        case 0:
+            urgentVC.selectedMonthlyIndex = nil
+            urgentVC.ListTV.reloadData()
+        case 1:
+            adVC.selectedYearlyIndex = nil
+            adVC.ListTV.reloadData()
+        default:
+            break
+        }
+    }
+    
+}
+
+extension CreatePremiumvc: MXPagerViewDelegate {
+    func pagerView(_ pagerView: MXPagerView, didMoveToPage page: UIView, at index: Int) {
+        urgentVC.clearSelection()  // ✅ clear both when tab changes
+        adVC.clearSelection()
     }
 }

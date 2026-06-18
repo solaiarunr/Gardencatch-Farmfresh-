@@ -21,7 +21,6 @@ class PromotionHeaderTableViewCell: UITableViewHeaderFooterView {
     @IBOutlet weak var lineView: UIView!
     @IBOutlet weak var promotionTitleLabel: UILabel!
     @IBOutlet weak var OraganicImageview: UIImageView!
-    
     @IBOutlet weak var TickImage: UIImageView!
     @IBOutlet weak var Tickimage3: UIImageView!
     @IBOutlet weak var Tickimage2: UIImageView!

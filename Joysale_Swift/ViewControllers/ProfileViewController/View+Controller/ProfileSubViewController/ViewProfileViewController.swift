@@ -25,7 +25,8 @@ class ViewProfileViewController: MXSegmentedPagerController {
     var isTabBar = false
     let delegate = UIApplication.shared.delegate as! AppDelegate
     var previousIndex = 0
-
+    var selectedTabIndex = 0
+    var openReviewTab = false
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(indicatorView)
@@ -51,10 +52,17 @@ class ViewProfileViewController: MXSegmentedPagerController {
         self.setStatusBarBackgroundColor(color: UIColor(named: "AppThemeColor") ?? .black)
         self.navigationController?.isNavigationBarHidden = false
     }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            if self.selectedTabIndex < self.titleArray.count {
+                self.segmentedPager.segmentedControl.select(index: self.selectedTabIndex, animated: true)
+            }
+        }
+    }
     func configUI() {
         self.myProfileArray = [myListingVC, myLikeVC, followerVC, followingVC]
-
-        
         if (ADMIN_VIEW_MODEL.adminModel?.result.buynow ?? "") == "disable"{
             self.titleArray = ["my_listing", "liked", "followers", "followings"]
         }
@@ -62,7 +70,6 @@ class ViewProfileViewController: MXSegmentedPagerController {
             self.titleArray = ["my_listing", "liked", "followers", "followings", "review"]
             self.myProfileArray = [myListingVC, myLikeVC, followerVC, followingVC, reviewVC]
         }
-         
         self.navigationController?.isNavigationBarHidden = true
         segmentedPager.backgroundColor = UIColor(named: "BackGroundColor")
         segmentedPager.segmentedControl.backgroundColor = UIColor(named: "whitecolor")

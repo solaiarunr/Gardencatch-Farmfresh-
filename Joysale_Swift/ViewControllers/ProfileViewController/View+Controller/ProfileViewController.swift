@@ -22,7 +22,7 @@ class ProfileViewController: UIViewController {
    //var bannerView1: GADBannerView!
     let queue = DispatchQueue(label: "InternetConnectionMonitor")
     var signupModel: SignupModel?
-
+    let promotionVM = PromotionViewModel()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.bannerView.isHidden = true
@@ -45,6 +45,49 @@ class ProfileViewController: UIViewController {
         /***Addons***/
 //        self.loadBannerView()
      }
+    
+    func getSubscriptionDetails() {
+        indicatorView.startAnimating()
+        promotionVM.getSubscriptionDetails { [weak self] status in
+            DispatchQueue.main.async {
+                indicatorView.stopAnimating()
+                if status {
+                    if let details = self?.promotionVM.subscriptionDetailsModel?.result {
+                        let pageObj = PremiumAdvc()
+                        self?.delegate.navigationController.pushViewController(pageObj, animated: true)
+                    }
+                }else{
+                    let alert = UIAlertController(
+                        title: "Alert",
+                        message: "No subscription details found",
+                        preferredStyle: .alert
+                    )
+                    alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                        self?.navigationController?.popViewController(animated: true)
+                    })
+                    self?.present(alert, animated: true)
+                }
+            }
+
+        } onFailure: { error in
+
+            DispatchQueue.main.async {
+                indicatorView.stopAnimating()
+                let alert = UIAlertController(
+                    title: "Alert",
+                    message: "No Found Subscription Details",
+                    preferredStyle: .alert
+                )
+
+                alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+                    self.navigationController?.popViewController(animated: true)
+                })
+
+                self.present(alert, animated: true)
+                print(error)
+            }
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         self.loadData()
@@ -122,6 +165,8 @@ class ProfileViewController: UIViewController {
                     self.profileArr.append("help")
                     self.profileArr.append("MembershipSubscription")
                     self.profileArr.append("Invite friends")
+                    self.profileArr.append("productanalytics")
+                    self.profileArr.append("comments")
                     self.profileArr.append("deleteaccount")
                     self.profileArr.append("logout")
                     self.tableView.reloadData()
@@ -364,6 +409,22 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             pageObj.modalPresentationStyle = .overCurrentContext
             self.delegate.navigationController.present(pageObj, animated: true, completion: nil)
         }
+        else if self.profileArr[indexPath.section] == "productanalytics" {
+            let pageObj = ViewProfileViewController()
+            pageObj.viewModel = self.viewModel
+            pageObj.userId = UserDefaultModule.shared.getUserData()?.user_id ?? ""
+            pageObj.modalPresentationCapturesStatusBarAppearance = true
+            self.delegate.navigationController.pushViewController(pageObj, animated: true)
+        }
+     
+        else if self.profileArr[indexPath.section] == "comments" {
+            let pageObj = ViewProfileViewController()
+            pageObj.viewModel = self.viewModel
+            pageObj.userId = UserDefaultModule.shared.getUserData()?.user_id ?? ""
+            pageObj.modalPresentationCapturesStatusBarAppearance = true
+            pageObj.selectedTabIndex = 4
+            self.delegate.navigationController.pushViewController(pageObj, animated: true)
+        }
         else if self.profileArr[indexPath.section] == "myordersale" {
             let pageObj = MyOrderSegmentViewController()
             self.delegate.navigationController.pushViewController(pageObj, animated: true)
@@ -374,8 +435,9 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             self.delegate.navigationController.pushViewController(pageObj, animated: true)
         }
         else if self.profileArr[indexPath.section] == "MembershipSubscription" {
-            let pageObj = PremiumAdvc()
-            self.delegate.navigationController.pushViewController(pageObj, animated: true)
+            self.getSubscriptionDetails()
+//            let pageObj = PremiumAdvc()
+//            self.delegate.navigationController.pushViewController(pageObj, animated: true)
         }
         else if self.profileArr[indexPath.section] == "donate"{                                 //MARK: Custom Work
             let pageObj = HelpViewController()

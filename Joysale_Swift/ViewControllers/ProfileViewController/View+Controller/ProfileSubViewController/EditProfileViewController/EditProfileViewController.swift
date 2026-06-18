@@ -132,7 +132,7 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource,
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
-            return 3
+            return 5
         }
         else if section == 2 {
             return 7

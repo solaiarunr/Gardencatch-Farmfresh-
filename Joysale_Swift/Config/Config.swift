@@ -32,8 +32,14 @@ let GOOGLE_URL = "https://maps.google.com/maps/api/geocode/json?sensor=false"
 let APP_RTC_URL = "http://yourturn_url:0000"
 
 //MARK: NEW DOMAIN CHANGES
+/*
 let BASE_URL = "https://farmfresh247.com/"
 let chatURL =  "https://farmfresh247.com:8081"
+ */
+let BASE_URL = "https://appservices.hitasoft.in/farmfresh/"
+let chatURL =  "https://appservices.hitasoft.in:2089"
+
+
 /*
 //MARK: Custom Work url
 let BASE_URL = "https://appservices.hitasoft.in/gardencatch/"
@@ -194,3 +200,5 @@ let DELETE_ACCOUNT = "deleteaccount"
 
 let AWS_UPLOAD_URL = "awsupload" // Server side timeout error when upload 5 images. so use this api to save image name
 
+let getpremium = "getpremium"
+let Subscriptiondetails = "subscriptiondetails"

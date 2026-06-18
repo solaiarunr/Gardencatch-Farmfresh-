@@ -130,11 +130,20 @@ class ProfileResultModel{
     var userName : String!
     var verification : VerificationModel!
     var emailVerification : String!
-
+    var freepost :String!
+    var freepostcount:String!
+    var freepost_remainingdays:String!
+    var subscriptionEnable:String!
+    
     init(fromJson json: JSON!){
         if json.isEmpty{
             return
         }
+        
+        subscriptionEnable = json["subscriptionenable"].stringValue
+        freepost_remainingdays = json["freepost_remainingdays"].stringValue
+        freepost = json["freepost"].stringValue
+        freepostcount = json["freepostcount"].stringValue
         city = json["city"].stringValue
         emailVerification = json["email_verification"].stringValue
         country = json["country"].stringValue

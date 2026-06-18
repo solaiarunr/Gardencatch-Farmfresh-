@@ -18,7 +18,7 @@ class ProfileViewModel {
     var tosModel: TOSModel?
     var stripeModel: StripeModel?
 
-    public func getProfileData(user_id: String,user_name: String, onSuccess success: @escaping (Bool) -> Void, onFailure failure: @escaping (String) -> Void) {
+    public func getProfileData(user_id: String,user_name: String  = "", onSuccess success: @escaping (Bool) -> Void, onFailure failure: @escaping (String) -> Void) {
         
         let parameter: [String: Any] = ["user_id":user_id, "user_name":user_name]
     

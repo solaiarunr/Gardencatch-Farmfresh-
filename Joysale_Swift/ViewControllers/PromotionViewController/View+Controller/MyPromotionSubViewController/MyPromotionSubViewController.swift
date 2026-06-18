@@ -52,6 +52,9 @@ class MyPromotionSubViewController: UIViewController {
         else if self.view.tag == 1 {
             type = "ad"
         }
+        else if self.view.tag == 2 {
+            type = "localbusiness"
+        }
         else {
             type = "expire"
         }

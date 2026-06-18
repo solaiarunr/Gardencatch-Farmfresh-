@@ -27,7 +27,6 @@
      @IBOutlet weak var priceLabel: UILabel!
      @IBOutlet weak var itemNameLabel: UILabel!
      @IBOutlet weak var detailsDescriptionStackView: UIStackView!
-     
      @IBOutlet weak var detailsValueLabel: UILabel!
      @IBOutlet weak var detailsTitleLabel: UILabel!
      @IBOutlet weak var moreButton: UIButton!
@@ -35,7 +34,6 @@
      @IBOutlet weak var twitterButton: UIButton!
      @IBOutlet weak var facebookButton: UIButton!
      @IBOutlet weak var viewLikeCommentStackView: UIStackView!
-     
      @IBOutlet weak var memberShipView: UIView!
      @IBOutlet weak var memberShipImageView: UIImageView!
      @IBOutlet weak var memberShipLabel: UILabel!
@@ -115,9 +113,6 @@
                      self.memberShipView.isHidden = false
 //                     self.adButton.setTitle(item.promotionType, for: .normal)
                      if item.promotionType == "Urgent" {
-//                         self.adButton.setTitle(getLanguage["urgent"] ?? "", for: .normal)
-//                         self.adButton.isHidden = false
-//                         self.adButton.backgroundColor = UIColor(named: "UrgentColor")
                          if item.membership_enable == "enable"{
                              self.memberShipView.backgroundColor = UIColor(named: "UrgentColor")
                              self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
@@ -133,10 +128,23 @@
                              self.memberShipViewWidth.constant = 90
                          }
                      }
+                  else if item.promotionType == "local business" {
+                         if item.membership_enable == "enable"{
+                             self.memberShipView.backgroundColor = UIColor(named: "redcolor")
+                             self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
+                             self.memberShipLabel.text = getLanguage["localbusiness"]
+                             self.memberShipViewWidth.constant = 110
+                         }else{
+                             self.memberShipView.backgroundColor = UIColor(named: "redcolor")
+                             self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
+                             self.memberShipLabel.text = getLanguage["localbusiness"]
+                             self.memberShipImageView.isHidden = true
+                             self.memberShipImageViewleading.constant = 0
+                             self.memberShipImageViewWidth.constant = 0
+                             self.memberShipViewWidth.constant = 90
+                         }
+                     }
                      else if item.promotionType == "Ad" {
-                         //                         self.adButton.isHidden = false
-                         //                         self.adButton.setTitle(getLanguage["ad"] ?? "", for: .normal)
-                         //                         self.adButton.backgroundColor = UIColor(named: "NameColor")
                          if item.membership_enable == "enable"{
                              self.memberShipView.backgroundColor = UIColor(named: "AdColor")
                              self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
@@ -168,9 +176,6 @@
                  }
              }
              else if item.itemStatus == "sold" {
-//                 self.adButton.isHidden = false
-//                 self.adButton.setTitle(getLanguage["sold"] ?? "", for: .normal)
-//                 self.adButton.backgroundColor = UIColor(named: "soldOutColor")
                  self.memberShipView.isHidden = false
                  self.adButton.isHidden = true
                  if item.membership_enable == "enable"{
@@ -186,6 +191,28 @@
                      self.memberShipView.backgroundColor = UIColor(named: "soldOutColor")
                      self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
                      self.memberShipLabel.text = getLanguage["sold"]
+                     self.memberShipViewWidth.constant = 55
+                     self.memberShipImageView.isHidden = true
+                     self.memberShipImageViewleading.constant = 0
+                     self.memberShipImageViewWidth.constant = 0
+                 }
+             }
+             else if item.itemStatus == "expired" {
+                 self.memberShipView.isHidden = false
+                 self.adButton.isHidden = true
+                 if item.membership_enable == "enable"{
+                     self.memberShipView.backgroundColor = UIColor(named: "soldOutColor")
+                     self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
+                     self.memberShipLabel.text = getLanguage["expired"]
+                     self.memberShipViewWidth.constant = 55
+                     self.memberShipImageView.isHidden = false
+                     self.memberShipImageViewWidth.constant = 15
+                     self.memberShipImageViewleading.constant = 5
+                     self.memberShipImageView.image = UIImage(named: "member_icon")
+                 }else{
+                     self.memberShipView.backgroundColor = UIColor(named: "soldOutColor")
+                     self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
+                     self.memberShipLabel.text = getLanguage["expired"]
                      self.memberShipViewWidth.constant = 55
                      self.memberShipImageView.isHidden = true
                      self.memberShipImageViewleading.constant = 0

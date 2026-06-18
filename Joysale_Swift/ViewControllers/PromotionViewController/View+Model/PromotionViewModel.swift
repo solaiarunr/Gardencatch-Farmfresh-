@@ -12,10 +12,45 @@ class PromotionViewModel {
     
     var premiumModel: PromotionModel?
     var getPromotionModel: GetPromotionModel?
+    var getMembershipPromotionModel: GetMembershipPromotionModel?
     var getSubcriptionModel: GetSubcribtionModel?
     var checkoutModel: SignupModel?
     var itemPromotionResultModel: ItemPromotionModel?
+    var subscriptionDetailsModel: SubscriptionDetailsModel?
+    public func cancelSubscription(
+        onSuccess success: @escaping (Bool, String) -> Void,
+        onFailure failure: @escaping (String) -> Void
+    ) {
 
+        let parameter: [String: Any] = [
+            "lang_type": DEFAULT_LANGUAGE_CODE,
+            "user_id": UserDefaultModule.shared.getUserData()?.user_id ?? ""
+        ]
+
+        CallParsingFunction().postDataCall(
+            subURl: "cancelsubscription",
+            params: parameter,
+            onSuccess: { response in
+
+                print("Response:", response)
+
+                let status = "\(response["status"] ?? "")"
+                    .trimmingCharacters(in: .whitespacesAndNewlines)
+                    .lowercased() == "true"
+
+                let message = "\(response["message"] ?? "")"
+
+                print("Parsed Status:", status)
+                print("Message:", message)
+
+                success(status, message)
+
+            }, onFailure: { error in
+
+                failure(error?.localizedDescription ?? "Something went wrong")
+            }
+        )
+    }
     public func myPromotionData(user_id: String,type: String, onSuccess success: @escaping (Bool) -> Void, onFailure failure: @escaping (String) -> Void) {
         let parameter: [String: Any] = ["user_id":user_id, "type":type, "lang_type": DEFAULT_LANGUAGE_CODE]
     
@@ -28,7 +63,33 @@ class PromotionViewModel {
             failure(error?.localizedDescription ?? "")
         }
     }
-    
+    public func getSubscriptionDetails(
+        onSuccess success: @escaping (Bool) -> Void,
+        onFailure failure: @escaping (String) -> Void
+    ) {
+
+        let parameter: [String: Any] = [
+            "lang_type": DEFAULT_LANGUAGE_CODE,
+            "user_id": UserDefaultModule.shared.getUserData()?.user_id ?? ""
+        ]
+
+        CallParsingFunction().postDataCall(
+            subURl: Subscriptiondetails,
+            params: parameter,
+            onSuccess: { (response) in
+
+                print(response)
+
+                let rootClass = SubscriptionDetailsModel(fromJson: response)
+                self.subscriptionDetailsModel = rootClass
+
+                success(rootClass.status ?? false)
+
+            }) { (error) in
+
+                failure(error?.localizedDescription ?? "")
+            }
+    }
     public func getPromotionData( onSuccess success: @escaping (Bool) -> Void, onFailure failure: @escaping (String) -> Void) {
         let parameter: [String: Any] = ["lang_type": DEFAULT_LANGUAGE_CODE, "user_id": UserDefaultModule.shared.getUserData()?.user_id ?? ""]
     
@@ -41,6 +102,21 @@ class PromotionViewModel {
             failure(error?.localizedDescription ?? "")
         }
     }
+    
+    
+    public func getPremiumData( onSuccess success: @escaping (Bool) -> Void, onFailure failure: @escaping (String) -> Void) {
+        let parameter: [String: Any] = ["lang_type": DEFAULT_LANGUAGE_CODE, "user_id": UserDefaultModule.shared.getUserData()?.user_id ?? ""]
+    
+        CallParsingFunction().postDataCall(subURl: getpremium, params: parameter, onSuccess: { (response) in
+            print(response)
+            let rootClass = GetMembershipPromotionModel.init(fromJson: response)
+            self.getMembershipPromotionModel = rootClass
+            success(rootClass.status ?? false)
+        }) { (error) in
+            failure(error?.localizedDescription ?? "")
+        }
+    }
+    
     public func getSubcriptionData( onSuccess success: @escaping (Bool) -> Void, onFailure failure: @escaping (String) -> Void) {
         let parameter: [String: Any] = ["lang_type": DEFAULT_LANGUAGE_CODE, "user_id": UserDefaultModule.shared.getUserData()?.user_id ?? ""]
     

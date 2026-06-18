@@ -293,6 +293,12 @@
 		B61CE8312F77E05000156BC8 /* PremiumAdvc.xib in Resources */ = {isa = PBXBuildFile; fileRef = B61CE82E2F77E05000156BC8 /* PremiumAdvc.xib */; };
 		B61CE8342F77E20D00156BC8 /* PreAdcellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61CE8322F77E20D00156BC8 /* PreAdcellTableViewCell.swift */; };
 		B61CE8352F77E20D00156BC8 /* PreAdcellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B61CE8332F77E20D00156BC8 /* PreAdcellTableViewCell.xib */; };
+		B6DE45952FC71EC200F7D8B1 /* CreatePremiumvc.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6DE45932FC71EC200F7D8B1 /* CreatePremiumvc.xib */; };
+		B6DE45962FC71EC200F7D8B1 /* CreatePremiumvc.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE45922FC71EC200F7D8B1 /* CreatePremiumvc.swift */; };
+		B6DE45992FC720A300F7D8B1 /* PremiumListVc.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6DE45982FC720A300F7D8B1 /* PremiumListVc.xib */; };
+		B6DE459A2FC720A300F7D8B1 /* PremiumListVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE45972FC720A300F7D8B1 /* PremiumListVc.swift */; };
+		B6DE459C2FC733A700F7D8B1 /* GetMembershipPromotionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE459B2FC7339F00F7D8B1 /* GetMembershipPromotionModel.swift */; };
+		B6F4319C2FC96C7E00A76894 /* SubscriptionDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F4319B2FC96C7E00A76894 /* SubscriptionDetailsModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -589,6 +595,12 @@
 		B61CE82E2F77E05000156BC8 /* PremiumAdvc.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PremiumAdvc.xib; sourceTree = "<group>"; };
 		B61CE8322F77E20D00156BC8 /* PreAdcellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreAdcellTableViewCell.swift; sourceTree = "<group>"; };
 		B61CE8332F77E20D00156BC8 /* PreAdcellTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreAdcellTableViewCell.xib; sourceTree = "<group>"; };
+		B6DE45922FC71EC200F7D8B1 /* CreatePremiumvc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePremiumvc.swift; sourceTree = "<group>"; };
+		B6DE45932FC71EC200F7D8B1 /* CreatePremiumvc.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreatePremiumvc.xib; sourceTree = "<group>"; };
+		B6DE45972FC720A300F7D8B1 /* PremiumListVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumListVc.swift; sourceTree = "<group>"; };
+		B6DE45982FC720A300F7D8B1 /* PremiumListVc.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PremiumListVc.xib; sourceTree = "<group>"; };
+		B6DE459B2FC7339F00F7D8B1 /* GetMembershipPromotionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMembershipPromotionModel.swift; sourceTree = "<group>"; };
+		B6F4319B2FC96C7E00A76894 /* SubscriptionDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionDetailsModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2122,6 +2134,7 @@
 		4084C841248E041C00857BBA /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				B6DE45942FC71EC200F7D8B1 /* CreatePremiumvc */,
 				B61CE82F2F77E05000156BC8 /* PremiumPage */,
 				3D34EA572755F7FA00D91146 /* Buynow */,
 				4030D1C5252209AF0087D0DD /* SiteMaintaneceViewController */,
@@ -2147,6 +2160,7 @@
 				40549B66249109EA008BF217 /* TabbarController */,
 				404632D9248F54980067C2AD /* HelpViewController */,
 				4052CE91248E21650086AC85 /* AuthenticationViewController */,
+				B6F4319B2FC96C7E00A76894 /* SubscriptionDetailsModel.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -2345,6 +2359,18 @@
 			path = PremiumPage;
 			sourceTree = "<group>";
 		};
+		B6DE45942FC71EC200F7D8B1 /* CreatePremiumvc */ = {
+			isa = PBXGroup;
+			children = (
+				B6DE45922FC71EC200F7D8B1 /* CreatePremiumvc.swift */,
+				B6DE45932FC71EC200F7D8B1 /* CreatePremiumvc.xib */,
+				B6DE45972FC720A300F7D8B1 /* PremiumListVc.swift */,
+				B6DE459B2FC7339F00F7D8B1 /* GetMembershipPromotionModel.swift */,
+				B6DE45982FC720A300F7D8B1 /* PremiumListVc.xib */,
+			);
+			path = CreatePremiumvc;
+			sourceTree = "<group>";
+		};
 		D1617A7F6C9AC07035A22022 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -2437,6 +2463,7 @@
 				404024AE24CEB56400E295C8 /* ProductConditionViewController.xib in Resources */,
 				4056D88324A9B0FB0005E1E0 /* ExchangeCollectionViewCell.xib in Resources */,
 				4072F9AE24C95E9E00AD7F77 /* CameraViewController.xib in Resources */,
+				B6DE45992FC720A300F7D8B1 /* PremiumListVc.xib in Resources */,
 				99777F5125D3C06400FCD5EA /* SmartReplyCollectionViewCell.xib in Resources */,
 				4034F9C024AF0DA5001BE520 /* ChatListTableViewCell.xib in Resources */,
 				403E9ED4249355FB00E122BA /* CategoryCollectionViewCell.xib in Resources */,
@@ -2450,6 +2477,7 @@
 				B61CE8352F77E20D00156BC8 /* PreAdcellTableViewCell.xib in Resources */,
 				4023143124AF791A002F37E1 /* ExchangeDetailsViewController.xib in Resources */,
 				405AAD7424CC052E00663A5A /* CategoryViewController.xib in Resources */,
+				B6DE45952FC71EC200F7D8B1 /* CreatePremiumvc.xib in Resources */,
 				3D34EA9F2755F7FA00D91146 /* AddressListViewController.xib in Resources */,
 				407B14A524C073D700B21103 /* BannerViewController.xib in Resources */,
 				3D34EA902755F7FA00D91146 /* MyOrderSalesTableViewCell.xib in Resources */,
@@ -2621,6 +2649,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6DE459C2FC733A700F7D8B1 /* GetMembershipPromotionModel.swift in Sources */,
 				405C82F9268D9C7100477D4A /* StripeModel.swift in Sources */,
 				3D34EAA02755F7FA00D91146 /* BuyNowViewController.swift in Sources */,
 				4005844D252DEE6000065D2C /* UIButton_Badge.swift in Sources */,
@@ -2643,6 +2672,7 @@
 				4060278F2492281600719206 /* HomeViewController.swift in Sources */,
 				9977817825D3E0A200FCD5EA /* ImageModel.swift in Sources */,
 				407B14A724C073E600B21103 /* BannerViewModel.swift in Sources */,
+				B6DE45962FC71EC200F7D8B1 /* CreatePremiumvc.swift in Sources */,
 				4052CEB8248E30B00086AC85 /* HSInterval+TimeInterval.swift in Sources */,
 				40BE18A724B9E373007A68DD /* FollowAndReviewTableViewCell.swift in Sources */,
 				40C0D08924A0C72E002D654B /* ItemDetailsViewModel.swift in Sources */,
@@ -2727,6 +2757,7 @@
 				403CADD324BF466B00147132 /* LanguageViewController.swift in Sources */,
 				4034F9CE24AF587B001BE520 /* MyExchangeViewController.swift in Sources */,
 				B61CE8302F77E05000156BC8 /* PremiumAdvc.swift in Sources */,
+				B6F4319C2FC96C7E00A76894 /* SubscriptionDetailsModel.swift in Sources */,
 				3D34EA9C2755F7FA00D91146 /* AddressListViewController.swift in Sources */,
 				40381C5A24C5B71000884ED2 /* MyPromotionDetailViewController.swift in Sources */,
 				403CFF9A24C0250300DFD34C /* NotificationViewModel.swift in Sources */,
@@ -2742,6 +2773,7 @@
 				4041137124C8181B00B6D9FF /* PromotionOptionTableViewCell.swift in Sources */,
 				40D23B332492479500704C17 /* ProfileViewModel.swift in Sources */,
 				4026B2942494EF6D00AD4B1C /* CustomSlider.swift in Sources */,
+				B6DE459A2FC720A300F7D8B1 /* PremiumListVc.swift in Sources */,
 				406027A32492287A00719206 /* ProfileViewController.swift in Sources */,
 				40318E1324C6CD7F005A3BC4 /* InsightViewController.swift in Sources */,
 				4020963724A06E9700CD3623 /* ItemDetailsMapTableViewCell.swift in Sources */,
@@ -2934,7 +2966,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.17;
+				MARKETING_VERSION = 2.0.18;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.gardencatch;
 				PRODUCT_NAME = "Farm Fresh";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2965,7 +2997,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.17;
+				MARKETING_VERSION = 2.0.18;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.gardencatch;
 				PRODUCT_NAME = "Farm Fresh";
 				PROVISIONING_PROFILE_SPECIFIER = "";

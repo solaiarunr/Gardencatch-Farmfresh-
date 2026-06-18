@@ -65,8 +65,6 @@ class ExchangeCollectionViewCell: UICollectionViewCell {
                 self.statusButton.setTitle(itemData.promotionType, for: .normal)
                 self.memberShipView.isHidden = false
                 if itemData.promotionType == "Urgent" {
-//                    self.statusButton.setTitle(getLanguage["urgent"] ?? "", for: .normal)
-//                    self.statusButton.setBackgroundColor(color: UIColor(named: "UrgentColor") ?? .white, forState: .normal)
                     if itemData.membership_enable == "enable"{
                         self.memberShipView.backgroundColor = UIColor(named: "UrgentColor")
                         self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
@@ -87,8 +85,6 @@ class ExchangeCollectionViewCell: UICollectionViewCell {
                     }
                 }
                 else if itemData.promotionType == "Ad" {
-//                    self.statusButton.setTitle(getLanguage["ad"] ?? "", for: .normal)
-//                    self.statusButton.setBackgroundColor(color: UIColor(named: "NameColor") ?? .white, forState: .normal)
                     if itemData.membership_enable == "enable"{
                         self.memberShipView.backgroundColor = UIColor(named: "AdColor")
                         self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
@@ -102,6 +98,26 @@ class ExchangeCollectionViewCell: UICollectionViewCell {
                         self.memberShipView.backgroundColor = UIColor(named: "AdColor")
                         self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
                         self.memberShipLabel.text = getLanguage["ad"]
+                        self.memberShipViewWidth.constant = 90
+                        self.memberShipImageView.isHidden = true
+                        self.memberShipImageViewleading.constant = 0
+                        self.memberShipImageViewWidth.constant = 0
+                    }
+                }
+                else if itemData.promotionType == "local business" {
+                    if itemData.membership_enable == "enable"{
+                        self.memberShipView.backgroundColor = UIColor(named: "redcolor")
+                        self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
+                        self.memberShipLabel.text = getLanguage["localbusiness"]
+                        self.memberShipViewWidth.constant = 110
+                        self.memberShipImageView.isHidden = false
+                        self.memberShipImageViewWidth.constant = 15
+                        self.memberShipImageViewleading.constant = 5
+                        self.memberShipImageView.image = UIImage(named: "member_icon")
+                    }else{
+                        self.memberShipView.backgroundColor = UIColor(named: "redcolor")
+                        self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
+                        self.memberShipLabel.text = getLanguage["localbusiness"]
                         self.memberShipViewWidth.constant = 90
                         self.memberShipImageView.isHidden = true
                         self.memberShipImageViewleading.constant = 0
@@ -128,8 +144,6 @@ class ExchangeCollectionViewCell: UICollectionViewCell {
             }
         }
         else if itemData.itemStatus == "sold" {
-//            self.statusButton.setTitle(getLanguage["sold"] ?? "", for: .normal)
-//            self.statusButton.setBackgroundColor(color: UIColor(named: "soldOutColor") ?? .white, forState: .normal)
             self.memberShipView.isHidden = false
             if itemData.membership_enable == "enable"{
                 self.memberShipView.backgroundColor = UIColor(named: "soldOutColor")
@@ -144,6 +158,27 @@ class ExchangeCollectionViewCell: UICollectionViewCell {
                 self.memberShipView.backgroundColor = UIColor(named: "soldOutColor")
                 self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
                 self.memberShipLabel.text = getLanguage["sold"]
+                self.memberShipViewWidth.constant = 55
+                self.memberShipImageView.isHidden = true
+                self.memberShipImageViewleading.constant = 0
+                self.memberShipImageViewWidth.constant = 0
+            }
+        }
+    else if itemData.itemStatus == "expired" {
+            self.memberShipView.isHidden = false
+            if itemData.membership_enable == "enable"{
+                self.memberShipView.backgroundColor = UIColor(named: "soldOutColor")
+                self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
+                self.memberShipLabel.text = getLanguage["expired"]
+                self.memberShipViewWidth.constant = 55
+                self.memberShipImageView.isHidden = false
+                self.memberShipImageViewWidth.constant = 15
+                self.memberShipImageViewleading.constant = 5
+                self.memberShipImageView.image = UIImage(named: "member_icon")
+            }else{
+                self.memberShipView.backgroundColor = UIColor(named: "soldOutColor")
+                self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
+                self.memberShipLabel.text = getLanguage["expired"]
                 self.memberShipViewWidth.constant = 55
                 self.memberShipImageView.isHidden = true
                 self.memberShipImageViewleading.constant = 0

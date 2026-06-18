@@ -86,11 +86,19 @@ class EditProfileTableViewCell: UITableViewCell {
                     self.textField.isUserInteractionEnabled = false
                 }
             }
-            else {
+            else if index.row == 2{
                 self.textField.text = "***************"
                 self.textField.isUserInteractionEnabled = false
                 self.titleLabel.text = (getLanguage["changepassword"] ?? "").capitalized
                 self.nextButton.isHidden = false
+            }else if index.row == 3{
+                self.titleLabel.text = (getLanguage["PostCount"] ?? "").capitalized
+                self.textField.text = profileData.freepostcount
+                self.textField.isUserInteractionEnabled = false
+            }else{
+                self.titleLabel.text = (getLanguage["RemainingDays"] ?? "").capitalized
+                self.textField.text = profileData.freepost_remainingdays
+                self.textField.isUserInteractionEnabled = false
             }
         }
         else if index.section == 2 {

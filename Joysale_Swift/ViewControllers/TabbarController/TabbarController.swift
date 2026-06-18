@@ -19,6 +19,8 @@ class TabbarController: UITabBarController, UITabBarControllerDelegate {
     var isFromNotification = false
     var profileNavigationController = UINavigationController()
     var viewModel = AdminViewModel()
+    var profileData: ProfileResultModel?
+    var viewModels = ProfileViewModel()
 //    var interstitial :GADInterstitialAd?
 
     var getFreePost = Int()
@@ -46,6 +48,62 @@ class TabbarController: UITabBarController, UITabBarControllerDelegate {
         )
          */
     }
+    
+    func loadProfile(){
+        self.viewModels.getProfileData(user_id: UserDefaultModule.shared.getUserData()?.user_id ?? "", onSuccess: { (success) in
+            print(success)
+            if success {
+                if let profileData = self.viewModels.profileModel?.result {
+                    self.profileData = profileData
+                    if self.profileData?.freepost == "true"{
+                        self.tabBar.isUserInteractionEnabled = true
+                        self.selectedIndex = 2
+                    }
+                    else if self.profileData?.freepost == "false"{
+                        if self.profileData?.subscriptionEnable == "true"{
+                            self.tabBar.isUserInteractionEnabled = true
+                            self.selectedIndex = 2
+                        }else{
+                            self.showAlerts()
+                        }
+                    }else{
+                        self.showAlerts()
+                    }
+                }
+            }
+        }) { (failure) in
+        }
+        
+     
+    }
+    func showAlerts() {
+        
+        let alertController = UIAlertController(
+            title: "Farm Fresh 24/7",
+            message: "Kindly Purchase the Premium",
+            preferredStyle: .alert
+        )
+
+        let upgradeAction = UIAlertAction(title: "Upgrade", style: .default) { _ in
+            
+            if (UserDefaultModule.shared.getUserData()?.user_id ?? "") != "" {
+                let pageObj = CreatePremiumvc()
+                self.navigationController?.pushViewController(pageObj, animated: true)
+            }
+            
+            self.tabBar.isUserInteractionEnabled = true
+        }
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            self.tabBar.isUserInteractionEnabled = true
+        }
+
+        alertController.addAction(upgradeAction)
+        alertController.addAction(cancelAction)
+
+        present(alertController, animated: true)
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         self.loadAds()
         if self.selectedIndex != 2 {
@@ -139,6 +197,12 @@ class TabbarController: UITabBarController, UITabBarControllerDelegate {
                 self.navigationController?.present(vc, animated: true, completion: nil)
                 return false
             }
+            // Camera tab tapped
+                 if viewController.isKind(of: CameraViewController.self) {
+                     self.loadProfile()
+                     return false
+                 }
+            
             else if !(viewController.isKind(of: ChatListViewController.self) || viewController.isKind(of: ProfileViewController.self)){
                 self.tabBar.isUserInteractionEnabled = false
                 self.loadSubScriptionData()
