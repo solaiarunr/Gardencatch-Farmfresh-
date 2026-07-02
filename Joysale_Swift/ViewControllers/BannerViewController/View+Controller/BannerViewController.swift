@@ -47,15 +47,15 @@ class BannerViewController: UIViewController {
     }
     func configUI() {
         self.bannerImageView.isHidden = true
-        self.textView.config(color: UIColor(named: "AppTextColor") ?? .black, font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "")
-        self.navigationController?.customNavigationBarView(title: "advertise", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 20), vc: self)
+        self.textView.config(color: UIColor(named: "AppTextColor") ?? .black, font: UIFont(name: APP_FONT_REGULAR, size: 18), align: .left, text: "")
+        self.navigationController?.customNavigationBarView(title: "buyadvertise", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 20), vc: self)
         self.navigationController?.customRightBarButtonView(title: "", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 14), imageName: "detail_back", isLeft: true, vc: self, transparantView: false)
         self.navigationController?.customRightBarButtonView(title: "", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 14), imageName: "advertise_history", isLeft: false, vc: self, transparantView: false)
         self.continueButton.backgroundColor = UIColor(named: "AppThemeColor") ?? .white
         self.continueButton.layer.cornerRadius = 8
         self.continueButton.clipsToBounds = true
 
-        self.continueButton.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .center, title: "continue")
+        self.continueButton.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .center, title: "BuyAdvertisingBanner")
         self.webView.navigationDelegate = self
         self.loadData()
     }
@@ -73,8 +73,29 @@ class BannerViewController: UIViewController {
                 }
             }
             self.webView.loadHTMLString((headerString + (self.viewModel.bannerModel?.result.first?.adDescription ?? "")), baseURL: nil)
-            let htmlString = (self.viewModel.bannerModel?.result.first?.adDescription ?? "").replacingOccurrences(of: "\n", with: "<br>")
-            self.textView.text = htmlString.html2String
+            let htmlString = self.viewModel.bannerModel?.result.first?.adDescription ?? ""
+
+            if let attributedString = htmlString.html2AttributedString?.mutableCopy() as? NSMutableAttributedString {
+
+                attributedString.enumerateAttribute(.font,
+                                                    in: NSRange(location: 0, length: attributedString.length),
+                                                    options: []) { value, range, _ in
+
+                    guard let oldFont = value as? UIFont else { return }
+
+                    let newFont: UIFont
+
+                    if oldFont.fontDescriptor.symbolicTraits.contains(.traitBold) {
+                        newFont = UIFont(name: APP_FONT_BOLD, size: 15) ?? UIFont.boldSystemFont(ofSize: 15)
+                    } else {
+                        newFont = UIFont(name: APP_FONT_REGULAR, size: 15) ?? UIFont.systemFont(ofSize: 15)
+                    }
+
+                    attributedString.addAttribute(.font, value: newFont, range: range)
+                }
+
+                self.textView.attributedText = attributedString
+            }
             Utility.shared.stopAnimation(viewController: self)
         }){ (failure) in
             

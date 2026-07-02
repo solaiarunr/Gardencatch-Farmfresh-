@@ -29,9 +29,11 @@ class PreAdcellTableViewCell: UITableViewCell {
                                       align: .left,
                                       text: "")
                 Plandays.config(color: UIColor(named: "LightTextColor"),
-                                      font: UIFont(name: APP_FONT_BOLD, size: 15),
+                                      font: UIFont(name: APP_FONT_REGULAR, size: 13),
                                       align: .left,
                                       text: "")
+                Plandays.numberOfLines = 0
+            Planname.numberOfLines = 0
     }
 
 }

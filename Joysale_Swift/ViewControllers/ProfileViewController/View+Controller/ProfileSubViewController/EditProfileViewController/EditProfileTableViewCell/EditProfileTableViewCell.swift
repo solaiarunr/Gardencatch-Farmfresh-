@@ -33,7 +33,7 @@ class EditProfileTableViewCell: UITableViewCell {
         self.textField.delegate = self
         self.userImageView.cornerViewRadius()
         self.verifyLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "")
-        self.titleLabel.config(color: UIColor(named: "ThemeTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "")
+        self.titleLabel.config(color: UIColor(named: "ThemeTextColor"), font: UIFont(name: APP_FONT_BOLD, size: 15), align: .left, text: "")
         self.nextButton.tintColor = UIColor(named: "ThemeTextColor")
         self.descLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "")
         self.textField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "", font: UIFont(name: APP_FONT_REGULAR, size: 15))
@@ -68,7 +68,7 @@ class EditProfileTableViewCell: UITableViewCell {
 //                    self.userImageView.image = #imageLiteral(resourceName: "applogo")
 //                }
 //            }
-            self.titleLabel.text = getLanguage["Edit"] ?? "Edit"
+            self.titleLabel.text = getLanguage["edit_profile"] ?? "Edit Profile"
         }
         else if index.section == 1 {
             self.textField.isHidden = false
@@ -97,7 +97,11 @@ class EditProfileTableViewCell: UITableViewCell {
                 self.textField.isUserInteractionEnabled = false
             }else{
                 self.titleLabel.text = (getLanguage["RemainingDays"] ?? "").capitalized
-                self.textField.text = profileData.freepost_remainingdays
+                if profileData.freepost_remainingdays == "0" {
+                    self.textField.text = "Expired"
+                } else {
+                    self.textField.text = profileData.freepost_remainingdays
+                }
                 self.textField.isUserInteractionEnabled = false
             }
         }

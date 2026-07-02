@@ -66,7 +66,8 @@ class ExchangeCollectionViewCell: UICollectionViewCell {
                 self.memberShipView.isHidden = false
                 if itemData.promotionType == "Urgent" {
                     if itemData.membership_enable == "enable"{
-                        self.memberShipView.backgroundColor = UIColor(named: "UrgentColor")
+                       // self.memberShipView.backgroundColor = UIColor(named: "UrgentColor")
+                        self.memberShipView.backgroundColor = UIColor(named: "AdColor")
                         self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
                         self.memberShipLabel.text = getLanguage["urgent"]
                         self.memberShipViewWidth.constant = 110
@@ -75,7 +76,8 @@ class ExchangeCollectionViewCell: UICollectionViewCell {
                         self.memberShipImageViewleading.constant = 5
                         self.memberShipImageView.image = UIImage(named: "member_icon")
                     }else{
-                        self.memberShipView.backgroundColor = UIColor(named: "UrgentColor")
+                       // self.memberShipView.backgroundColor = UIColor(named: "UrgentColor")
+                        self.memberShipView.backgroundColor = UIColor(named: "AdColor")
                         self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
                         self.memberShipLabel.text = getLanguage["urgent"]
                         self.memberShipImageView.isHidden = true

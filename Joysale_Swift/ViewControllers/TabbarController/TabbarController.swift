@@ -77,32 +77,53 @@ class TabbarController: UITabBarController, UITabBarControllerDelegate {
      
     }
     func showAlerts() {
-        
-        let alertController = UIAlertController(
-            title: "Farm Fresh 24/7",
-            message: "Kindly Purchase the Premium",
-            preferredStyle: .alert
-        )
 
-        let upgradeAction = UIAlertAction(title: "Upgrade", style: .default) { _ in
-            
-            if (UserDefaultModule.shared.getUserData()?.user_id ?? "") != "" {
-                let pageObj = CreatePremiumvc()
-                self.navigationController?.pushViewController(pageObj, animated: true)
+        let popup = PremiumPopupView(frame: UIScreen.main.bounds)
+
+        popup.cancelAction = {
+            self.tabBar.isUserInteractionEnabled = true
+        }
+
+        popup.upgradeAction = {
+
+            self.tabBar.isUserInteractionEnabled = true
+
+            if !(UserDefaultModule.shared.getUserData()?.user_id ?? "").isEmpty {
+
+                let vc = CreatePremiumvc()
+                self.navigationController?.pushViewController(vc, animated: true)
             }
-            
-            self.tabBar.isUserInteractionEnabled = true
         }
 
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-            self.tabBar.isUserInteractionEnabled = true
-        }
-
-        alertController.addAction(upgradeAction)
-        alertController.addAction(cancelAction)
-
-        present(alertController, animated: true)
+        UIApplication.shared.windows.first?.addSubview(popup)
     }
+//    func showAlerts() {
+//        
+//        let alertController = UIAlertController(
+//            title: "Unlock Premium Visibliity",
+//            message: "You've reached your free posting limit. Upgrade to unlock unlimited posting and premium visibility.",
+//            preferredStyle: .alert
+//        )
+//
+//        let upgradeAction = UIAlertAction(title: "Upgrade", style: .default) { _ in
+//            
+//            if (UserDefaultModule.shared.getUserData()?.user_id ?? "") != "" {
+//                let pageObj = CreatePremiumvc()
+//                self.navigationController?.pushViewController(pageObj, animated: true)
+//            }
+//            
+//            self.tabBar.isUserInteractionEnabled = true
+//        }
+//
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+//            self.tabBar.isUserInteractionEnabled = true
+//        }
+//
+//        alertController.addAction(upgradeAction)
+//        alertController.addAction(cancelAction)
+//
+//        present(alertController, animated: true)
+//    }
 
     override func viewDidAppear(_ animated: Bool) {
         self.loadAds()
@@ -408,6 +429,143 @@ extension TabbarController: SearchDelegate, CategoryDelegate, FilterDelegate {
         self.homeVC.isFound = true
         self.homeVC.loadFilterData()
         self.homeVC.loadData()
+    }
+}
+
+
+class PremiumPopupView: UIView {
+
+    var upgradeAction: (() -> Void)?
+    var cancelAction: (() -> Void)?
+
+    private let containerView = UIView()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+    }
+
+    private func setupUI() {
+
+        backgroundColor = UIColor.black.withAlphaComponent(0.6)
+
+        // Container
+        containerView.backgroundColor = .white
+        containerView.layer.cornerRadius = 16
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(containerView)
+
+        NSLayoutConstraint.activate([
+            containerView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
+        ])
+
+        // Title
+        let titleLabel = UILabel()
+        titleLabel.text = "Unlock Premium Visibility"
+        titleLabel.font = .boldSystemFont(ofSize: 20)
+        titleLabel.textAlignment = .center
+        titleLabel.numberOfLines = 0
+
+        // Message
+        let messageLabel = UILabel()
+        messageLabel.text = "You've reached your free posting limit.\nUpgrade to unlock unlimited posting and premium visibility."
+        messageLabel.numberOfLines = 0
+        messageLabel.font = .systemFont(ofSize: 15)
+        messageLabel.textAlignment = .center
+
+        // Benefits
+        let benefits = [
+            "Unlimited product listings",
+            "Biz Spotlight & Local Spotlight boosts",
+            "Local Business badge for trust",
+            "Priority placement in search results"
+        ]
+
+        let benefitStack = UIStackView()
+        benefitStack.axis = .vertical
+        benefitStack.spacing = 10
+
+        for item in benefits {
+
+            let row = UIStackView()
+            row.axis = .horizontal
+            row.spacing = 8
+            row.alignment = .top
+
+            let bullet = UILabel()
+            bullet.text = "•"
+            bullet.font = .boldSystemFont(ofSize: 18)
+
+            let label = UILabel()
+            label.text = item
+            label.numberOfLines = 0
+            label.font = .systemFont(ofSize: 15)
+
+            row.addArrangedSubview(bullet)
+            row.addArrangedSubview(label)
+
+            benefitStack.addArrangedSubview(row)
+        }
+
+        // Buttons
+
+        let cancelButton = UIButton(type: .system)
+        cancelButton.setTitle("Not Now", for: .normal)
+        cancelButton.backgroundColor = .lightGray
+        cancelButton.tintColor = .white
+        cancelButton.layer.cornerRadius = 8
+        cancelButton.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        cancelButton.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
+
+        let upgradeButton = UIButton(type: .system)
+        upgradeButton.setTitle("Activate Premium", for: .normal)
+        upgradeButton.backgroundColor = UIColor(named: "AppThemeColor") ?? .systemGreen
+        upgradeButton.tintColor = .white
+        upgradeButton.layer.cornerRadius = 8
+        upgradeButton.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        upgradeButton.addTarget(self, action: #selector(upgradeTapped), for: .touchUpInside)
+
+        let buttonStack = UIStackView(arrangedSubviews: [cancelButton, upgradeButton])
+        buttonStack.axis = .horizontal
+        buttonStack.spacing = 12
+        buttonStack.distribution = .fillEqually
+
+        let mainStack = UIStackView(arrangedSubviews: [
+            titleLabel,
+            messageLabel,
+            benefitStack,
+            buttonStack
+        ])
+
+        mainStack.axis = .vertical
+        mainStack.spacing = 20
+        mainStack.translatesAutoresizingMaskIntoConstraints = false
+
+        containerView.addSubview(mainStack)
+
+        NSLayoutConstraint.activate([
+            mainStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 24),
+            mainStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            mainStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            mainStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -24)
+        ])
+    }
+
+    @objc func cancelTapped() {
+        removeFromSuperview()
+        cancelAction?()
+    }
+
+    @objc func upgradeTapped() {
+        removeFromSuperview()
+        upgradeAction?()
     }
 }
 /*

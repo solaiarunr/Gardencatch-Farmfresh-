@@ -33,6 +33,11 @@ class ItemDetailsViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var infoview: UIView!
+    @IBOutlet weak var infolbl: UILabel!
+    
+    
+    
     var itemDetails: ItemModel?
     var viewModel = ItemDetailsViewModel()
     var itemModel: GetItemsModel?
@@ -122,6 +127,9 @@ class ItemDetailsViewController: UIViewController {
         }
         let lat =  itemDetails?.latitude ?? 0
         let lon =  itemDetails?.longitude ?? 0
+        self.infoview.cornerViewRadius()
+        self.infolbl.config(color: .black, font: UIFont(name: APP_FONT_REGULAR, size: 11), align: .left, text: "infolable")
+        
         /*
         DispatchQueue.main.async {
             let cameras = SnapshotCamera(

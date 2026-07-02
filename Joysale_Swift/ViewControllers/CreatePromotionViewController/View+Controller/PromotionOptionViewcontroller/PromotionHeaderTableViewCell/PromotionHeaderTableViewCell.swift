@@ -20,12 +20,17 @@ class PromotionHeaderTableViewCell: UITableViewHeaderFooterView {
     @IBOutlet weak var promotion1Label: UILabel!
     @IBOutlet weak var lineView: UIView!
     @IBOutlet weak var promotionTitleLabel: UILabel!
+    @IBOutlet weak var pricelableabovetxt: UILabel!
+    @IBOutlet weak var pricelablebewlotxt: UILabel!
     @IBOutlet weak var OraganicImageview: UIImageView!
     @IBOutlet weak var TickImage: UIImageView!
     @IBOutlet weak var Tickimage3: UIImageView!
     @IBOutlet weak var Tickimage2: UIImageView!
     @IBOutlet weak var ickimage4: UIImageView!
     @IBOutlet weak var newpromotionImage: UIImageView!
+    @IBOutlet weak var promostackview: UIStackView!
+    @IBOutlet weak var promo5label: UILabel!
+    @IBOutlet weak var bottomlable: UILabel!
     
 
 
@@ -43,19 +48,33 @@ class PromotionHeaderTableViewCell: UITableViewHeaderFooterView {
         self.promotion2Label.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .left, text: "")
         self.promotion3Label.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .left, text: "")
         self.promotion4Label.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .left, text: "")
+        self.promo5label.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .left, text: "")
+        self.bottomlable.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .left, text: "")
         self.statusButton.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .center, title: "")
     }
     func loadHeaderData(viewTag: Int) {
         self.promotionTitleLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 17), align: .center, text: "")
+        self.pricelableabovetxt.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 17), align: .center, text: "")
+        self.pricelablebewlotxt.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 17), align: .center, text: "")
+        self.promotionTitleLabel.isHidden = true
         self.descStackView.isHidden = true
         self.lineView.isHidden = true
         self.promotionImageView.isHidden = true
         self.priceLabel.isHidden = true
+        self.bottomlable.isHidden = true
         if viewTag == 0 {
             self.priceLabel.isHidden = false
+            self.pricelableabovetxt.isHidden = false
+            self.pricelablebewlotxt.isHidden = false
             self.promotionTitleLabel.text = getLanguage["urgent_ads_highlighted"] ?? ""
+            self.pricelableabovetxt.text = getLanguage["price_above_txt"] ?? ""
+            self.pricelablebewlotxt.text = getLanguage["price_below_txt"] ?? ""
         }
         else {
+            self.promotionTitleLabel.isHidden = true
+            self.pricelableabovetxt.isHidden = false
+            self.pricelableabovetxt.text = getLanguage["local_spotlit_points"] ?? ""
+            self.pricelablebewlotxt.isHidden = true
             self.priceLabel.isHidden = true
             self.promotionTitleLabel.text = getLanguage["ads_instant_viewable"] ?? ""
         }
@@ -66,7 +85,7 @@ class PromotionHeaderTableViewCell: UITableViewHeaderFooterView {
         self.lineView.isHidden = false
         self.promotionImageView.isHidden = false
         self.priceLabel.isHidden = true
-
+        self.bottomlable.isHidden = false
         if viewTag == 0 {
             self.statusButton.setTitle(getLanguage["urgent2"] ?? "", for: .normal)
             if Member_enable == "enable"{
@@ -74,6 +93,9 @@ class PromotionHeaderTableViewCell: UITableViewHeaderFooterView {
             }else{
                 self.newpromotionImage.image = UIImage(named: "business")
             }
+            self.pricelableabovetxt.isHidden = true
+            self.pricelablebewlotxt.isHidden = true
+            self.promostackview.isHidden = false
             self.statusButton.backgroundColor = UIColor.red
             self.promotionTitleLabel.text = getLanguage["urgent_tag_features"] ?? ""
             self.promotionTitleLabel.textColor = UIColor.red
@@ -82,8 +104,13 @@ class PromotionHeaderTableViewCell: UITableViewHeaderFooterView {
             self.promotion2Label.text = getLanguage["urgent_feature_list2"] ?? ""
             self.promotion3Label.text = getLanguage["urgent_feature_list3"] ?? ""
             self.promotion4Label.text = getLanguage["urgent_feature_list4"] ?? ""
+            self.promo5label.text = getLanguage["urgent_feature_list5"] ?? ""
+            self.bottomlable.text = getLanguage["bottom_biz"] ?? ""
         }
         else {
+            self.pricelableabovetxt.isHidden = true
+            self.pricelablebewlotxt.isHidden = true
+            self.promostackview.isHidden = true
             self.statusButton.setTitle(getLanguage["ad"] ?? "", for: .normal)
             self.OraganicImageview.image = UIImage(named: "promote_urgent2")
             if Member_enable == "enable"{
@@ -102,6 +129,7 @@ class PromotionHeaderTableViewCell: UITableViewHeaderFooterView {
             self.promotion2Label.text = getLanguage["promote_feature_list2"] ?? ""
             self.promotion3Label.text = getLanguage["promote_feature_list3"] ?? ""
             self.promotion4Label.text = getLanguage["promote_feature_list4"] ?? ""
+            self.bottomlable.text = getLanguage["bottom_local"] ?? ""
         }
     }
 }

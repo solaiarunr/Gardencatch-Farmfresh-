@@ -338,15 +338,54 @@ extension Date {
         return Calendar.current.dateComponents([.second], from: date, to: self).second ?? 0
     }
     /// Returns the a custom time interval description from another date
+//    func offset(from date: Date) -> String {
+//        if years(from: date)   > 0 { return "\(getLanguage["ago"] ?? "")\(years(from: date)) \(getLanguage["Year ago"] ?? "")"   }
+//        if months(from: date) > 0 {
+//               let month = months(from: date)
+//               let text = month == 1 ? (getLanguage["month ago"] ?? "month ago") : (getLanguage["months ago"] ?? "months ago")
+//               return "\(getLanguage["ago"] ?? "") \(month) \(text)"
+//           }
+//        //        if weeks(from: date)   > 0 { return "\(getLanguage["ago"] ?? "") \(weeks(from: date))w"   }
+//        if days(from: date)    > 0 { return "\(getLanguage["ago"] ?? "") \(days(from: date)) \(getLanguage["daysago"] ?? "")"    }
+//        if hours(from: date)   > 0 { return "\(getLanguage["ago"] ?? "") \(hours(from: date)) \(getLanguage["hoursago"] ?? "")"   }
+//        if minutes(from: date) > 0 { return "\(getLanguage["ago"] ?? "") \(minutes(from: date)) \(getLanguage["aminuteago"] ?? "")" }
+//        if seconds(from: date) > 0 { return "\(getLanguage["ago"] ?? "") \(seconds(from: date)) \(getLanguage["justnow"] ?? "")" }
+//        return "\(getLanguage["ago"] ?? "") 1 \(getLanguage["justnow"] ?? "")"
+//    }
     func offset(from date: Date) -> String {
-        if years(from: date)   > 0 { return "\(getLanguage["ago"] ?? "")\(years(from: date)) \(getLanguage["Year ago"] ?? "")"   }
-        if months(from: date)  > 0 { return "\(getLanguage["ago"] ?? "") \(months(from: date)) \(getLanguage["month ago"] ?? "")"  }
-        //        if weeks(from: date)   > 0 { return "\(getLanguage["ago"] ?? "") \(weeks(from: date))w"   }
-        if days(from: date)    > 0 { return "\(getLanguage["ago"] ?? "") \(days(from: date)) \(getLanguage["daysago"] ?? "")"    }
-        if hours(from: date)   > 0 { return "\(getLanguage["ago"] ?? "") \(hours(from: date)) \(getLanguage["hoursago"] ?? "")"   }
-        if minutes(from: date) > 0 { return "\(getLanguage["ago"] ?? "") \(minutes(from: date)) \(getLanguage["aminuteago"] ?? "")" }
+
+        if years(from: date) > 0 {
+            let year = years(from: date)
+            let text = year == 1 ? (getLanguage["Year ago"] ?? "year ago") : (getLanguage["Years ago"] ?? "years ago")
+            return "\(getLanguage["ago"] ?? "") \(year) \(text)"
+        }
+
+        if months(from: date) > 0 {
+            let month = months(from: date)
+            let text = month == 1 ? (getLanguage["month ago"] ?? "month ago") : (getLanguage["months ago"] ?? "months ago")
+            return "\(getLanguage["ago"] ?? "") \(month) \(text)"
+        }
+        if days(from: date) > 0 {
+            let day = days(from: date)
+            let text = day == 1 ? (getLanguage["dayago"] ?? "day ago") : (getLanguage["daysago"] ?? "days ago")
+            return "\(getLanguage["ago"] ?? "") \(day) \(text)"
+        }
+
+        if hours(from: date) > 0 {
+            let hour = hours(from: date)
+            let text = hour == 1 ? (getLanguage["hourago"] ?? "hour ago") : (getLanguage["hoursago"] ?? "hours ago")
+            return "\(getLanguage["ago"] ?? "") \(hour) \(text)"
+        }
+
+        if minutes(from: date) > 0 {
+            let minute = minutes(from: date)
+            let text = minute == 1 ? (getLanguage["aminuteago"] ?? "minute ago") : (getLanguage["minutesago"] ?? "minutes ago")
+            return "\(getLanguage["ago"] ?? "") \(minute) \(text)"
+        }
+
         if seconds(from: date) > 0 { return "\(getLanguage["ago"] ?? "") \(seconds(from: date)) \(getLanguage["justnow"] ?? "")" }
-        return "\(getLanguage["ago"] ?? "") 1 \(getLanguage["justnow"] ?? "")"
+
+        return "\(getLanguage["ago"] ?? "") 1 \(getLanguage["just now"] ?? "just now")"
     }
     func offsetFrom(date: Date) -> String {
         

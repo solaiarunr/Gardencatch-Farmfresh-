@@ -12,7 +12,14 @@ class PremiumListVc: UIViewController {
     @IBOutlet weak var ListTV: UITableView!
     @IBOutlet weak var TitleLbl: UILabel!
     @IBOutlet weak var payBtn: UIButton!
-
+    @IBOutlet weak var cancellbl: UILabel!
+    @IBOutlet weak var deslbl: UILabel!
+    @IBOutlet weak var benifitslbl: UILabel!
+    @IBOutlet weak var benitfisstackview: UIStackView!
+    
+    
+    
+    
     var premiumType: PremiumType = .monthly
     var monthlyPromotions: [PromotionPlanModel] = []
     var yearlyPromotions: [PromotionPlanModel] = []
@@ -50,10 +57,48 @@ class PremiumListVc: UIViewController {
             UINib(nibName: "PreAdcellTableViewCell", bundle: nil),
             forCellReuseIdentifier: "PreAdcellTableViewCell"
         )
+        self.ListTV.rowHeight = UITableView.automaticDimension
+        self.ListTV.estimatedRowHeight = 85
         TitleLbl.config(color: UIColor(named: "LightTextColor"),
-                              font: UIFont(name: APP_FONT_REGULAR, size: 15),
+                              font: UIFont(name: APP_FONT_BOLD, size: 15),
                               align: .left,
                               text: "Upgradecontent")
+        benifitslbl.config(color: UIColor(named: "LightTextColor"),
+                              font: UIFont(name: APP_FONT_BOLD, size: 15),
+                              align: .left,
+                              text: "benifits")
+
+        self.cancellbl.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 13), align: .left, text: "cancel_des")
+        self.deslbl.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "Upgradecontentdes")
+        self.cancellbl.numberOfLines = 0
+        // Benefits
+        let benefits = [
+            "Unlimited product listings",
+            "Biz Spotlight & Local Spotlight boosts",
+            "Local Business badge for trust",
+            "Priority placement in search results"
+        ]
+        for item in benefits {
+
+            let row = UIStackView()
+            row.axis = .horizontal
+            row.spacing = 8
+            row.alignment = .top
+
+            let bullet = UILabel()
+            bullet.text = "•"
+            bullet.font = .boldSystemFont(ofSize: 18)
+
+            let label = UILabel()
+            label.text = item
+            label.numberOfLines = 0
+            label.font = UIFont(name: APP_FONT_REGULAR, size: 15)
+
+            row.addArrangedSubview(bullet)
+            row.addArrangedSubview(label)
+
+            benitfisstackview.addArrangedSubview(row)
+        }
      
        
     }
@@ -407,7 +452,7 @@ extension PremiumListVc: UITableViewDelegate, UITableViewDataSource {
 
         cell.Planname.text = model.name ?? ""
         cell.price.text = model.formattedPrice ?? ""
-        cell.Plandays.text = premiumType == .monthly ? "Monthly" : "Yearly"
+        cell.Plandays.text = premiumType == .monthly ? "Monthly Plan — Support Local Month-to-Month" : "Yearly Plan — Support Local All Year"
 
         // ✅ Check selected index and apply background
         let isSelected = premiumType == .monthly
@@ -445,6 +490,6 @@ extension PremiumListVc: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView,
                    heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 85
+        return 90
     }
 }

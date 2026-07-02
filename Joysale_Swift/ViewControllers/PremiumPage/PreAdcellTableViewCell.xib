@@ -22,7 +22,7 @@
                         <rect key="frame" x="5" y="0.0" width="488" height="110"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="fe7-dn-rP2">
-                                <rect key="frame" x="10.000000000000007" y="30.666666666666668" width="110.66666666666669" height="48.666666666666671"/>
+                                <rect key="frame" x="10.000000000000007" y="10" width="110.66666666666669" height="90"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LightTextColor" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NAg-Rk-7j2">
                                         <rect key="frame" x="0.0" y="0.0" width="110.66666666666667" height="20.333333333333332"/>
@@ -30,8 +30,8 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="7 Days" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z1H-Iy-5zh">
-                                        <rect key="frame" x="0.0" y="28.333333333333336" width="110.66666666666667" height="20.333333333333336"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="7 Days" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z1H-Iy-5zh">
+                                        <rect key="frame" x="0.0" y="28.333333333333343" width="110.66666666666667" height="61.666666666666657"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -39,7 +39,7 @@
                                 </subviews>
                             </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$500" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ma7-lP-ZQN">
-                                <rect key="frame" x="120.66666666666663" y="45" width="357.33333333333337" height="20.333333333333329"/>
+                                <rect key="frame" x="437" y="45" width="41" height="20.333333333333329"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" name="AppThemeColorNew"/>
                                 <nil key="highlightedColor"/>
@@ -47,11 +47,12 @@
                         </subviews>
                         <color key="backgroundColor" name="whitecolorNEW"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="fe7-dn-rP2" secondAttribute="bottom" constant="10" id="2f1-tM-Fyc"/>
                             <constraint firstItem="fe7-dn-rP2" firstAttribute="centerY" secondItem="24b-yO-jtz" secondAttribute="centerY" id="2qS-Zd-OTN"/>
                             <constraint firstItem="Ma7-lP-ZQN" firstAttribute="centerY" secondItem="fe7-dn-rP2" secondAttribute="centerY" id="Iba-eI-ZyD"/>
-                            <constraint firstItem="Ma7-lP-ZQN" firstAttribute="leading" secondItem="fe7-dn-rP2" secondAttribute="trailing" id="JGq-i3-l7J"/>
                             <constraint firstAttribute="trailing" secondItem="Ma7-lP-ZQN" secondAttribute="trailing" constant="10" id="LoD-ue-hbw"/>
                             <constraint firstItem="fe7-dn-rP2" firstAttribute="leading" secondItem="24b-yO-jtz" secondAttribute="leading" constant="10" id="ZE7-de-SUF"/>
+                            <constraint firstItem="fe7-dn-rP2" firstAttribute="top" secondItem="24b-yO-jtz" secondAttribute="top" constant="10" id="Ztb-Vo-oKZ"/>
                         </constraints>
                     </view>
                 </subviews>

@@ -60,7 +60,7 @@ class EditProfileViewController: UIViewController, customLocationDelegate {
         self.tableView.estimatedSectionFooterHeight = 50
         self.saveButton.backgroundColor = UIColor(named: "AppThemeColor") ?? .white
         self.saveButton.cornerMiniumRadius()
-        self.saveButton.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .center, title: "save")
+        self.saveButton.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .center, title: "save_change")
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         let providers: [FUIAuthProvider] = [

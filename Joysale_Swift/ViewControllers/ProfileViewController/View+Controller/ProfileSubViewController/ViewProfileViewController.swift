@@ -195,8 +195,11 @@ class ViewProfileViewController: MXSegmentedPagerController {
                     self.headerView.editButton.backgroundColor = UIColor(named: "clearcolor")
                     self.headerView.editButton.setImage(#imageLiteral(resourceName: "profile_settingheader"), for: .normal)
                     self.headerView.editButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+                    self.headerView.editButton.config(color: UIColor.white, font: UIFont(name: APP_FONT_REGULAR, size: 13), align: .center, title: "edit_profile")
+                    self.headerView.editButton.setTitle(" Edit Profile", for: .normal)
                 }
                 else {
+                    self.headerView.editButton.setTitle(nil, for: .normal)
                     self.headerView.editButton.setImage(nil, for: .normal)
                     self.headerView.editButton.isUserInteractionEnabled = false
                 }

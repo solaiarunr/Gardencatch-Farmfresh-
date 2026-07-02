@@ -58,13 +58,20 @@ class ProfileViewController: UIViewController {
                     }
                 }else{
                     let alert = UIAlertController(
-                        title: "Alert",
-                        message: "No subscription details found",
+                        title: "Subscription Status",
+                        message: "You do not have an active subscription.",
                         preferredStyle: .alert
                     )
+                    alert.addAction(UIAlertAction(title: "Upgrade", style: .default) { _ in
+                        if (UserDefaultModule.shared.getUserData()?.user_id ?? "") != "" {
+                            let pageObj = CreatePremiumvc()
+                            self?.navigationController?.pushViewController(pageObj, animated: true)
+                        }
+                    })
                     alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
                         self?.navigationController?.popViewController(animated: true)
                     })
+                    
                     self?.present(alert, animated: true)
                 }
             }
@@ -143,29 +150,33 @@ class ProfileViewController: UIViewController {
                 group.notify(queue: DispatchQueue.main) {
                     self.profileArr.removeAll()
                     self.profileArr.append("")
+                    
                     if PAID_BANNER_FLAG {
                         self.profileArr.append("advertise")
                     }
                     self.profileArr.append("donate")    //MARK: Custom Work
-                    self.profileArr.append("notifications")
+                    self.profileArr.append("MembershipSubscription")
+                    
                     if BUYNOW_MODEL_FLAG {
                         self.profileArr.append("myordersale")
-                    }
-                    if PROMOTION_FLAG {
-                        self.profileArr.append("my_promotions")
                     }
                     if EXCHANGE_MODEL_FLAG {
                         self.profileArr.append("myexchange")
                     }
+                    if PROMOTION_FLAG {
+                        self.profileArr.append("my_promotions")
+                    }
+                    self.profileArr.append("productanalytics")
 //                    self.profileArr.append("my_subscription")
                     
                      if BUYNOW_MODEL_FLAG {
                         self.profileArr.append("addressbook")
                     }
-                    self.profileArr.append("help")
-                    self.profileArr.append("MembershipSubscription")
                     self.profileArr.append("Invite friends")
-                    self.profileArr.append("productanalytics")
+                    self.profileArr.append("help")
+                    self.profileArr.append("notifications")
+                    
+                   
                     self.profileArr.append("comments")
                     self.profileArr.append("deleteaccount")
                     self.profileArr.append("logout")

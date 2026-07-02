@@ -73,6 +73,7 @@
          self.likeLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "comments")
          self.memberShipView.cornerViewMiniumRadius()
          self.memberShipImageView.image = UIImage(named: "member_icon")
+         self.twitterButton.cornerRoundRadius()
          
      }
      
@@ -114,12 +115,14 @@
 //                     self.adButton.setTitle(item.promotionType, for: .normal)
                      if item.promotionType == "Urgent" {
                          if item.membership_enable == "enable"{
-                             self.memberShipView.backgroundColor = UIColor(named: "UrgentColor")
+                           //  self.memberShipView.backgroundColor = UIColor(named: "UrgentColor")
+                             self.memberShipView.backgroundColor = UIColor(named: "AdColor")
                              self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
                              self.memberShipLabel.text = getLanguage["urgent"]
                              self.memberShipViewWidth.constant = 110
                          }else{
-                             self.memberShipView.backgroundColor = UIColor(named: "UrgentColor")
+                            // self.memberShipView.backgroundColor = UIColor(named: "UrgentColor")
+                             self.memberShipView.backgroundColor = UIColor(named: "AdColor")
                              self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
                              self.memberShipLabel.text = getLanguage["urgent"]
                              self.memberShipImageView.isHidden = true

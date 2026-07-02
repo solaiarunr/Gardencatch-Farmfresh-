@@ -36,6 +36,14 @@ class AddBannerViewController: UIViewController {
     @IBOutlet weak var endTextField: UITextField!
     @IBOutlet weak var descLabel: UILabel!
     @IBOutlet weak var totalPriceLabel: UILabel!
+    @IBOutlet weak var titlelbl: UILabel!
+    @IBOutlet weak var deslbl: UILabel!
+    
+    @IBOutlet weak var notedes: UILabel!
+    @IBOutlet weak var notetitle: UILabel!
+    @IBOutlet weak var bottomdeslbl: UILabel!
+    
+    
     var bannerResultModel: BannerResultModel?
     let dateformatter = DateFormatter() // 2-2
     var imagePicker: ImagePicker!
@@ -80,10 +88,14 @@ class AddBannerViewController: UIViewController {
         self.appView.cornerViewMiniumRadius()
         self.webSizeLabel.config(color: UIColor(named: "SecondaryTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .left, text: "Web banner (size 1920px 400px)")
         self.appSizeLabel.config(color: UIColor(named: "SecondaryTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .left, text: "App banner (size 1024px 500px)")
+        self.deslbl.config(color: UIColor(named: "SecondaryTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .left, text: "uploadbannerdes")
+        self.notedes.config(color: UIColor(named: "SecondaryTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .left, text: "importantnotesdes")
         self.bannerLinkTitleLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "banner_link")
-        self.bannerLinkTitleLabel.text = self.bannerLinkTitleLabel.text?.uppercased()
+        self.notetitle.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "importantnotes")
+        self.titlelbl.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "uploadbanner")
+     //   self.bannerLinkTitleLabel.text = self.bannerLinkTitleLabel.text?.uppercased()
         self.whenLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "when_banner_display")
-        self.whenLabel.text = self.whenLabel.text?.uppercased()
+       // self.whenLabel.text = self.whenLabel.text?.uppercased()
         self.priceLabel.config(color: UIColor(named: "redcolor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .right, text: "")
         self.priceTypeLabel.config(color: UIColor(named: "redcolor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .right, text: "")
         self.webLinkTextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "web_link", font: UIFont(name: APP_FONT_REGULAR, size: 14))
@@ -91,7 +103,8 @@ class AddBannerViewController: UIViewController {
         self.startTextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "start_date", font: UIFont(name: APP_FONT_REGULAR, size: 14))
         self.endTextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "end_date", font: UIFont(name: APP_FONT_REGULAR, size: 14))
         self.descLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .center, text: "")
-        self.priceLabel.text = "\(self.bannerResultModel?.formattedPricePerDay ?? "") "
+        self.bottomdeslbl.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .center, text: "ads_runText")
+        self.priceLabel.text = "Price: \(self.bannerResultModel?.formattedPricePerDay ?? "") "
         self.priceTypeLabel.text = (getLanguage["per_day"] ?? "")
         
 //        self.descLabel.text = "\(getLanguage["ads_run"] ?? "") 0 \(getLanguage["days"]?.lowercased() ?? ""). \(getLanguage["spend"] ?? "")"
@@ -159,35 +172,56 @@ class AddBannerViewController: UIViewController {
     func updatePrice() {
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        self.view.endEditing(true)
-        var numberOfDays = 0
         formatter.dateFormat = "yyyy-MM-dd"
-        if let startDate = formatter.date(from: self.startTextField.text!), let endDate = formatter.date(from: self.endTextField.text!) {
-            print("Start\(startDate)")
-            print("End\(endDate)")
 
-            numberOfDays = (calendar.dateComponents([.day], from: startDate, to: endDate).day! + 1)
-            print("differ\(numberOfDays)")
+        self.view.endEditing(true)
 
-            let pricePerDay = Double(self.bannerResultModel?.pricePerDay ?? "0") ?? 0
-//            self.descLabel.text = "\(getLanguage["ads_run"] ?? "") \(numberOfDays) \(getLanguage["days"]?.lowercased() ?? ""). \(getLanguage["spend"] ?? "")"
-            let string = NSMutableAttributedString(string: "\(getLanguage["ads_run"] ?? "") \(numberOfDays) \(getLanguage["days"]?.lowercased() ?? ""). \(getLanguage["spend"] ?? "")")
-            string.setColorWithFont("\(numberOfDays) \(getLanguage["days"]?.lowercased() ?? "")", with: UIColor(named: "BlackColor") ?? .white, font: UIFont(name: APP_FONT_BOLD, size: 14) ?? UIFont.boldSystemFont(ofSize: 14))
-            self.descLabel.attributedText = string
-
-             totalPrice = (pricePerDay * Double(numberOfDays))
-            let currency = (self.bannerResultModel?.currencyMode ?? "") == "symbol" ? (self.bannerResultModel?.currencySymbol ?? "") : (self.bannerResultModel?.currencyCode ?? "")
-            if UserDefaultModule.shared.getAppLanguage().capitalized == "Arabic" {
-                self.totalPriceLabel.text = (self.bannerResultModel?.currencyPosition) == "postfix" ? "\(currency) \(String(format: "%.2f", totalPrice))" : "\(String(format: "%.2f", totalPrice)) \(currency)"
-            }
-            else {
-                self.totalPriceLabel.text = (self.bannerResultModel?.currencyPosition) == "postfix" ? "\(String(format: "%.2f", totalPrice)) \(currency)" : "\(currency) \(String(format: "%.2f", totalPrice))"
-            }
-        }
+        // Hide labels if either date is missing
+        guard
+            let startText = startTextField.text, !startText.isEmpty,
+            let endText = endTextField.text, !endText.isEmpty,
+            let startDate = formatter.date(from: startText),
+            let endDate = formatter.date(from: endText)
         else {
-            self.descLabel.text = "\(getLanguage["ads_run"] ?? "") \(0) \(getLanguage["days"]?.lowercased() ?? ""). \(getLanguage["spend"] ?? "")"
-            self.totalPriceLabel.text = "\(String(format: "%.2f", 0)) \(self.bannerResultModel?.currencySymbol ?? "")"
+            descLabel.isHidden = true
+            totalPriceLabel.isHidden = true
+            return
+        }
 
+        // Show labels when both dates are selected
+        descLabel.isHidden = false
+        totalPriceLabel.isHidden = false
+
+        let numberOfDays = (calendar.dateComponents([.day], from: startDate, to: endDate).day ?? 0) + 1
+
+        let pricePerDay = Double(self.bannerResultModel?.pricePerDay ?? "0") ?? 0
+
+        let string = NSMutableAttributedString(
+            string: "\(getLanguage["ads_run"] ?? "") \(numberOfDays) \(getLanguage["days"]?.lowercased() ?? ""). \(getLanguage["spend"] ?? "")"
+        )
+
+        string.setColorWithFont(
+            "\(numberOfDays) \(getLanguage["days"]?.lowercased() ?? "")",
+            with: UIColor(named: "BlackColor") ?? .white,
+            font: UIFont(name: APP_FONT_BOLD, size: 14) ?? UIFont.boldSystemFont(ofSize: 14)
+        )
+
+        descLabel.attributedText = string
+
+        totalPrice = pricePerDay * Double(numberOfDays)
+
+        let currency = (bannerResultModel?.currencyMode ?? "") == "symbol"
+            ? (bannerResultModel?.currencySymbol ?? "")
+            : (bannerResultModel?.currencyCode ?? "")
+
+        if UserDefaultModule.shared.getAppLanguage().capitalized == "Arabic" {
+            totalPriceLabel.text = (bannerResultModel?.currencyPosition) == "postfix"
+                ? "\(currency) \(String(format: "%.2f", totalPrice))"
+                : "\(String(format: "%.2f", totalPrice)) \(currency)"
+        } else {
+            totalPriceLabel.text = (bannerResultModel?.currencyPosition) == "postfix"
+                ? "\(String(format: "%.2f", totalPrice)) \(currency)"
+                : "\(currency) \(String(format: "%.2f", totalPrice))"
         }
     }
     
