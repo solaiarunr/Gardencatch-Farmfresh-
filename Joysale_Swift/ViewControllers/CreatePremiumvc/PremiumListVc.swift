@@ -2,6 +2,7 @@ import UIKit
 import Stripe
 import BraintreeDropIn
 import Braintree
+
 enum PremiumType {
     case monthly
     case yearly
@@ -16,10 +17,7 @@ class PremiumListVc: UIViewController {
     @IBOutlet weak var deslbl: UILabel!
     @IBOutlet weak var benifitslbl: UILabel!
     @IBOutlet weak var benitfisstackview: UIStackView!
-    
-    
-    
-    
+
     var premiumType: PremiumType = .monthly
     var monthlyPromotions: [PromotionPlanModel] = []
     var yearlyPromotions: [PromotionPlanModel] = []
@@ -29,102 +27,143 @@ class PremiumListVc: UIViewController {
     var stripeModel = StripeDataModel()
     var paymentSheetFlowController: PaymentSheet.FlowController?
     let appdelegatecall = UIApplication.shared.delegate as! AppDelegate
-    
+
     @IBOutlet weak var LoaderView: UIView!
     @IBOutlet weak var Loader: UIActivityIndicatorView!
-    
+
+    private let planBenefitKeys = [
+        "benefit_unlimited_listings",
+        "benefit_local_business_badge",
+        "benefit_priority_placement",
+        "benefit_business_tools",
+        "benefit_faster_approval"
+    ]
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configUI()
         getPremiumData()
     }
+
     func showLoader() {
-        self.LoaderView.isHidden = false
-        self.Loader.startAnimating()
+        LoaderView.isHidden = false
+        Loader.startAnimating()
     }
 
     func hideLoader() {
-        self.LoaderView.isHidden = true
-        self.Loader.stopAnimating()
+        LoaderView.isHidden = true
+        Loader.stopAnimating()
     }
+
     func configUI() {
         ListTV.delegate = self
         ListTV.dataSource = self
-      
-
+        ListTV.separatorStyle = .none
+        ListTV.backgroundColor = UIColor(named: "BackGroundColor")
         ListTV.register(
             UINib(nibName: "PreAdcellTableViewCell", bundle: nil),
             forCellReuseIdentifier: "PreAdcellTableViewCell"
         )
-        self.ListTV.rowHeight = UITableView.automaticDimension
-        self.ListTV.estimatedRowHeight = 85
-        TitleLbl.config(color: UIColor(named: "LightTextColor"),
-                              font: UIFont(name: APP_FONT_BOLD, size: 15),
-                              align: .left,
-                              text: "Upgradecontent")
-        benifitslbl.config(color: UIColor(named: "LightTextColor"),
-                              font: UIFont(name: APP_FONT_BOLD, size: 15),
-                              align: .left,
-                              text: "benifits")
+        ListTV.rowHeight = UITableView.automaticDimension
+        ListTV.estimatedRowHeight = 320
 
-        self.cancellbl.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 13), align: .left, text: "cancel_des")
-        self.deslbl.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "Upgradecontentdes")
-        self.cancellbl.numberOfLines = 0
-        // Benefits
-        let benefits = [
-            "Unlimited product listings",
-            "Biz Spotlight & Local Spotlight boosts",
-            "Local Business badge for trust",
-            "Priority placement in search results"
-        ]
-        for item in benefits {
+        TitleLbl.config(
+            color: UIColor(named: "AppTextColor"),
+            font: UIFont(name: APP_FONT_BOLD, size: 16),
+            align: .left,
+            text: "Upgradecontent"
+        )
+        TitleLbl.numberOfLines = 0
 
-            let row = UIStackView()
-            row.axis = .horizontal
-            row.spacing = 8
-            row.alignment = .top
+        deslbl.config(
+            color: UIColor(named: "AppTextColor"),
+            font: UIFont(name: APP_FONT_REGULAR, size: 14),
+            align: .left,
+            text: "Upgradecontentdes"
+        )
+        deslbl.numberOfLines = 0
 
-            let bullet = UILabel()
-            bullet.text = "•"
-            bullet.font = .boldSystemFont(ofSize: 18)
-
-            let label = UILabel()
-            label.text = item
-            label.numberOfLines = 0
-            label.font = UIFont(name: APP_FONT_REGULAR, size: 15)
-
-            row.addArrangedSubview(bullet)
-            row.addArrangedSubview(label)
-
-            benitfisstackview.addArrangedSubview(row)
+        benifitslbl.isHidden = true
+        benitfisstackview.isHidden = true
+        benitfisstackview.arrangedSubviews.forEach {
+            benitfisstackview.removeArrangedSubview($0)
+            $0.removeFromSuperview()
         }
-     
-       
+
+        cancellbl.config(
+            color: UIColor(named: "AppTextColor"),
+            font: UIFont(name: APP_FONT_REGULAR, size: 13),
+            align: .left,
+            text: "cancel_des"
+        )
+        cancellbl.numberOfLines = 0
+
+        payBtn.config(
+            color: UIColor(named: "whitecolor"),
+            font: UIFont(name: APP_FONT_BOLD, size: 16),
+            align: .center,
+            title: "ActivateBusinessSubscription"
+        )
+        payBtn.backgroundColor = UIColor(named: "activecolor") ?? UIColor(named: "AppThemeColor")
+        payBtn.layer.cornerRadius = 8
+        payBtn.clipsToBounds = true
     }
+
+    func planBenefits() -> [String] {
+        planBenefitKeys.compactMap { getLanguage[$0] }
+    }
+
+    func planTitle(for type: PremiumType) -> String {
+        switch type {
+        case .monthly:
+            return getLanguage["MonthlyPlanTitle"] ?? "Local Business Subscription - Monthly Plan"
+        case .yearly:
+            return getLanguage["YearlyPlanTitle"] ?? "Local Business Subscription - Yearly Plan"
+        }
+    }
+
+    func formattedPriceText(for model: PromotionPlanModel, type: PremiumType) -> String {
+        let suffix = type == .monthly
+            ? (getLanguage["per_month"] ?? "/ month")
+            : (getLanguage["per_year"] ?? "/ year")
+        let priceValue = model.formattedPrice ?? ""
+        if priceValue.isEmpty {
+            return suffix.trimmingCharacters(in: .whitespaces)
+        }
+        return "\(priceValue) \(suffix)"
+    }
+
+    func selectDefaultPlan() {
+        switch premiumType {
+        case .monthly:
+            selectedMonthlyIndex = monthlyPromotions.isEmpty ? nil : 0
+        case .yearly:
+            selectedYearlyIndex = yearlyPromotions.isEmpty ? nil : 0
+        }
+        ListTV.reloadData()
+    }
+
     func clearSelection() {
         selectedMonthlyIndex = nil
         selectedYearlyIndex = nil
         ListTV.reloadData()
     }
+
     @IBAction func payBtnAction(_ sender: UIButton) {
         sender.isEnabled = false
-        let selectedPlanIndex = premiumType == .monthly
-            ? selectedMonthlyIndex
-            : selectedYearlyIndex
 
-        guard selectedPlanIndex != nil else {
+        if getSelectedPlan() == nil {
+            selectDefaultPlan()
+        }
+
+        guard getSelectedPlan() != nil else {
             sender.isEnabled = true
             let alert = UIAlertController(
                 title: nil,
                 message: "Please select a plan",
                 preferredStyle: .alert
             )
-
-            alert.addAction(
-                UIAlertAction(title: "OK", style: .cancel)
-            )
-
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel))
             present(alert, animated: true)
             return
         }
@@ -135,90 +174,62 @@ class PremiumListVc: UIViewController {
             presentStripe()
         }
     }
-    
+
     func getSelectedPlan() -> PromotionPlanModel? {
-
         switch premiumType {
-
         case .monthly:
-
             guard let index = selectedMonthlyIndex,
                   index < monthlyPromotions.count else {
                 return nil
             }
-
             return monthlyPromotions[index]
 
         case .yearly:
-
             guard let index = selectedYearlyIndex,
                   index < yearlyPromotions.count else {
                 return nil
             }
-
             return yearlyPromotions[index]
         }
     }
-    func presentStripe() {
 
+    func presentStripe() {
         guard let plan = getSelectedPlan() else {
-            self.payBtn.isEnabled = true
+            payBtn.isEnabled = true
             return
         }
 
         let amount = "\(plan.price ?? 0.0)"
-
-        let currency = getMembershipPromotionModel?
-            .result?
-            .currencyCode ?? "USD"
-
+        let currency = getMembershipPromotionModel?.result?.currencyCode ?? "USD"
         let vm = StripeDataViewModel()
 
         vm.getStripeDetails(
             amount: amount,
             currency: currency,
             payment_mode: "subscription",
-            plan_id: "\(plan.id ?? 0)",user_id:UserDefaultModule.shared.getUserData()?.user_id ?? ""
+            plan_id: "\(plan.id ?? 0)",
+            user_id: UserDefaultModule.shared.getUserData()?.user_id ?? ""
         ) { success in
-
             guard success else {
-
                 self.payBtn.isEnabled = true
-
                 let alert = UIAlertController(
                     title: "Error",
-                    message:  "Unable to create payment",
+                    message: "Unable to create payment",
                     preferredStyle: .alert
                 )
-
-                alert.addAction(
-                    UIAlertAction(
-                        title: "OK",
-                        style: .default
-                    )
-                )
-
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
                 self.present(alert, animated: true)
                 return
             }
 
             guard let stripeData = vm.stripeModel else {
-
                 self.payBtn.isEnabled = true
-
                 let alert = UIAlertController(
                     title: "Error",
                     message: "Invalid payment response",
                     preferredStyle: .alert
                 )
-
-                alert.addAction(
-                    UIAlertAction(
-                        title: "OK",
-                        style: .default
-                    )
-                )
-
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
                 self.present(alert, animated: true)
                 return
             }
@@ -226,9 +237,7 @@ class PremiumListVc: UIViewController {
             self.stripeModel = stripeData
 
             var configuration = PaymentSheet.Configuration()
-
             configuration.merchantDisplayName = "Garden Catch LLC"
-
             configuration.customer = .init(
                 id: stripeData.customer,
                 ephemeralKeySecret: stripeData.ephemeralKey
@@ -241,17 +250,10 @@ class PremiumListVc: UIViewController {
 
             let delegate = UIApplication.shared.delegate as! AppDelegate
 
-            paymentSheet.present(
-                from: delegate.navigationController
-            ) { result in
-
+            paymentSheet.present(from: delegate.navigationController) { result in
                 switch result {
-
                 case .completed:
-
-                    let token = stripeData.paymentIntent
-                        .components(separatedBy: "_secret_")
-
+                    let token = stripeData.paymentIntent.components(separatedBy: "_secret_")
                     self.payAct(
                         type: "stripe",
                         token: token.first ?? "",
@@ -259,103 +261,71 @@ class PremiumListVc: UIViewController {
                     )
 
                 case .canceled:
-
                     self.payBtn.isEnabled = true
 
                 case .failed(let error):
-
                     self.payBtn.isEnabled = true
-
                     let alert = UIAlertController(
                         title: "Payment Failed",
                         message: error.localizedDescription,
                         preferredStyle: .alert
                     )
-
-                    alert.addAction(
-                        UIAlertAction(
-                            title: "OK",
-                            style: .default
-                        )
-                    )
-
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
                     self.present(alert, animated: true)
                 }
             }
 
         } onFailure: { error in
-
             self.payBtn.isEnabled = true
-
             let alert = UIAlertController(
                 title: "Error",
                 message: error,
                 preferredStyle: .alert
             )
-
-            alert.addAction(
-                UIAlertAction(
-                    title: "OK",
-                    style: .default
-                )
-            )
-
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
             self.present(alert, animated: true)
         }
     }
+
     func presentDropInController() {
-
         let dropInRequest = BTDropInRequest()
-
         let dropInController = BTDropInController(
             authorization: BRAINTREE_TOKEN,
             request: dropInRequest
         ) { controller, result, error in
-
-            guard let result = result,
-                  error == nil else {
+            guard let result = result, error == nil else {
                 self.payBtn.isEnabled = true
                 print(error?.localizedDescription ?? "")
                 return
             }
 
             if let nonce = result.paymentMethod?.nonce {
-
-                self.payAct(
-                    type: "braintree",
-                    token: nonce,currency: ""
-                )
+                self.payAct(type: "braintree", token: nonce, currency: "")
             }
 
             controller.dismiss(animated: true)
         }
 
         guard let dropIn = dropInController else { return }
-
         present(dropIn, animated: true)
     }
-    func payAct(type: String,
-                token: String,currency:String = "") {
 
+    func payAct(type: String, token: String, currency: String = "") {
         guard let plan = getSelectedPlan() else {
             return
         }
-        showLoader()
-        let parameter: [String: Any] = [
-            "user_id":
-                UserDefaultModule.shared.getUserData()?.user_id ?? "",
-            "plan_id":
-                plan.id ?? 0,
-            "payment_type":
-                type,
-            "pay_nonce":
-                token,
-            "type":"localbusiness",
-            "lang_type":DEFAULT_LANGUAGE_CODE,
-            "currency_code":currency
-            
-        ]
 
+        showLoader()
+
+        let parameter: [String: Any] = [
+            "user_id": UserDefaultModule.shared.getUserData()?.user_id ?? "",
+            "plan_id": plan.id ?? 0,
+            "payment_type": type,
+            "pay_nonce": token,
+            "type": "localbusiness",
+            "lang_type": DEFAULT_LANGUAGE_CODE,
+            "currency_code": currency
+        ]
 
         CallParsingFunction().postDataCall(
             subURl: PROCESSING_PAYMENT_URL,
@@ -370,14 +340,9 @@ class PremiumListVc: UIViewController {
                 preferredStyle: .alert
             )
 
-            alert.addAction(UIAlertAction(
-                title: "OK",
-                style: .default
-            ) { _ in
-
+            alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
                 let pageObj = TabbarController()
                 pageObj.selectedIndex = 0
-
                 self.appdelegatecall.initVC(initialView: pageObj)
             })
 
@@ -390,7 +355,8 @@ class PremiumListVc: UIViewController {
     }
 
     public func getPremiumData() {
-        self.showLoader()
+        showLoader()
+
         let parameter: [String: Any] = [
             "lang_type": DEFAULT_LANGUAGE_CODE,
             "user_id": UserDefaultModule.shared.getUserData()?.user_id ?? ""
@@ -402,19 +368,13 @@ class PremiumListVc: UIViewController {
             onSuccess: { response in
                 self.hideLoader()
                 let rootClass = GetMembershipPromotionModel(fromJson: response)
-
                 self.getMembershipPromotionModel = rootClass
-
-                self.monthlyPromotions =
-                    rootClass.result?.monthlyPromotions ?? []
-
-                self.yearlyPromotions =
-                    rootClass.result?.yearlyPromotions ?? []
+                self.monthlyPromotions = rootClass.result?.monthlyPromotions ?? []
+                self.yearlyPromotions = rootClass.result?.yearlyPromotions ?? []
 
                 DispatchQueue.main.async {
-                    self.ListTV.reloadData()
+                    self.selectDefaultPlan()
                 }
-
             },
             onFailure: { error in
                 self.hideLoader()
@@ -426,21 +386,16 @@ class PremiumListVc: UIViewController {
 
 extension PremiumListVc: UITableViewDelegate, UITableViewDataSource {
 
-    func tableView(_ tableView: UITableView,
-                   numberOfRowsInSection section: Int) -> Int {
-
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch premiumType {
-
         case .monthly:
             return monthlyPromotions.count
-
         case .yearly:
             return yearlyPromotions.count
         }
     }
-    func tableView(_ tableView: UITableView,
-                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(
             withIdentifier: "PreAdcellTableViewCell",
             for: indexPath
@@ -450,46 +405,28 @@ extension PremiumListVc: UITableViewDelegate, UITableViewDataSource {
             ? monthlyPromotions[indexPath.row]
             : yearlyPromotions[indexPath.row]
 
-        cell.Planname.text = model.name ?? ""
-        cell.price.text = model.formattedPrice ?? ""
-        cell.Plandays.text = premiumType == .monthly ? "Monthly Plan — Support Local Month-to-Month" : "Yearly Plan — Support Local All Year"
-
-        // ✅ Check selected index and apply background
         let isSelected = premiumType == .monthly
             ? selectedMonthlyIndex == indexPath.row
             : selectedYearlyIndex == indexPath.row
 
-        cell.CornerView.backgroundColor = isSelected
-            ? UIColor(named: "AppThemeColorTrans")  // ✅ Selected - highlighted
-            : UIColor(named: "BlackColorad")         // ✅ Unselected - normal
-        
+        cell.configure(
+            planTitle: planTitle(for: premiumType),
+            priceText: formattedPriceText(for: model, type: premiumType),
+            isYearly: premiumType == .yearly,
+            benefits: planBenefits(),
+            isSelected: isSelected
+        )
+
         return cell
     }
-    func tableView(_ tableView: UITableView,
-                   didSelectRowAt indexPath: IndexPath) {
 
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch premiumType {
         case .monthly:
-            // ✅ Tap same row again = deselect, tap new row = select
-            if selectedMonthlyIndex == indexPath.row {
-                selectedMonthlyIndex = nil  // deselect
-            } else {
-                selectedMonthlyIndex = indexPath.row  // select
-            }
-
+            selectedMonthlyIndex = selectedMonthlyIndex == indexPath.row ? nil : indexPath.row
         case .yearly:
-            if selectedYearlyIndex == indexPath.row {
-                selectedYearlyIndex = nil  // deselect
-            } else {
-                selectedYearlyIndex = indexPath.row  // select
-            }
+            selectedYearlyIndex = selectedYearlyIndex == indexPath.row ? nil : indexPath.row
         }
-
         tableView.reloadData()
-    }
-
-    func tableView(_ tableView: UITableView,
-                   heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 90
     }
 }

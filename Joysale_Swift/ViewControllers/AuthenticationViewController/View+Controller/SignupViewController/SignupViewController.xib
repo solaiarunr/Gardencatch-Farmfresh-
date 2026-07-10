@@ -10,8 +10,8 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
-        <array key="Proxima Nova Regular.OTF">
-            <string>ProximaNova-Regular</string>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
         </array>
     </customFonts>
     <objects>
@@ -98,7 +98,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="4ck-WC-QOs"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="ProximaNova-Regular" family="Proxima Nova" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="-1" id="sEJ-hZ-jnb"/>
@@ -168,7 +168,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="e9p-O8-PjX"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="ProximaNova-Regular" family="Proxima Nova" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="-1" id="eMq-W7-JP7"/>
@@ -203,7 +203,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="T4Q-Xw-Qu1"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="ProximaNova-Regular" family="Proxima Nova" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="-1" id="tZh-5B-bnH"/>
@@ -238,7 +238,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="FZh-15-9Yh"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="ProximaNova-Regular" family="Proxima Nova" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="-1" id="1YD-yY-5oE"/>
@@ -273,7 +273,7 @@
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="35" id="gMU-OI-B34"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" name="ProximaNova-Regular" family="Proxima Nova" pointSize="17"/>
+                                                    <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="-1" id="vej-3d-6T9"/>

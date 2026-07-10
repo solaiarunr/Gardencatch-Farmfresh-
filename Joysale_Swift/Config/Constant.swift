@@ -16,8 +16,8 @@ var indicatorView = NVActivityIndicatorView.init(frame: CGRect(x:FULL_WIDTH/2-30
 let chat_bg = #colorLiteral(red: 0.1490196078, green: 0.5529411765, blue: 0.2156862745, alpha: 1)
 let WHITE_COLOR_HEADER = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
 
-let APP_FONT_BOLD = "ProximaNova-Bold"
-let APP_FONT_REGULAR = "ProximaNova-Regular"
+let APP_FONT_BOLD = "Roboto-Bold"
+let APP_FONT_REGULAR = "Roboto-Regular"
 var DEFAULT_LANGUAGE = "english"
 var DEFAULT_LANGUAGE_CODE = "en"
 var BRAINTREE_TOKEN = ""

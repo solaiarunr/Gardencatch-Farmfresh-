@@ -111,7 +111,7 @@
              }
              if item.itemStatus == "onsale" {
                  if item.promotionType != "Normal" && PROMOTION_FLAG {
-                     self.memberShipView.isHidden = false
+                     self.memberShipView.isHidden = true/*false*/
 //                     self.adButton.setTitle(item.promotionType, for: .normal)
                      if item.promotionType == "Urgent" {
                          if item.membership_enable == "enable"{
@@ -166,7 +166,7 @@
                  }
                  else {
                      if item.membership_enable == "enable"{
-                         self.memberShipView.isHidden = false
+                         self.memberShipView.isHidden = true/*false*/
                          self.memberShipView.backgroundColor = UIColor(named: "AppThemeColor")
                          self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
                          self.memberShipLabel.text = getLanguage["stewardship"]
@@ -179,7 +179,7 @@
                  }
              }
              else if item.itemStatus == "sold" {
-                 self.memberShipView.isHidden = false
+                 self.memberShipView.isHidden = true/*false*/
                  self.adButton.isHidden = true
                  if item.membership_enable == "enable"{
                      self.memberShipView.backgroundColor = UIColor(named: "soldOutColor")
@@ -201,7 +201,7 @@
                  }
              }
              else if item.itemStatus == "expired" {
-                 self.memberShipView.isHidden = false
+                 self.memberShipView.isHidden = true/*false*/
                  self.adButton.isHidden = true
                  if item.membership_enable == "enable"{
                      self.memberShipView.backgroundColor = UIColor(named: "soldOutColor")
@@ -255,7 +255,7 @@
              self.viewLikeCommentStackView.isHidden = false
              self.viewLabel.text = "\(item.viewsCount ?? 0) \((getLanguage["views"] ?? ""))"
              self.likeLabel.text = "\(item.likesCount ?? 0) \(getLanguage["likes"] ?? "")"
-             self.commentLabel.text = "\(Int(item.commentsCount) ?? 0) \((getLanguage["comments"] ?? ""))"
+             self.commentLabel.text = "\((getLanguage["comments"] ?? "")) (\(Int(item.commentsCount) ?? 0))"
          }
      }
      @objc func descTapAct(_ gesture: UITapGestureRecognizer) {

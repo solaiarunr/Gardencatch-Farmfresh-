@@ -22,6 +22,9 @@ class ExchangeCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var memberShipImageViewWidth: NSLayoutConstraint!
     @IBOutlet weak var memberShipImageViewleading: NSLayoutConstraint!
     @IBOutlet weak var memberShipViewWidth: NSLayoutConstraint!
+    @IBOutlet weak var tagimage: UIImageView!
+    
+    
     private let gradientLayer: CAGradientLayer = {
         let gradient = CAGradientLayer()
         gradient.colors = [UIColor.black.withAlphaComponent(0.5).cgColor, UIColor.clear]
@@ -60,6 +63,105 @@ class ExchangeCollectionViewCell: UICollectionViewCell {
 //                self.exchangeImageView.image = #imageLiteral(resourceName: "applogo")
             }
         }
+        self.tagimage.isHidden = true
+        
+        
+            if itemData.itemStatus == "onsale" {
+                if itemData.promotionType != "Normal" && PROMOTION_FLAG {
+                    self.tagimage.isHidden = false
+//                     self.adButton.setTitle(item.promotionType, for: .normal)
+                    
+                    if itemData.promotionType == "Urgent" {
+                        if itemData.membership_enable == "enable" {
+                            self.tagimage.image = UIImage(named: "business_withicon")
+                            self.tagimage.isHidden = false
+                        } else {
+                            self.tagimage.image = #imageLiteral(resourceName: "business")
+                            self.tagimage.isHidden = false
+                        }
+                    } else if itemData.promotionType == "local business" {
+                        if itemData.membership_enable == "enable" {
+                            self.tagimage.image = UIImage(named: "businesslocalpremium")
+                            self.tagimage.isHidden = false
+                        } else {
+                            self.tagimage.image = #imageLiteral(resourceName: "businesslocal")
+                            self.tagimage.isHidden = false
+                        }
+                    } else if itemData.promotionType == "Ad" {
+                        if itemData.membership_enable == "enable" {
+                            self.tagimage.image = UIImage(named: "ad_new_withicon")
+                            self.tagimage.isHidden = false
+                        } else {
+                            self.tagimage.image = #imageLiteral(resourceName: "ad_new")
+                            self.tagimage.isHidden = false
+                        }
+                    } else {
+                        self.tagimage.isHidden = true
+                    }
+                }
+                else {
+                        self.tagimage.isHidden = true
+                    if itemData.membership_enable == "enable"{
+                        
+                       tagimage.image = UIImage(named: "memberTag_withicon")
+                        self.tagimage.isHidden = false
+                    }else{
+                        self.memberShipView.isHidden = true
+                    }
+
+                }
+            }
+            else if itemData.itemStatus == "sold" {
+  
+                if itemData.membership_enable == "enable"{
+                    self.tagimage.image = UIImage(named: "sold_withicon")
+                    self.tagimage.isHidden = false
+                }else{
+                    self.tagimage.image = UIImage(named: "sold")
+                    self.tagimage.isHidden = false
+                }
+
+            }  else if itemData.itemStatus == "expired" {
+                self.memberShipView.isHidden = false
+                if itemData.membership_enable == "enable"{
+                    self.memberShipView.backgroundColor = UIColor(named: "soldOutColor")
+                    self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
+                    self.memberShipLabel.text = getLanguage["expired"]
+                    self.memberShipViewWidth.constant = 55
+                    self.memberShipImageView.isHidden = false
+                    self.memberShipImageViewWidth.constant = 15
+                    self.memberShipImageViewleading.constant = 5
+                    self.memberShipImageView.image = UIImage(named: "member_icon")
+                }else{
+                    self.memberShipView.backgroundColor = UIColor(named: "soldOutColor")
+                    self.memberShipLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .center, text: "")
+                    self.memberShipLabel.text = getLanguage["expired"]
+                    self.memberShipViewWidth.constant = 55
+                    self.memberShipImageView.isHidden = true
+                    self.memberShipImageViewleading.constant = 0
+                    self.memberShipImageViewWidth.constant = 0
+                }
+            }
+        let dateString = Utility.shared.timeStampWithDateFormat(timeStamp: "\(itemData.postedTime ?? 0)", dateFormat: "EEE, dd MMM yy HH:mm:ss VVVV")
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "EEE, dd MMM yy HH:mm:ss VVVV"
+        let date = dateFormatterGet.date(from: dateString)
+        if let dateVal = date {
+            self.dateButton.setTitle(Date().offset(from: dateVal), for: .normal)
+        }
+        self.dateButton.layer.insertSublayer(gradientLayer, at: 0)
+    }
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        gradientLayer.locations = [0, 1]
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: self.dateButton.bounds.width, height: self.dateButton.bounds.height)
+    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+//        self.exchangeImageView.image = nil
+    }
+    
+    func unused(_ itemData: ItemModel){
         if itemData.itemStatus == "onsale" {
             if itemData.promotionType != "Normal" && PROMOTION_FLAG {
                 self.statusButton.setTitle(itemData.promotionType, for: .normal)
@@ -187,22 +289,5 @@ class ExchangeCollectionViewCell: UICollectionViewCell {
                 self.memberShipImageViewWidth.constant = 0
             }
         }
-        let dateString = Utility.shared.timeStampWithDateFormat(timeStamp: "\(itemData.postedTime ?? 0)", dateFormat: "EEE, dd MMM yy HH:mm:ss VVVV")
-        let dateFormatterGet = DateFormatter()
-        dateFormatterGet.dateFormat = "EEE, dd MMM yy HH:mm:ss VVVV"
-        let date = dateFormatterGet.date(from: dateString)
-        if let dateVal = date {
-            self.dateButton.setTitle(Date().offset(from: dateVal), for: .normal)
-        }
-        self.dateButton.layer.insertSublayer(gradientLayer, at: 0)
-    }
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        gradientLayer.locations = [0, 1]
-        gradientLayer.frame = CGRect(x: 0, y: 0, width: self.dateButton.bounds.width, height: self.dateButton.bounds.height)
-    }
-    override func prepareForReuse() {
-        super.prepareForReuse()
-//        self.exchangeImageView.image = nil
     }
 }

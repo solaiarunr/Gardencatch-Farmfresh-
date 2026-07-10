@@ -257,6 +257,8 @@
 		407FDDA824A7665C000B4D32 /* StripeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 407FDDA624A7665C000B4D32 /* StripeViewController.xib */; };
 		4084C84A248E07C700857BBA /* Proxima Nova Bold.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 4084C848248E07C700857BBA /* Proxima Nova Bold.OTF */; };
 		4084C84B248E07C700857BBA /* Proxima Nova Regular.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 4084C849248E07C700857BBA /* Proxima Nova Regular.OTF */; };
+		40F0A0A32487A00100F0NT03 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 40F0A0A12487A00100F0NT01 /* Roboto-Regular.ttf */; };
+		40F0A0A42487A00100F0NT04 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 40F0A0A22487A00100F0NT02 /* Roboto-Bold.ttf */; };
 		4084C850248E0A3F00857BBA /* English.json in Resources */ = {isa = PBXBuildFile; fileRef = 4084C84D248E0A3F00857BBA /* English.json */; };
 		4084C851248E0A3F00857BBA /* French.json in Resources */ = {isa = PBXBuildFile; fileRef = 4084C84E248E0A3F00857BBA /* French.json */; };
 		40AEC48B24AB842E004C74BD /* ChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AEC48A24AB842E004C74BD /* ChatModel.swift */; };
@@ -555,6 +557,8 @@
 		407FDDA624A7665C000B4D32 /* StripeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StripeViewController.xib; sourceTree = "<group>"; };
 		4084C848248E07C700857BBA /* Proxima Nova Bold.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima Nova Bold.OTF"; sourceTree = "<group>"; };
 		4084C849248E07C700857BBA /* Proxima Nova Regular.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima Nova Regular.OTF"; sourceTree = "<group>"; };
+		40F0A0A12487A00100F0NT01 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		40F0A0A22487A00100F0NT02 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		4084C84D248E0A3F00857BBA /* English.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = English.json; sourceTree = "<group>"; };
 		4084C84E248E0A3F00857BBA /* French.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = French.json; sourceTree = "<group>"; };
 		40AEC48A24AB842E004C74BD /* ChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModel.swift; sourceTree = "<group>"; };
@@ -1807,6 +1811,8 @@
 			children = (
 				4084C848248E07C700857BBA /* Proxima Nova Bold.OTF */,
 				4084C849248E07C700857BBA /* Proxima Nova Regular.OTF */,
+				40F0A0A12487A00100F0NT01 /* Roboto-Regular.ttf */,
+				40F0A0A22487A00100F0NT02 /* Roboto-Bold.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -2510,6 +2516,8 @@
 				4020963824A06E9700CD3623 /* ItemDetailsMapTableViewCell.xib in Resources */,
 				407B14B324C0904300B21103 /* BannerListViewController.xib in Resources */,
 				4084C84A248E07C700857BBA /* Proxima Nova Bold.OTF in Resources */,
+				40F0A0A32487A00100F0NT03 /* Roboto-Regular.ttf in Resources */,
+				40F0A0A42487A00100F0NT04 /* Roboto-Bold.ttf in Resources */,
 				3D34EAA42755F7FA00D91146 /* WriteReviewViewController.xib in Resources */,
 				40549B5E2490A870008BF217 /* GoogleService-Info.plist in Resources */,
 				4038162A2497888B00722F22 /* HomeCatogoryCollectionViewCell.xib in Resources */,

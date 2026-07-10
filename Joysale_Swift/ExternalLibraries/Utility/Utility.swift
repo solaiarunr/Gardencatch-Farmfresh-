@@ -293,8 +293,25 @@ extension UINavigationController {
     }
     func customNavigationBarView(title: String, fColor: String, fontName: UIFont?, vc: UIViewController) {
         vc.title = getLanguage[title] ?? title
-        self.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: fontName ?? UIFont.systemFont(ofSize: 20), NSAttributedString.Key.foregroundColor: UIColor(named: fColor) ?? .white]
-        
+        let titleColor = UIColor(named: fColor) ?? .white
+        let font = fontName ?? UIFont.systemFont(ofSize: 20)
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: titleColor
+        ]
+        navigationBar.titleTextAttributes = attributes
+
+        if #available(iOS 13.0, *) {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = UIColor(named: "AppThemeColor")
+            appearance.shadowColor = .clear
+            appearance.shadowImage = UIImage()
+            appearance.titleTextAttributes = attributes
+            navigationBar.standardAppearance = appearance
+            navigationBar.scrollEdgeAppearance = appearance
+            navigationBar.compactAppearance = appearance
+        }
     }
     //    open override var preferredStatusBarStyle: UIStatusBarStyle {
     //       return topViewController?.preferredStatusBarStyle ?? .default

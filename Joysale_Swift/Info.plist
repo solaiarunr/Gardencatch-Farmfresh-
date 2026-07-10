@@ -255,8 +255,8 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Proxima Nova Bold.OTF</string>
-		<string>Proxima Nova Regular.OTF</string>
+		<string>Roboto-Bold.ttf</string>
+		<string>Roboto-Regular.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

@@ -82,16 +82,16 @@ class ViewProfileViewController: MXSegmentedPagerController {
         headerView.editButton.setImage(nil, for: .normal)
         headerView.wholeRatingView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.ratingViewAct)))
         segmentedPager.parallaxHeader.view = headerView
-        segmentedPager.parallaxHeader.height = 250
+        segmentedPager.parallaxHeader.height = 290
         segmentedPager.bounces = false
         segmentedPager.parallaxHeader.mode = .fill
 //        self.headerView.backButton.setImage(#imageLiteral(resourceName: "detail_back").imageFlippedForRightToLeftLayoutDirection(), for: .normal)
         self.headerView.backButton.addTarget(self, action: #selector(self.backButtonAct(_:)), for: .touchUpInside)
         self.headerView.editButton.addTarget(self, action: #selector(self.editButtonAct(_:)), for: .touchUpInside)
-        var wholeHeight = 60
+        var wholeHeight = 80
         if #available(iOS 11.0, *) {
             let window = UIApplication.shared.keyWindow
-            wholeHeight = Int((window?.safeAreaInsets.top ?? 0) + 44)
+            wholeHeight = Int((window?.safeAreaInsets.top ?? 0) + 44 + 12 + 16)
         }
         segmentedPager.parallaxHeader.minimumHeight = CGFloat(wholeHeight)
         headerView.widthAnchor.constraint(equalTo: self.view.widthAnchor).isActive = true
@@ -181,6 +181,7 @@ class ViewProfileViewController: MXSegmentedPagerController {
                 self.headerView.editButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                 self.headerView.editButton.backgroundColor = UIColor(named: "lightWhite")
                 self.headerView.editButton.setImage(#imageLiteral(resourceName: "unFollow"), for: .normal)
+                self.headerView.editprofileLabel.isHidden = true
 
                 if let followedIDArr = self.viewModel.followerModel?.result {
                     for id in followedIDArr {
@@ -195,13 +196,14 @@ class ViewProfileViewController: MXSegmentedPagerController {
                     self.headerView.editButton.backgroundColor = UIColor(named: "clearcolor")
                     self.headerView.editButton.setImage(#imageLiteral(resourceName: "profile_settingheader"), for: .normal)
                     self.headerView.editButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-                    self.headerView.editButton.config(color: UIColor.white, font: UIFont(name: APP_FONT_REGULAR, size: 13), align: .center, title: "edit_profile")
-                    self.headerView.editButton.setTitle(" Edit Profile", for: .normal)
+                    self.headerView.editButton.setTitle(nil, for: .normal)
+                    self.headerView.editprofileLabel.isHidden = false
                 }
                 else {
                     self.headerView.editButton.setTitle(nil, for: .normal)
                     self.headerView.editButton.setImage(nil, for: .normal)
                     self.headerView.editButton.isUserInteractionEnabled = false
+                    self.headerView.editprofileLabel.isHidden = true
                 }
             }
         }
@@ -210,6 +212,13 @@ class ViewProfileViewController: MXSegmentedPagerController {
         return (getLanguage[titleArray[index]] ?? "")
     }
     override func segmentedPager(_ segmentedPager: MXSegmentedPager, didScrollWith parallaxHeader: MXParallaxHeader) {
+        let currentHeight = parallaxHeader.minimumHeight +
+            (parallaxHeader.height - parallaxHeader.minimumHeight) * parallaxHeader.progress
+
+        print("Current Height:", currentHeight)
+        print("Header Frame:", headerView.frame)
+        print("Content Frame:", headerView.contentView.frame)
+        print("parallaxHeader.progress:\(parallaxHeader.progress) \(parallaxHeader.height) \(parallaxHeader.progress * parallaxHeader.height)")
         self.headerView.updateView(val: (parallaxHeader.progress * parallaxHeader.height))
         if (parallaxHeader.progress * parallaxHeader.height) <= 150{
             self.statusBaStyle = 0

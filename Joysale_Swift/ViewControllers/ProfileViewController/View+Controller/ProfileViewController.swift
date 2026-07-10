@@ -56,23 +56,17 @@ class ProfileViewController: UIViewController {
                         let pageObj = PremiumAdvc()
                         self?.delegate.navigationController.pushViewController(pageObj, animated: true)
                     }
-                }else{
-                    let alert = UIAlertController(
-                        title: "Subscription Status",
-                        message: "You do not have an active subscription.",
-                        preferredStyle: .alert
-                    )
-                    alert.addAction(UIAlertAction(title: "Upgrade", style: .default) { _ in
-                        if (UserDefaultModule.shared.getUserData()?.user_id ?? "") != "" {
+                } else {
+                    guard let self = self else { return }
+                    let popup = SubscriptionStatusPopupView(frame: self.view.bounds)
+                    popup.okAction = { }
+                    popup.upgradeAction = {
+                        if !(UserDefaultModule.shared.getUserData()?.user_id ?? "").isEmpty {
                             let pageObj = CreatePremiumvc()
-                            self?.navigationController?.pushViewController(pageObj, animated: true)
+                            self.delegate.navigationController.pushViewController(pageObj, animated: true)
                         }
-                    })
-                    alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-                        self?.navigationController?.popViewController(animated: true)
-                    })
-                    
-                    self?.present(alert, animated: true)
+                    }
+                    self.view.addSubview(popup)
                 }
             }
 
@@ -150,12 +144,17 @@ class ProfileViewController: UIViewController {
                 group.notify(queue: DispatchQueue.main) {
                     self.profileArr.removeAll()
                     self.profileArr.append("")
-                    
+                    self.profileArr.append("MembershipSubscription")
                     if PAID_BANNER_FLAG {
                         self.profileArr.append("advertise")
+                    }else{
+                        if PROMOTION_FLAG {
+                            self.profileArr.append("promote_listing")
+                        }
                     }
+                    
                     self.profileArr.append("donate")    //MARK: Custom Work
-                    self.profileArr.append("MembershipSubscription")
+                    
                     
                     if BUYNOW_MODEL_FLAG {
                         self.profileArr.append("myordersale")
@@ -163,9 +162,7 @@ class ProfileViewController: UIViewController {
                     if EXCHANGE_MODEL_FLAG {
                         self.profileArr.append("myexchange")
                     }
-                    if PROMOTION_FLAG {
-                        self.profileArr.append("my_promotions")
-                    }
+                   
                     self.profileArr.append("productanalytics")
 //                    self.profileArr.append("my_subscription")
                     
@@ -340,6 +337,10 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             return UITableView.automaticDimension
         }
+        let sectionKey = self.profileArr[indexPath.section]
+        if sectionKey == "MembershipSubscription" || sectionKey == "advertise" || sectionKey == "donate" {
+            return UITableView.automaticDimension
+        }
         return 55
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -353,23 +354,35 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         }
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileTableViewCell") as! ProfileTableViewCell
-            cell.titleLabel.textColor = UIColor(named: "AppTextColor")
+            cell.resetDescription()
             cell.isHidden = false
             cell.notificationButton.isHidden = true
             cell.titleLabel.text = getLanguage[self.profileArr[indexPath.section]]
-            if self.profileArr[indexPath.section] == "advertise" {
+            if self.profileArr[indexPath.section] == "MembershipSubscription" {
+                cell.descLabel.isHidden = false
+                cell.descLabel.text = getLanguage["business_subscription_desc"] ?? "Unlock unlimited posting & business tools."
+                cell.arrowImageView.image = #imageLiteral(resourceName: "InArrowImg")
+            }
+            else if self.profileArr[indexPath.section] == "advertise" {
                 cell.arrowImageView.image = #imageLiteral(resourceName: "ad_annocement")
-                cell.titleLabel.textColor = UIColor(named: "AppThemeColor")
+                cell.descLabel.isHidden = false
+                cell.descLabel.text = getLanguage["promote_business_desc"] ?? "Spotlight boosts & banner advertising."
+            }else if self.profileArr[indexPath.section] == "promote_listing" {
+                cell.titleLabel.text = getLanguage["advertise"]
+                cell.arrowImageView.image = #imageLiteral(resourceName: "ad_annocement")
             }
             else if self.profileArr[indexPath.section] == "donate"{
                 cell.arrowImageView.image = UIImage(named: "profile_membericon")
-                cell.titleLabel.textColor = UIColor(named: "AppThemeColor")
+                cell.descLabel.isHidden = false
+                cell.descLabel.text = getLanguage["become_supporter_desc"] ?? "Support the movement & help keep local food alive."
             }
             else if self.profileArr[indexPath.section] == "notifications" {
                 if (ADMIN_VIEW_MODEL.getCountModel?.notificationCount ?? 0) > 0 {
                     cell.notificationButton.isHidden = false
                     cell.notificationButton.setTitle("\(ADMIN_VIEW_MODEL.getCountModel?.notificationCount ?? 0)", for: .normal)
                 }
+            }else if self.profileArr[indexPath.section] == "deleteaccount" || self.profileArr[indexPath.section] == "logout"{
+                cell.titleLabel.textColor = UIColor(named: "redcolor")
             }
             else if self.profileArr[indexPath.section] == "logout" {
                 cell.arrowImageView.image = #imageLiteral(resourceName: "logout")
@@ -389,10 +402,33 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             self.delegate.navigationController.pushViewController(pageObj, animated: true)
         }
         if self.profileArr[indexPath.section] == "advertise" {
-            let pageObj = BannerViewController()
-            self.delegate.navigationController.pushViewController(pageObj, animated: true)
+            if PROMOTION_FLAG {
+                let popup = PromoteBusinessPopupView(frame: view.bounds)
+
+                popup.promoteListingAction = { [weak self] in
+                    let pageObj = MyPromotionViewController()
+                    self?.delegate.navigationController.pushViewController(pageObj, animated: true)
+                }
+
+                popup.bannerAdvertisingAction = { [weak self] in
+                    let pageObj = BannerViewController()
+                    self?.delegate.navigationController.pushViewController(pageObj, animated: true)
+                    }
+
+                view.addSubview(popup)
+            }else{
+                let pageObj = BannerViewController()
+                self.delegate.navigationController.pushViewController(pageObj, animated: true)
+
+            }
+           
+            
         }
         if self.profileArr[indexPath.section] == "my_promotions" {
+            let pageObj = MyPromotionViewController()
+            self.delegate.navigationController.pushViewController(pageObj, animated: true)
+        }
+        if self.profileArr[indexPath.section] == "promote_listing" {
             let pageObj = MyPromotionViewController()
             self.delegate.navigationController.pushViewController(pageObj, animated: true)
         }
@@ -491,6 +527,246 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
             alert.addAction(UIAlertAction(title: getLanguage["no"] ?? "", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
+    }
+}
+
+
+
+class SubscriptionStatusPopupView: UIView {
+
+    var okAction: (() -> Void)?
+    var upgradeAction: (() -> Void)?
+
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 12
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Subscription Status"
+        label.font = UIFont(name: APP_FONT_BOLD, size: 18)
+        label.textColor = UIColor(named: "appblackcolor")
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let messageLabel: UILabel = {
+        let label = UILabel()
+        label.text = "You do not have an active subscription."
+        label.font = UIFont(name: APP_FONT_REGULAR, size: 15)
+        label.textColor = UIColor(named: "appblackcolor")
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let okButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("OK", for: .normal)
+        button.backgroundColor = UIColor(named: "notnowcolor")
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont(name: APP_FONT_BOLD, size: 16)
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        button.layer.cornerRadius = 8
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private let upgradeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Upgrade to Premium", for: .normal)
+        button.backgroundColor = UIColor(named: "activecolor") ?? .systemGreen
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont(name: APP_FONT_BOLD, size: 15)
+        button.titleLabel?.numberOfLines = 2
+        button.titleLabel?.textAlignment = .center
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        button.layer.cornerRadius = 8
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+    }
+
+    private func setupUI() {
+        backgroundColor = UIColor.black.withAlphaComponent(0.5)
+
+        addSubview(containerView)
+
+        let buttonStack = UIStackView(arrangedSubviews: [okButton, upgradeButton])
+        buttonStack.axis = .horizontal
+        buttonStack.spacing = 12
+        buttonStack.distribution = .fillEqually
+        buttonStack.alignment = .fill
+        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(messageLabel)
+        containerView.addSubview(buttonStack)
+
+        NSLayoutConstraint.activate([
+            containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            containerView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+
+            messageLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 12),
+            messageLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            messageLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+
+            buttonStack.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 20),
+            buttonStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            buttonStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            buttonStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20),
+
+            okButton.heightAnchor.constraint(equalToConstant: 48),
+            upgradeButton.heightAnchor.constraint(equalToConstant: 48)
+        ])
+
+        okButton.addTarget(self, action: #selector(okTapped), for: .touchUpInside)
+        upgradeButton.addTarget(self, action: #selector(upgradeTapped), for: .touchUpInside)
+    }
+
+    @objc private func okTapped() {
+        removeFromSuperview()
+        okAction?()
+    }
+
+    @objc private func upgradeTapped() {
+        removeFromSuperview()
+        upgradeAction?()
+    }
+}
+
+class PromoteBusinessPopupView: UIView {
+
+    var promoteListingAction: (() -> Void)?
+    var bannerAdvertisingAction: (() -> Void)?
+
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 16
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Promote your business"
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textAlignment = .center
+        label.config(color: .black, font: UIFont(name: APP_FONT_REGULAR, size: 18), align: .center, text: "advertise")
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let promoteButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Promote your listing", for: .normal)
+        button.backgroundColor = UIColor.systemGreen
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 10
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        button.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_BOLD, size: 16), align: .center, title: "promote_listing")
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private let bannerButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("", for: .normal)
+        button.backgroundColor = UIColor.systemBlue
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 10
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        button.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_BOLD, size: 16), align: .center, title: "banner_ad")
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+    }
+
+    private func setupUI() {
+
+        backgroundColor = UIColor.black.withAlphaComponent(0.5)
+
+        addSubview(containerView)
+
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(promoteButton)
+        containerView.addSubview(bannerButton)
+
+        NSLayoutConstraint.activate([
+
+            containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            containerView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
+
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 24),
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+
+            promoteButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
+            promoteButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            promoteButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            promoteButton.heightAnchor.constraint(equalToConstant: 48),
+
+            bannerButton.topAnchor.constraint(equalTo: promoteButton.bottomAnchor, constant: 16),
+            bannerButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            bannerButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            bannerButton.heightAnchor.constraint(equalToConstant: 48),
+            bannerButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -24)
+        ])
+
+        promoteButton.addTarget(self, action: #selector(promoteTapped), for: .touchUpInside)
+        bannerButton.addTarget(self, action: #selector(bannerTapped), for: .touchUpInside)
+
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissPopup))
+        addGestureRecognizer(tap)
+    }
+
+    @objc private func promoteTapped() {
+        removeFromSuperview()
+        promoteListingAction?()
+    }
+
+    @objc private func bannerTapped() {
+        removeFromSuperview()
+        bannerAdvertisingAction?()
+    }
+
+    @objc private func dismissPopup() {
+        removeFromSuperview()
     }
 }
 /*

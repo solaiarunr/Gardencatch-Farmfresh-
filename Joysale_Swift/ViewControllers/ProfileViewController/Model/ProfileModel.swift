@@ -134,6 +134,7 @@ class ProfileResultModel{
     var freepostcount:String!
     var freepost_remainingdays:String!
     var subscriptionEnable:String!
+    var currentpassword:String!
     
     init(fromJson json: JSON!){
         if json.isEmpty{
@@ -157,6 +158,7 @@ class ProfileResultModel{
         showMobileNo = json["show_mobile_no"].boolValue
         state = json["state"].stringValue
         membership_enable = json["membership_enable"].stringValue
+        currentpassword = json["currentpassword"].stringValue
         let stripeDetailsJson = json["stripe_details"]
         if !stripeDetailsJson.isEmpty{
             stripeDetails = StripeDetailModel(fromJson: stripeDetailsJson)

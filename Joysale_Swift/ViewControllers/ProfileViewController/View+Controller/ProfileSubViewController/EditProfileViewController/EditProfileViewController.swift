@@ -19,6 +19,7 @@ class EditProfileViewController: UIViewController, customLocationDelegate {
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     var profileData: ProfileResultModel?
+    var locationManuallyEdited = false
     var imagePicker: ImagePicker!
     let authUI = FUIAuth.defaultAuthUI()
     var viewModel = ProfileViewModel()
@@ -103,6 +104,7 @@ class EditProfileViewController: UIViewController, customLocationDelegate {
             if (self.profileData?.userImg ?? "").contains("/logo/") {
                     self.profileData?.userImg = ""
                         }
+            self.syncLocationFieldsFromInput(force: self.locationManuallyEdited)
             Utility.shared.startAnimation(viewController: self)
             self.viewModel.editProfileData(user_id: UserDefaultModule.shared.getUserData()?.user_id ?? "", email: self.profileData?.email ?? "", full_name: self.profileData?.fullName ?? "", first_name: "", last_name: "", mobile_no: self.profileData?.mobileNo ?? "", isFromFB: 0, show_mobile_no: self.profileData?.showMobileNo ?? false, user_img: self.profileData?.userImg ?? "", fb_profileurl: "", facebook_id: self.profileData?.facebookId ?? "", fb_phone: "", country_name: self.profileData?.country ?? "", city_name: self.profileData?.city ?? "", state_name: self.profileData?.state ?? "", onSuccess: { (success) in
                 Utility.shared.stopAnimation(viewController: self)
@@ -124,6 +126,38 @@ class EditProfileViewController: UIViewController, customLocationDelegate {
             let alert = UIAlertController(title: nil, message: getLanguage["enter_the_name"] ?? "", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: getLanguage["ok"] ?? "", style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
+        }
+    }
+
+    private func syncLocationFieldsFromInput(force: Bool = true) {
+        guard force else { return }
+        guard let locationText = profileData?.location?
+            .trimmingCharacters(in: .whitespacesAndNewlines), !locationText.isEmpty else {
+            profileData?.city = ""
+            profileData?.state = ""
+            profileData?.country = ""
+            return
+        }
+
+        profileData?.location = locationText
+        let parts = locationText
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+
+        switch parts.count {
+        case 1:
+            profileData?.city = parts[0]
+            profileData?.state = ""
+            profileData?.country = ""
+        case 2:
+            profileData?.city = parts[0]
+            profileData?.state = parts[1]
+            profileData?.country = ""
+        default:
+            profileData?.city = parts[0]
+            profileData?.state = parts[1]
+            profileData?.country = parts.dropFirst(2).joined(separator: ", ")
         }
     }
     
@@ -168,6 +202,10 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource,
             cell.loadData(profileData, index: indexPath)
         }
         cell.switchButton.addTarget(self, action: #selector(self.switchControllAct(_:)), for: .valueChanged)
+        cell.nextButton.removeTarget(nil, action: nil, for: .allEvents)
+        if indexPath.section == 2 && indexPath.row == 0 {
+            cell.nextButton.addTarget(self, action: #selector(self.locationPickerAct), for: .touchUpInside)
+        }
         if indexPath.section == 2 && indexPath.row == 5 {
             if (self.profileData?.mobileNo ?? "") == "" {
                 cell.isHidden = true
@@ -199,23 +237,6 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource,
             pageObj.profileData = self.profileData
             self.navigationController?.pushViewController(pageObj, animated: true)
         }
-        else if indexPath.section == 2 && indexPath.row == 0{
-            // MARK: Mabbox Addon
-            /*
-             let pageObj = MapViewController()
-             pageObj.locationString = self.profileData?.location ?? ""
-             pageObj.delegate = self
-             pageObj.viewType = "profile"
-             self.navigationController?.pushViewController(pageObj, animated: true)
-             */
-            
-            let pageObj = LocationViewController()
-            pageObj.locationString = self.profileData?.location ?? ""
-            pageObj.delegate = self
-            pageObj.viewType = "profile"
-            self.navigationController?.pushViewController(pageObj, animated: true)
-            
-        }
         else if indexPath.section == 2 && indexPath.row == 3 {
             UINavigationBar.appearance().tintColor = UIColor(named: "whitecolor")
             let phoneProvider = FUIAuth.defaultAuthUI()?.providers.first as! FUIPhoneAuth
@@ -231,9 +252,23 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource,
             self.navigationController?.pushViewController(pageObj, animated: true)
         }
     }
+    @objc func locationPickerAct() {
+        let pageObj = LocationViewController()
+        pageObj.locationString = self.profileData?.location ?? ""
+        pageObj.delegate = self
+        pageObj.viewType = "profile"
+        self.navigationController?.pushViewController(pageObj, animated: true)
+    }
+
     func textFieldEndEditingAct(_ textField: UITextField) {
+        print("dtas\(textField.tag)")
         if textField.tag == 0 {
             self.profileData?.fullName = textField.text!
+        }
+         if textField.tag == 21 {
+            self.profileData?.location = textField.text ?? ""
+            self.locationManuallyEdited = true
+            self.syncLocationFieldsFromInput()
         }
     }
 }
@@ -273,7 +308,12 @@ extension EditProfileViewController: ImageDelegate {
 }
 extension EditProfileViewController {
     func locationAct(city: String, state: String, country: String,countryCode: String, lat: String, long: String, location: String) {
-        self.profileData?.location = "\(city), \(state), \(country)"
+        self.locationManuallyEdited = false
+        if location.isEmpty {
+            self.profileData?.location = "\(city), \(state), \(country)"
+        } else {
+            self.profileData?.location = location
+        }
         self.profileData?.city = city
         self.profileData?.state = state
         self.profileData?.country = country

@@ -20,6 +20,9 @@ class ChangePasswordViewController: UIViewController {
     @IBOutlet weak var edit2TextField: UITextField!
     @IBOutlet weak var edit3TextField: UITextField!
     @IBOutlet weak var edit3Label: UILabel!
+    @IBOutlet weak var eyebutton: UIButton!
+    
+    
     var viewType = ""
     var viewModel = ProfileViewModel()
     var profileData: ProfileResultModel?
@@ -44,12 +47,13 @@ class ChangePasswordViewController: UIViewController {
             self.edit3Label.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "confirmpassword")
             self.edit1TextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "************", font: UIFont(name: APP_FONT_REGULAR, size: 15))
             self.edit1TextField.isSecureTextEntry = true
-            self.edit2TextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "************", font: UIFont(name: APP_FONT_REGULAR, size: 15))
+            self.edit2TextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "enternewpassword", font: UIFont(name: APP_FONT_REGULAR, size: 15))
               self.edit2TextField.isSecureTextEntry = true
              self.edit2TextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-            self.edit3TextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "************", font: UIFont(name: APP_FONT_REGULAR, size: 15))
+            self.edit3TextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "enterconfirmpassword", font: UIFont(name: APP_FONT_REGULAR, size: 15))
             self.edit3TextField.isSecureTextEntry = true
             self.edit3View.isHidden = false
+            self.edit1TextField.text = self.profileData?.currentpassword ?? ""
         }
         else {
             self.edit1TextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "enter_here", font: UIFont(name: APP_FONT_REGULAR, size: 15))
@@ -63,6 +67,7 @@ class ChangePasswordViewController: UIViewController {
             self.edit3View.isHidden = true
         }
     }
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
           return .lightContent
     }
@@ -83,6 +88,15 @@ class ChangePasswordViewController: UIViewController {
             }
         }
     }
+    
+    
+    @IBAction func eyeact(_ sender: Any) {
+        edit1TextField.isSecureTextEntry.toggle()
+        let imageName = edit1TextField.isSecureTextEntry ? "hidden" : "eyeimage"
+        eyebutton.setImage(UIImage(named: imageName), for: .normal)
+        print(edit1TextField.isSecureTextEntry)
+    }
+    
     @IBAction func saveButtonAct(_ sender: UIButton) {
         if viewType == "changepassword" {
             if validatePassword().0 {

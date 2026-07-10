@@ -20,6 +20,8 @@ class ViewProfileHeaderView: UIView {
     @IBOutlet weak var mailVerifyImageView: UIImageView!
     @IBOutlet weak var facebookVerifyImageView: UIImageView!
     @IBOutlet weak var mobileVerifyImageView: UIImageView!
+    @IBOutlet weak var mobileVerifyLabel: UILabel!
+    @IBOutlet weak var facebookVerifyLabel: UILabel!
     @IBOutlet weak var ratingStackView: UIStackView!
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var contentView: UIView!
@@ -33,7 +35,9 @@ class ViewProfileHeaderView: UIView {
     @IBOutlet weak var wholeStackView: UIStackView!
     @IBOutlet weak var nameStackView: UIStackView!
     @IBOutlet weak var memberShipIcon: UIImageView!
-    
+    @IBOutlet weak var editprofileLabel: UILabel!
+    @IBOutlet weak var wholeStackHeightConstraint: NSLayoutConstraint!
+
      override init(frame: CGRect) {
         super.init(frame: frame)
         self.customUI()
@@ -54,6 +58,13 @@ class ViewProfileHeaderView: UIView {
         self.navFirstNameLabel.config(color: UIColor(named: "appblackcolor"), font: UIFont(name: APP_FONT_BOLD, size: 15), align: .left, text: "")
         self.navUserNameLabel.config(color: UIColor(named: "appblackcolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .left, text: "")
         self.ratingLabel.config(color: UIColor(named: "appblackcolor"), font: UIFont(name: APP_FONT_REGULAR, size: 20), align: .left, text: "")
+        self.editprofileLabel.config(color: UIColor.white, font: UIFont(name: APP_FONT_REGULAR, size: 10), align: .center, text: "edit_profile")
+        self.mobileVerifyLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 10), align: .center, text: "mobileno")
+        self.facebookVerifyLabel.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 10), align: .center, text: "facebook")
+        self.mobileVerifyLabel.numberOfLines = 2
+        self.facebookVerifyLabel.numberOfLines = 2
+        self.editprofileLabel.numberOfLines = 2
+        self.editprofileLabel.isHidden = true
         self.memberShipIcon.image = UIImage(named: "member_icon")
         self.editButton.cornerMiniumRadius()
         
@@ -71,7 +82,7 @@ class ViewProfileHeaderView: UIView {
             let window = UIApplication.shared.keyWindow
             wholeHeight = Int(window?.safeAreaInsets.top ?? 0)
         }
-        self.navTopConst.constant = CGFloat(wholeHeight)
+        self.navTopConst.constant = CGFloat(wholeHeight) + 12
         self.wholeRatingView.isHidden = !BUYNOW_MODEL_FLAG
     }
     func updateView(val: CGFloat) {
@@ -82,6 +93,7 @@ class ViewProfileHeaderView: UIView {
             self.wholeStackView.isHidden = false
             self.navUserImageView.isHidden = true
             self.userImageView.isHidden = false
+            self.editprofileLabel.isHidden = false
         }
         else if val > 150 {
             self.backButton.tintColor = (UIColor(named: "whitecolor") ?? .white)
@@ -92,6 +104,7 @@ class ViewProfileHeaderView: UIView {
             self.wholeStackView.isHidden = false
             self.userImageView.isHidden = true
             self.navUserImageView.isHidden = false
+            self.editprofileLabel.isHidden = false
         }
         else {
             self.backButton.tintColor = (UIColor(named: "AppTextColor") ?? .white)
@@ -102,6 +115,7 @@ class ViewProfileHeaderView: UIView {
             self.navUserImageView.isHidden = false
             self.wholeStackView.isHidden = true
             self.userImageView.isHidden = true
+            self.editprofileLabel.isHidden = true
         }
     }
     func loadData(_ profileData: ProfileResultModel) {

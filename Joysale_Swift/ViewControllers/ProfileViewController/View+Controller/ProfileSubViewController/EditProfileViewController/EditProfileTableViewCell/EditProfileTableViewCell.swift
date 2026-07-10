@@ -83,7 +83,7 @@ class EditProfileTableViewCell: UITableViewCell {
                 else {
                     self.titleLabel.text = (getLanguage["username"] ?? "").capitalized
                     self.textField.text = profileData.userName
-                    self.textField.isUserInteractionEnabled = false
+                    self.textField.isUserInteractionEnabled = true
                 }
             }
             else if index.row == 2{
@@ -113,7 +113,12 @@ class EditProfileTableViewCell: UITableViewCell {
                 self.verifyButton.isHidden = true
                 if index.row == 0 {
                     self.titleLabel.text = (getLanguage["location"] ?? "")
-                    self.descLabel.text = profileData.location
+                    self.descLabel.isHidden = true
+                    self.textField.isHidden = false
+                    self.textField.tag = 21
+                    self.textField.text = profileData.location
+                    self.textField.placeholder = getLanguage["location"] ?? "Location"
+                    self.textField.isUserInteractionEnabled = true
                 }
                 else {
                     self.descLabel.isHidden = true
@@ -157,7 +162,7 @@ class EditProfileTableViewCell: UITableViewCell {
                         self.descLabel.text = "+\(profileData.mobileNo ?? "")"
                     }
                     if (profileData.mobileNo == ""){
-                        self.descLabel.text = getLanguage["link_your_account"] ?? ""
+                        self.descLabel.text = getLanguage["verify_mobile"] ?? ""
                     }
                    self.verifyLabel.text = (profileData.mobileNo != "") ? (getLanguage["verified"] ?? "") : (getLanguage["unverified"] ?? "")
                     self.verifyButton.setImage((profileData.mobileNo != "") ? #imageLiteral(resourceName: "tick-green") : #imageLiteral(resourceName: "cancel-1"), for: .normal)
@@ -211,7 +216,8 @@ extension EditProfileTableViewCell: UITextFieldDelegate {
         let strLength = textField.text?.count ?? 0
         let lngthToAdd = string.count
         let lengthCount = strLength + lngthToAdd
-        if lengthCount > 30 {
+        let maxLength = textField.tag == 21 ? 100 : 30
+        if lengthCount > maxLength {
             return false
         }
         return true

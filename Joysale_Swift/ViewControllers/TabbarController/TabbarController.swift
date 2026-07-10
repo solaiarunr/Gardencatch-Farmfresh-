@@ -209,6 +209,18 @@ class TabbarController: UITabBarController, UITabBarControllerDelegate {
             self.navigationController?.pushViewController(pageObj, animated: true)
         }
     }
+
+    @objc func notificationButtonAct() {
+        if (UserDefaultModule.shared.getUserData()?.user_id ?? "") == "" {
+            let vc = InitialViewController()
+            vc.isFromList = true
+            vc.modalPresentationStyle = .overFullScreen
+            self.navigationController?.present(vc, animated: true, completion: nil)
+            return
+        }
+        let pageObj = NotificationViewController()
+        self.navigationController?.pushViewController(pageObj, animated: true)
+    }
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         if !(viewController.isKind(of: HomeViewController.self) || viewController.isKind(of: CategoryViewController.self)){
             if (UserDefaultModule.shared.getUserData()?.user_id ?? "" == "") {
@@ -315,7 +327,7 @@ class TabbarController: UITabBarController, UITabBarControllerDelegate {
             }
             else {
                 
-                self.navigationController?.customNavigationBarView(title: "myprofile", fColor: "whitecolor",fontName: UIFont(name: APP_FONT_REGULAR, size: 20),vc: self)
+                self.navigationController?.customNavigationBarView(title: "myprofile", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 20), vc: self)
                 self.navigationController?.customRightBarButtonView(title: "", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 14), imageName: "", isLeft: true, vc: self, transparantView: false)
             }
         }
@@ -332,22 +344,21 @@ class TabbarController: UITabBarController, UITabBarControllerDelegate {
         imageView.contentMode = .scaleAspectFit
         self.navigationItem.titleView = imageView
         self.navigationItem.titleView?.tintColor = UIColor(named: "whitecolor")
+        let searchImage = self.scaledNavigationImage(named: "new_search", size: 22)?
+            .withHorizontallyFlippedOrientation()
         let button: UIButton = UIButton(type: UIButton.ButtonType.custom)
-        button.setImage(UIImage(named: "new_search")?.withHorizontallyFlippedOrientation(), for: UIControl.State.normal)
-        if UserDefaultModule.shared.getAppLanguage().capitalized == "Arabic" {
-            button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6)
-        }
-        else {
-            button.contentEdgeInsets = UIEdgeInsets(top: 0, left: -6, bottom: 0, right: 6)
-        }
-        button.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-//        let barButton = UIBarButtonItem(customView: button1)
-//        self.navigationItem.leftBarButtonItem = barButton
-//        button.tintColor = UIColor(named: "whitecolor")
+        button.setImage(searchImage, for: UIControl.State.normal)
         button.tag = 0
         button.addTarget(self, action: #selector(self.filterButtonAct(_:)), for: .touchUpInside)
+        button.tintColor = UIColor(named: "whitecolor")
+        button.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button.widthAnchor.constraint(equalToConstant: 32),
+            button.heightAnchor.constraint(equalToConstant: 32)
+        ])
+
         let button1: MFBadgeButton = MFBadgeButton(type: UIButton.ButtonType.custom)
-        button1.setImage(UIImage(named: "search_adv"), for: UIControl.State.normal)
+        button1.setImage(self.scaledNavigationImage(named: "search_adv", size: 22), for: UIControl.State.normal)
         if FILTER_DATA.toDictionary().keys.count > 0 {
              button1.badgeValue = "●"
         }
@@ -357,15 +368,34 @@ class TabbarController: UITabBarController, UITabBarControllerDelegate {
         button1.tag = 1
         button1.addTarget(self, action: #selector(self.filterButtonAct(_:)), for: .touchUpInside)
         button1.tintColor = UIColor(named: "whitecolor")
-        button1.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
-        button1.contentEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: -6)
+        button1.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            button1.widthAnchor.constraint(equalToConstant: 32),
+            button1.heightAnchor.constraint(equalToConstant: 32)
+        ])
 
-        let barButton1 = UIBarButtonItem(customView: button)
-        self.navigationItem.rightBarButtonItem = barButton1
+        let notificationContainer = self.makeNotificationBarButton()
+        let rightButtonStack = UIStackView(arrangedSubviews: [notificationContainer, button])
+        rightButtonStack.axis = .horizontal
+        rightButtonStack.spacing = 14
+        rightButtonStack.alignment = .center
+        rightButtonStack.distribution = .fill
+        rightButtonStack.translatesAutoresizingMaskIntoConstraints = false
+
+        let rightButtonContainer = UIView()
+        rightButtonContainer.clipsToBounds = false
+        rightButtonContainer.addSubview(rightButtonStack)
+        NSLayoutConstraint.activate([
+            rightButtonStack.topAnchor.constraint(equalTo: rightButtonContainer.topAnchor),
+            rightButtonStack.bottomAnchor.constraint(equalTo: rightButtonContainer.bottomAnchor),
+            rightButtonStack.leadingAnchor.constraint(equalTo: rightButtonContainer.leadingAnchor),
+            rightButtonStack.trailingAnchor.constraint(equalTo: rightButtonContainer.trailingAnchor)
+        ])
+
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButtonContainer)
         navigationBarAppearace.barTintColor = UIColor(named: "AppThemeColor")
         let barButton = UIBarButtonItem(customView: button1)
         self.navigationItem.leftBarButtonItem = barButton
-        button.tintColor = UIColor(named: "whitecolor")
         
         navigationBarAppearace.isTranslucent = false
         let navigationBar = navigationController?.navigationBar
@@ -388,6 +418,63 @@ class TabbarController: UITabBarController, UITabBarControllerDelegate {
             // Fallback on earlier versions
         }
         tabBar.layer.backgroundColor = (UIColor(named: "whitecolor") ?? .white).cgColor
+    }
+
+    private func makeNotificationBarButton() -> UIView {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.clipsToBounds = false
+
+        let button = UIButton(type: .custom)
+        button.setImage(self.scaledNavigationImage(named: "notifybell", size: 22), for: .normal)
+        button.tintColor = UIColor(named: "whitecolor")
+        button.addTarget(self, action: #selector(self.notificationButtonAct), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(button)
+
+        let badgeButton = UIButton(type: .custom)
+        badgeButton.isUserInteractionEnabled = false
+        badgeButton.titleLabel?.font = UIFont(name: APP_FONT_BOLD, size: 10) ?? .boldSystemFont(ofSize: 10)
+        badgeButton.setTitleColor(.white, for: .normal)
+        badgeButton.backgroundColor = UIColor(named: "redcolor") ?? .systemRed
+        badgeButton.contentEdgeInsets = UIEdgeInsets(top: 1, left: 4, bottom: 1, right: 4)
+        badgeButton.layer.cornerRadius = 8
+        badgeButton.clipsToBounds = true
+        badgeButton.translatesAutoresizingMaskIntoConstraints = false
+
+        let count = ADMIN_VIEW_MODEL.getCountModel?.notificationCount ?? 0
+        if count > 0 {
+            badgeButton.setTitle(count > 99 ? "99+" : "\(count)", for: .normal)
+            badgeButton.isHidden = false
+        } else {
+            badgeButton.isHidden = true
+        }
+
+        container.addSubview(badgeButton)
+
+        NSLayoutConstraint.activate([
+            container.widthAnchor.constraint(equalToConstant: 36),
+            container.heightAnchor.constraint(equalToConstant: 36),
+            button.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            button.widthAnchor.constraint(equalToConstant: 28),
+            button.heightAnchor.constraint(equalToConstant: 28),
+            badgeButton.topAnchor.constraint(equalTo: container.topAnchor),
+            badgeButton.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            badgeButton.heightAnchor.constraint(equalToConstant: 16)
+        ])
+
+        return container
+    }
+
+    private func scaledNavigationImage(named: String, size: CGFloat) -> UIImage? {
+        guard let image = UIImage(named: named) else { return nil }
+        let targetSize = CGSize(width: size, height: size)
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+        return UIGraphicsImageRenderer(size: targetSize, format: format).image { _ in
+            image.draw(in: CGRect(origin: .zero, size: targetSize))
+        }.withRenderingMode(.alwaysOriginal)
     }
     
 }
@@ -451,12 +538,14 @@ class PremiumPopupView: UIView {
     }
 
     private func setupUI() {
-
         backgroundColor = UIColor.black.withAlphaComponent(0.6)
 
-        // Container
         containerView.backgroundColor = .white
-        containerView.layer.cornerRadius = 16
+        containerView.layer.cornerRadius = 12
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOpacity = 0.2
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 4)
+        containerView.layer.shadowRadius = 8
         containerView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(containerView)
 
@@ -466,21 +555,20 @@ class PremiumPopupView: UIView {
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
         ])
 
-        // Title
         let titleLabel = UILabel()
         titleLabel.text = "Unlock Premium Visibility"
-        titleLabel.font = .boldSystemFont(ofSize: 20)
+        titleLabel.font = UIFont(name: APP_FONT_BOLD, size: 18)
+        titleLabel.textColor = UIColor(named: "appblackcolor")
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
 
-        // Message
         let messageLabel = UILabel()
         messageLabel.text = "You've reached your free posting limit.\nUpgrade to unlock unlimited posting and premium visibility."
         messageLabel.numberOfLines = 0
-        messageLabel.font = .systemFont(ofSize: 15)
+        messageLabel.font = UIFont(name: APP_FONT_REGULAR, size: 15)
+        messageLabel.textColor = UIColor(named: "appblackcolor")
         messageLabel.textAlignment = .center
 
-        // Benefits
         let benefits = [
             "Unlimited product listings",
             "Biz Spotlight & Local Spotlight boosts",
@@ -490,10 +578,10 @@ class PremiumPopupView: UIView {
 
         let benefitStack = UIStackView()
         benefitStack.axis = .vertical
-        benefitStack.spacing = 10
+        benefitStack.spacing = 8
+        benefitStack.alignment = .leading
 
         for item in benefits {
-
             let row = UIStackView()
             row.axis = .horizontal
             row.spacing = 8
@@ -501,35 +589,48 @@ class PremiumPopupView: UIView {
 
             let bullet = UILabel()
             bullet.text = "•"
-            bullet.font = .boldSystemFont(ofSize: 18)
+            bullet.font = UIFont(name: APP_FONT_BOLD, size: 16)
+            bullet.textColor = UIColor(named: "appblackcolor")
 
             let label = UILabel()
             label.text = item
             label.numberOfLines = 0
-            label.font = .systemFont(ofSize: 15)
+            label.font = UIFont(name: APP_FONT_REGULAR, size: 15)
+            label.textColor = UIColor(named: "appblackcolor")
 
             row.addArrangedSubview(bullet)
             row.addArrangedSubview(label)
-
             benefitStack.addArrangedSubview(row)
         }
 
-        // Buttons
+        let tagStack = UIStackView(arrangedSubviews: [
+            makeTagSample(imageName: "business_withicon"),
+            makeTagSample(imageName: "ad_new_withicon"),
+            makeTagSample(imageName: "businesslocal")
+        ])
+        tagStack.axis = .horizontal
+        tagStack.spacing = 12
+        tagStack.distribution = .fillEqually
+        tagStack.alignment = .center
 
         let cancelButton = UIButton(type: .system)
         cancelButton.setTitle("Not Now", for: .normal)
-        cancelButton.backgroundColor = .lightGray
-        cancelButton.tintColor = .white
+        cancelButton.backgroundColor = UIColor(named: "notnowcolor")
+        cancelButton.setTitleColor(.white, for: .normal)
+        cancelButton.titleLabel?.font = UIFont(name: APP_FONT_BOLD, size: 16)
         cancelButton.layer.cornerRadius = 8
-        cancelButton.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelButton.heightAnchor.constraint(equalToConstant: 48).isActive = true
         cancelButton.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
 
         let upgradeButton = UIButton(type: .system)
         upgradeButton.setTitle("Activate Premium", for: .normal)
-        upgradeButton.backgroundColor = UIColor(named: "AppThemeColor") ?? .systemGreen
-        upgradeButton.tintColor = .white
+        upgradeButton.backgroundColor = UIColor(named: "activecolor") ?? .systemGreen
+        upgradeButton.setTitleColor(.white, for: .normal)
+        upgradeButton.titleLabel?.font = UIFont(name: APP_FONT_BOLD, size: 16)
         upgradeButton.layer.cornerRadius = 8
-        upgradeButton.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        upgradeButton.translatesAutoresizingMaskIntoConstraints = false
+        upgradeButton.heightAnchor.constraint(equalToConstant: 48).isActive = true
         upgradeButton.addTarget(self, action: #selector(upgradeTapped), for: .touchUpInside)
 
         let buttonStack = UIStackView(arrangedSubviews: [cancelButton, upgradeButton])
@@ -541,21 +642,41 @@ class PremiumPopupView: UIView {
             titleLabel,
             messageLabel,
             benefitStack,
+            tagStack,
             buttonStack
         ])
-
         mainStack.axis = .vertical
-        mainStack.spacing = 20
+        mainStack.spacing = 12
         mainStack.translatesAutoresizingMaskIntoConstraints = false
 
         containerView.addSubview(mainStack)
 
         NSLayoutConstraint.activate([
-            mainStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 24),
+            mainStack.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
             mainStack.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
             mainStack.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            mainStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -24)
+            mainStack.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20)
         ])
+    }
+
+    private func makeTagSample(imageName: String) -> UIView {
+        let wrapper = UIView()
+        wrapper.translatesAutoresizingMaskIntoConstraints = false
+
+        let imageView = UIImageView(image: UIImage(named: imageName))
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        wrapper.addSubview(imageView)
+
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: wrapper.topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: wrapper.bottomAnchor),
+            imageView.centerXAnchor.constraint(equalTo: wrapper.centerXAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: 28),
+            imageView.widthAnchor.constraint(lessThanOrEqualTo: wrapper.widthAnchor)
+        ])
+
+        return wrapper
     }
 
     @objc func cancelTapped() {

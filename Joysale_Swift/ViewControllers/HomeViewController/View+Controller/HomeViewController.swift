@@ -64,10 +64,9 @@ class HomeViewController: UIViewController, customLocationDelegate {
         return .lightContent
     }
     override func viewWillAppear(_ animated: Bool) {
-        
-        
-        
         self.loadFilterData()
+        self.view.bringSubviewToFront(self.locationView)
+        self.locationView.isHidden = false
        // self.loadBannerAddOns()
         self.startTimer()
     }
@@ -85,7 +84,8 @@ class HomeViewController: UIViewController, customLocationDelegate {
         FILTER_DATA = UserDefaultModule.shared.getFilterData()
         self.locationView.isHidden = false
 //        self.locationLabel.text = FILTER_DATA.location == "" ? "Worldwide" : FILTER_DATA.location
-        self.locationLabel.text = FILTER_DATA.location == "" ? CURRENT_LOCATION : FILTER_DATA.location
+        let location = FILTER_DATA.location.isEmpty ? CURRENT_LOCATION : FILTER_DATA.location
+        locationLabel.text = location?.lowercased() == "worldwide" ? "Location: Worldwide" : location
         
         let keys = Array(FILTER_DATA.toDictionary().keys)
         self.filterArray = keys.sorted()
@@ -155,6 +155,7 @@ class HomeViewController: UIViewController, customLocationDelegate {
         self.refreshControl.addTarget(self, action: #selector(self.refreshAct), for: .valueChanged)
         self.collectionView.alwaysBounceVertical = true
         self.locationView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.locationViewAct)))
+        self.view.bringSubviewToFront(self.locationView)
         
         
         /**** Addons******/

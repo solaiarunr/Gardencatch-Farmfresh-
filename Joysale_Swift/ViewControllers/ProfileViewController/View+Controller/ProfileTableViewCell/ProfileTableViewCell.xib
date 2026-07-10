@@ -21,12 +21,23 @@
                     <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="NN7-a9-q1d">
                         <rect key="frame" x="15" y="5" width="290" height="63"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VPB-wy-Fas">
-                                <rect key="frame" x="0.0" y="21.5" width="199" height="20.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="Txt-St-kVw">
+                                <rect key="frame" x="0.0" y="10.5" width="199" height="42.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VPB-wy-Fas">
+                                        <rect key="frame" x="0.0" y="0.0" width="199" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dsc-Lb-Prf">
+                                        <rect key="frame" x="0.0" y="24.5" width="199" height="18"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" name="AppThemeColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XaM-Lc-G2O">
                                 <rect key="frame" x="204" y="18.5" width="56" height="26"/>
                                 <color key="backgroundColor" name="AppThemeColor"/>
@@ -58,6 +69,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="arrowImageView" destination="jEg-yB-aSo" id="MFV-Pa-5gL"/>
+                <outlet property="descLabel" destination="Dsc-Lb-Prf" id="Dsc-Prf-Out"/>
                 <outlet property="notificationButton" destination="XaM-Lc-G2O" id="g9Z-4R-BiX"/>
                 <outlet property="titleLabel" destination="VPB-wy-Fas" id="eKQ-wb-VTw"/>
             </connections>

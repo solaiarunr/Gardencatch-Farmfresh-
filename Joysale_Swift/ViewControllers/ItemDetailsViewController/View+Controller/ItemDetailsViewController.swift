@@ -1049,6 +1049,9 @@ extension ItemDetailsViewController: UICollectionViewDelegate, UICollectionViewD
         if let photos = self.itemDetails?.photos[indexPath.row] {
             cell.loadData(photos)
         }
+        if let itemDetails = self.itemDetails{
+            cell.loadData1(item: itemDetails)
+        }
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

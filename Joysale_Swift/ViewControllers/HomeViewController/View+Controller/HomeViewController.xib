@@ -180,7 +180,7 @@
             <color key="backgroundColor" name="BackGroundColor"/>
             <constraints>
                 <constraint firstItem="fnc-9P-V1U" firstAttribute="centerY" secondItem="fnl-2z-Ty3" secondAttribute="centerY" id="ECr-Pa-adb"/>
-                <constraint firstItem="J7q-1T-IBF" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" symbolic="YES" id="HD8-iW-y5L"/>
+                <constraint firstItem="J7q-1T-IBF" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="8" id="HD8-iW-y5L"/>
                 <constraint firstItem="J7q-1T-IBF" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="Hlb-d8-61U"/>
                 <constraint firstItem="DlW-Dw-d0X" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="KQz-kU-QDj"/>
                 <constraint firstItem="fnc-9P-V1U" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="TI6-ne-fzr"/>
@@ -188,7 +188,6 @@
                 <constraint firstItem="J7q-1T-IBF" firstAttribute="width" relation="lessThanOrEqual" secondItem="i5M-Pr-FkT" secondAttribute="width" multiplier="0.5" id="gg4-l1-R0E"/>
                 <constraint firstItem="DlW-Dw-d0X" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="jmL-AL-m2t"/>
                 <constraint firstItem="DlW-Dw-d0X" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="xbK-jb-Apg"/>
-                <constraint firstItem="J7q-1T-IBF" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="96" id="yoQ-pS-4Ii"/>
             </constraints>
             <point key="canvasLocation" x="-695.625" y="55.985915492957744"/>
         </view>

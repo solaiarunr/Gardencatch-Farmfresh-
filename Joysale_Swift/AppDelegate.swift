@@ -124,12 +124,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.getCurrentLocation()
         }
         if #available(iOS 15, *) {
-                    let appearance = UINavigationBarAppearance()
-                    appearance.configureWithOpaqueBackground()
-                    appearance.backgroundColor = UIColor(named: "AppThemeColor")
-                    UINavigationBar.appearance().standardAppearance = appearance
-                    UINavigationBar.appearance().scrollEdgeAppearance = appearance
-                }
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = UIColor(named: "AppThemeColor")
+            appearance.titleTextAttributes = [
+                NSAttributedString.Key.font: UIFont(name: APP_FONT_REGULAR, size: 20) ?? UIFont.systemFont(ofSize: 20),
+                NSAttributedString.Key.foregroundColor: UIColor(named: "whitecolor") ?? .white
+            ]
+            UINavigationBar.appearance().standardAppearance = appearance
+            UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        }
         if let userData = UserDefaultModule.shared.getUserData()?.user_id, (userData != "") {
             self.initVC(initialView: TabbarController())
         }

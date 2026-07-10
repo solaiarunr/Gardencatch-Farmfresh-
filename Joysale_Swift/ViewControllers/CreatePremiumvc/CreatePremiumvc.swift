@@ -20,11 +20,21 @@ class CreatePremiumvc: MXSegmentedPagerController {
     var isTabBar = false
     let delegate = UIApplication.shared.delegate as! AppDelegate
 
+    private let tabUnderlineColor = UIColor(red: 200 / 255, green: 200 / 255, blue: 200 / 255, alpha: 1)
+    private var tabBaselineView: UIView?
+    private var yearlyDiscountBadge: UILabel?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configUI()
-        segmentedPager.pager.delegate = self  // ✅ must add this
-        // Do any additional setup after loading the view.
+        segmentedPager.pager.delegate = self
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupTabBaseline()
+        setupYearlyDiscountBadge()
+        updateTabStyles(selectedIndex: segmentedPager.segmentedControl.selectedIndex)
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
           return .lightContent
@@ -56,20 +66,94 @@ class CreatePremiumvc: MXSegmentedPagerController {
         urgentVC.premiumType = .monthly
         adVC.premiumType = .yearly
         self.promotionArr = [urgentVC, adVC]
-        self.navigationController?.customNavigationBarView(title: "create_promotionn", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 20), vc: self)
-        self.navigationController?.customRightBarButtonView(title: "", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 18), imageName: "detail_back", isLeft: true, vc: self, transparantView: false)
+        self.navigationController?.customNavigationBarView(
+            title: "create_promotionn",
+            fColor: "whitecolor",
+            fontName: UIFont(name: APP_FONT_BOLD, size: 20),
+            vc: self
+        )
+        self.navigationController?.customRightBarButtonView(
+            title: "",
+            fColor: "whitecolor",
+            fontName: UIFont(name: APP_FONT_REGULAR, size: 18),
+            imageName: "detail_back",
+            isLeft: true,
+            vc: self,
+            transparantView: false
+        )
         segmentedPager.backgroundColor = UIColor(named: "BackGroundColor")
         segmentedPager.segmentedControl.backgroundColor = UIColor(named: "whitecolor")
-        segmentedPager.segmentedControl.textColor = (UIColor(named: "AppTextColor") ?? .white)
-        segmentedPager.segmentedControl.font = (UIFont(name: APP_FONT_REGULAR, size: 15) ?? UIFont.systemFont(ofSize: 15))
-        segmentedPager.segmentedControl.selectedTextColor = (UIColor(named: "AppThemeColor") ?? .white)
-        segmentedPager.segmentedControl.indicator.lineView.backgroundColor = (UIColor(named: "AppThemeColor") ?? .white)
+        segmentedPager.segmentedControl.textColor = UIColor(named: "AppTextColor") ?? .darkGray
+        segmentedPager.segmentedControl.font = UIFont(name: APP_FONT_REGULAR, size: 14) ?? .systemFont(ofSize: 14)
+        segmentedPager.segmentedControl.selectedTextColor = UIColor(named: "activecolor") ?? UIColor(named: "AppThemeColor")
+        segmentedPager.segmentedControl.indicator.lineView.backgroundColor = UIColor(named: "activecolor") ?? UIColor(named: "AppThemeColor")
+        segmentedPager.segmentedControl.indicator.lineHeight = 2
+        segmentedPager.segmentedControl.segmentEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
         segmentedPager.parallaxHeader.height = 0
         if UserDefaultModule.shared.getAppLanguage().capitalized == "Arabic" {
             self.segmentedPager.segmentedControl.transform = CGAffineTransform(scaleX: -1, y: 1)
             self.segmentedPager.pager.transform = CGAffineTransform(scaleX: -1, y: 1)
             self.urgentVC.view.transform = CGAffineTransform(scaleX: -1, y: 1)
             self.adVC.view.transform = CGAffineTransform(scaleX: -1, y: 1)
+        }
+    }
+
+    private func setupTabBaseline() {
+        let segmentedControl = segmentedPager.segmentedControl
+        if tabBaselineView == nil {
+            let baseline = UIView()
+            baseline.backgroundColor = tabUnderlineColor
+            segmentedControl.addSubview(baseline)
+            tabBaselineView = baseline
+        }
+        tabBaselineView?.frame = CGRect(
+            x: 0,
+            y: segmentedControl.bounds.height - 2,
+            width: segmentedControl.bounds.width,
+            height: 1
+        )
+    }
+
+    private func setupYearlyDiscountBadge() {
+        let segmentedControl = segmentedPager.segmentedControl
+        guard segmentedControl.count > 1,
+              let yearlySegment = segmentedControl.segment(at: 1) else {
+            return
+        }
+
+        yearlySegment.layoutIfNeeded()
+        segmentedControl.layoutIfNeeded()
+
+        if yearlyDiscountBadge == nil {
+            let badge = UILabel()
+            badge.text = getLanguage["Save20Percent"] ?? "Save 20%"
+            badge.font = UIFont(name: APP_FONT_BOLD, size: 9) ?? .boldSystemFont(ofSize: 9)
+            badge.textColor = .white
+           // badge.backgroundColor = UIColor(named: "redcolor") ?? .red
+            badge.textAlignment = .center
+            badge.layer.cornerRadius = 7
+            badge.layer.masksToBounds = true
+            segmentedControl.addSubview(badge)
+            yearlyDiscountBadge = badge
+        }
+
+        yearlyDiscountBadge?.backgroundColor = UIColor(named: "redcolor") ?? .red
+
+        let badgeSize = CGSize(width: 54, height: 14)
+        let segmentFrame = yearlySegment.convert(yearlySegment.bounds, to: segmentedControl)
+        let badgeX = segmentFrame.maxX - badgeSize.width - 10
+        let badgeY = segmentFrame.minY + 2
+        yearlyDiscountBadge?.frame = CGRect(origin: CGPoint(x: badgeX, y: badgeY), size: badgeSize)
+        yearlyDiscountBadge?.isHidden = false
+        segmentedControl.bringSubviewToFront(yearlyDiscountBadge!)
+    }
+
+    private func updateTabStyles(selectedIndex: Int) {
+        for index in 0..<segmentedPager.segmentedControl.count {
+            let isSelected = index == selectedIndex
+            let fontName = isSelected ? APP_FONT_BOLD : APP_FONT_REGULAR
+            segmentedPager.segmentedControl.segment(at: index)?.titleLabel?.font =
+                UIFont(name: fontName, size: 14) ?? .systemFont(ofSize: 14, weight: isSelected ? .bold : .regular)
         }
     }
     
@@ -91,13 +175,12 @@ class CreatePremiumvc: MXSegmentedPagerController {
 
     // ✅ Add below this
     override func segmentedPager(_ segmentedPager: MXSegmentedPager, didSelectViewAt index: Int) {
+        updateTabStyles(selectedIndex: index)
         switch index {
         case 0:
-            urgentVC.selectedMonthlyIndex = nil
-            urgentVC.ListTV.reloadData()
+            urgentVC.selectDefaultPlan()
         case 1:
-            adVC.selectedYearlyIndex = nil
-            adVC.ListTV.reloadData()
+            adVC.selectDefaultPlan()
         default:
             break
         }
@@ -107,7 +190,11 @@ class CreatePremiumvc: MXSegmentedPagerController {
 
 extension CreatePremiumvc: MXPagerViewDelegate {
     func pagerView(_ pagerView: MXPagerView, didMoveToPage page: UIView, at index: Int) {
-        urgentVC.clearSelection()  // ✅ clear both when tab changes
-        adVC.clearSelection()
+        updateTabStyles(selectedIndex: index)
+        if index == 0 {
+            urgentVC.selectDefaultPlan()
+        } else {
+            adVC.selectDefaultPlan()
+        }
     }
 }
