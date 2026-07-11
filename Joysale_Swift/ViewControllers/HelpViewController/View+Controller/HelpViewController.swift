@@ -59,6 +59,19 @@ class HelpViewController: UIViewController {
             print(isLeft)
             if isLeft == 1 {
             }
+            else if self.isFromHelp && self.tableView.isHidden {
+                self.isFromHelp = false
+                self.viewType = "help"
+                self.helpResult = nil
+                self.navigationController?.customNavigationBarView(title: getLanguage["help"] ?? "help", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 20), vc: self)
+                self.headerView.isHidden = false
+                self.bottomView.isHidden = false
+                self.webStackView.isHidden = true
+                self.tableView.isHidden = false
+                self.textView.isHidden = true
+                self.tableView.reloadData()
+                Utility.shared.stopAnimation(viewController: self)
+            }
             else {
                 self.navigationController?.popViewController(animated: true)
             }
@@ -162,55 +175,48 @@ class HelpViewController: UIViewController {
         }
         else if self.viewType == "donate"{                                  //MARK: Custom Work
             print("THIS ELSE IF FUNCTION")
-            self.headerView.isHidden = true
-            self.bottomView.isHidden = true
-            if DEFAULT_LANGUAGE_CODE == "en" {
-                let data = self.donateContent.data(using: .utf8)!
-                let attributedString = try? NSMutableAttributedString(
-                    data: data,
-                    options: [.documentType: NSAttributedString.DocumentType.html],
-                    documentAttributes: nil)
-                attributedString?.addAttribute(NSAttributedString.Key.font, value: UIFont(name: APP_FONT_REGULAR, size: 15) ?? UIFont.systemFont(ofSize: 14), range: NSRange(location: 0, length: self.donateContent.html2String.count))
-                
-                
-                self.textView.attributedText = attributedString
-            }
-            else {
-                self.textView.linkTextAttributes = [
-                    .foregroundColor: UIColor.blue,
-                    .underlineStyle: NSUnderlineStyle.single.rawValue
-                ]
-                self.textView.attributedText = NSAttributedString(string: self.donateContent.html2String, attributes: [NSAttributedString.Key.font: UIFont(name: APP_FONT_REGULAR, size: 15) ?? UIFont.systemFont(ofSize: 14)])
-            }
-
-            DispatchQueue.main.async {
-                self.textView.setContentOffset(CGPoint.zero, animated: false)
-            }
+            self.showHelpPageContent(self.donateContent)
         }
         else {
-            self.headerView.isHidden = true
-            self.bottomView.isHidden = true
-            if DEFAULT_LANGUAGE_CODE == "en" {
-                let data = (self.helpResult?.pageContent ?? "").data(using: .utf8)!
-                let attributedString = try? NSMutableAttributedString(
-                    data: data,
-                    options: [.documentType: NSAttributedString.DocumentType.html],
-                    documentAttributes: nil)
-                attributedString?.addAttribute(NSAttributedString.Key.font, value: UIFont(name: APP_FONT_REGULAR, size: 15) ?? UIFont.systemFont(ofSize: 14), range: NSRange(location: 0, length: (self.helpResult?.pageContent ?? "").html2String.count))
-                
-                
-                self.textView.attributedText = attributedString
+            self.showHelpPageContent(self.helpResult?.pageContent ?? "")
+        }
+    }
+    
+    private func showHelpPageContent(_ pageContent: String) {
+        self.headerView.isHidden = true
+        self.bottomView.isHidden = true
+        self.webStackView.isHidden = false
+        self.tableView.isHidden = true
+        self.textView.isHidden = false
+        
+        let appFont = UIFont(name: APP_FONT_REGULAR, size: 15) ?? UIFont.systemFont(ofSize: 14)
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let attributedText: NSAttributedString
+            if DEFAULT_LANGUAGE_CODE == "en",
+               let data = pageContent.data(using: .utf8),
+               let mutable = try? NSMutableAttributedString(
+                data: data,
+                options: [.documentType: NSAttributedString.DocumentType.html],
+                documentAttributes: nil) {
+                mutable.addAttribute(.font, value: appFont, range: NSRange(location: 0, length: mutable.length))
+                attributedText = mutable
             }
             else {
+                let plainText = pageContent.html2String
+                attributedText = NSAttributedString(string: plainText, attributes: [.font: appFont])
+            }
+            
+            DispatchQueue.main.async {
+                guard let self = self else { return }
                 self.textView.linkTextAttributes = [
                     .foregroundColor: UIColor.blue,
                     .underlineStyle: NSUnderlineStyle.single.rawValue
                 ]
-                self.textView.attributedText = NSAttributedString(string: (self.helpResult?.pageContent ?? "").html2String, attributes: [NSAttributedString.Key.font: UIFont(name: APP_FONT_REGULAR, size: 15) ?? UIFont.systemFont(ofSize: 14)])
-            }
-
-            DispatchQueue.main.async {
-                self.textView.setContentOffset(CGPoint.zero, animated: false)
+                self.textView.attributedText = attributedText
+                self.textView.setContentOffset(.zero, animated: false)
+                Utility.shared.stopAnimation(viewController: self)
+                self.view.isUserInteractionEnabled = true
             }
         }
     }
@@ -272,10 +278,18 @@ extension HelpViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let pageObj = HelpViewController()
-        pageObj.isFromHelp = true
-        pageObj.viewType = (self.viewModel.helpModel?.result[indexPath.section].pageName ?? "")
-        pageObj.helpResult = self.viewModel.helpModel?.result[indexPath.section]
-        self.navigationController?.pushViewController(pageObj, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
+        guard let helpResult = self.viewModel.helpModel?.result[indexPath.section] else { return }
+        
+        self.isFromHelp = true
+        self.helpResult = helpResult
+        self.viewType = helpResult.pageName ?? ""
+        
+        if self.viewType != "" {
+            self.navigationController?.customNavigationBarView(title: getLanguage[self.viewType] ?? self.viewType, fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 20), vc: self)
+            self.navigationController?.customRightBarButtonView(title: "", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 17), imageName: "detail_back", isLeft: true, vc: self, transparantView: false)
+        }
+        
+        self.showHelpPageContent(helpResult.pageContent ?? "")
     }
 }
