@@ -166,7 +166,11 @@ extension EditProfileViewController: UITableViewDelegate, UITableViewDataSource,
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 1 {
-            return 5
+            if self.profileData?.subscriptionEnable == "true"{
+                return 3
+            }else{
+                return 5
+            }
         }
         else if section == 2 {
             return 7
@@ -323,6 +327,12 @@ extension EditProfileViewController {
 extension EditProfileViewController: FUIAuthDelegate {
     func authUI(_ authUI: FUIAuth, didSignInWith authDataResult: AuthDataResult?, error: Error?) {
         print(error?.localizedDescription ?? "")
+        if let error = error as NSError? {
+            print("Domain: \(error.domain)")
+            print("Code: \(error.code)")
+            print("Description: \(error.localizedDescription)")
+            print("UserInfo: \(error.userInfo)")
+        }
         if error == nil {
             print(authDataResult?.user.phoneNumber ?? "")
             

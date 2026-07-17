@@ -50,10 +50,11 @@ class ChangePasswordViewController: UIViewController {
             self.edit2TextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "enternewpassword", font: UIFont(name: APP_FONT_REGULAR, size: 15))
               self.edit2TextField.isSecureTextEntry = true
              self.edit2TextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+             self.edit1TextField.addTarget(self, action: #selector(textFieldDidChange1), for: .editingChanged)
             self.edit3TextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "enterconfirmpassword", font: UIFont(name: APP_FONT_REGULAR, size: 15))
             self.edit3TextField.isSecureTextEntry = true
             self.edit3View.isHidden = false
-            self.edit1TextField.text = self.profileData?.currentpassword ?? ""
+            //self.edit1TextField.text = self.profileData?.currentpassword ?? ""
         }
         else {
             self.edit1TextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "enter_here", font: UIFont(name: APP_FONT_REGULAR, size: 15))
@@ -160,6 +161,14 @@ class ChangePasswordViewController: UIViewController {
         }
         else if self.edit2TextField.text == "" {
             self.edit2TextField.textFieldWithShowAct(title: "", image: nil)
+        }
+      }
+    @objc func textFieldDidChange1() {
+        if  self.edit1TextField.hasText {
+            self.eyebutton.isHidden = false
+        }
+        else if self.edit2TextField.text == "" {
+            self.eyebutton.isHidden = true
         }
       }
       func validatePassword() -> (Bool, String) {

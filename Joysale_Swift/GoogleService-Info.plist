@@ -2,37 +2,33 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
-	<string>ca-app-pub-3940256099942544/2934735716</string>
-	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
-	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>916288168071-o66c5t13r06rsie4jtn300qvvaph0gr2.apps.googleusercontent.com</string>
+	<string>751543825019-fe28f9e63rdonmvjrcvdq53iko2l7djg.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.916288168071-o66c5t13r06rsie4jtn300qvvaph0gr2</string>
+	<string>com.googleusercontent.apps.751543825019-fe28f9e63rdonmvjrcvdq53iko2l7djg</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDUlLaz94Bm6w5iSKDIkh15uk5WG0QwfWQ</string>
+	<string>AIzaSyCReONt0mcLXG5ED5Do0P19YjPSAxbWCpU</string>
 	<key>GCM_SENDER_ID</key>
-	<string>916288168071</string>
+	<string>751543825019</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.app.gardencatch</string>
 	<key>PROJECT_ID</key>
-	<string>garden-catch-1556585909906</string>
+	<string>farm-fresh-247-378d1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>farm-fresh-247-378d1.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:916288168071:ios:8f9bff1359625da7</string>
-	<key>DATABASE_URL</key>
-	<string>https://garden-catch-1556585909906.firebaseio.com</string>
+	<string>1:751543825019:ios:a106bd293f7855fc5868de</string>
 </dict>
 </plist>

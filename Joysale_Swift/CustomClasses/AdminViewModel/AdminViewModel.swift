@@ -37,6 +37,8 @@ class AdminViewModel {
                 PAID_BANNER_FLAG = ((self.adminModel?.result.paidBanner ?? "") == "disable") ? false : true
                 EXCHANGE_MODEL_FLAG = ((self.adminModel?.result.exchange ?? "") == "disable") ? false : true
                 //chatURL = (self.adminModel?.result.socketUrl ?? "")
+                updateBaseURL(from: self.adminModel?.result.api_url ?? "")
+                print("BaseurlNew:\(BASE_URL) \n\(SITE_URL)")
                 BANNNER_ID = (self.adminModel?.result.googleAdsIos ?? "")
                 MAPBOXACCESSTOKEN = (self.adminModel?.result.mapboxToken ?? "")
                // APP_RTC_URL = (self.adminModel?.result.apprtcUrl ?? "")

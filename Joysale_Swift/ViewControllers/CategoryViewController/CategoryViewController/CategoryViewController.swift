@@ -105,24 +105,22 @@ class CategoryViewController: UIViewController {
         }
     }
     func loadData() {
-        let group = DispatchGroup()
-        group.enter()
-
         ADMIN_VIEW_MODEL.getAdminData(onSuccess: { (success) in
             StripeAPI.defaultPublishableKey = (ADMIN_VIEW_MODEL.adminModel?.result.stripePublicKey ?? "")
-            group.leave()
+            ADMIN_VIEW_MODEL.productBeforeAddData(onSuccess: { (success) in
+                DispatchQueue.main.async {
+                    self.loadCategoryIndex()
+                }
+            }) { (failure) in
+                DispatchQueue.main.async {
+                    self.loadCategoryIndex()
+                }
+            }
         }) { (failure) in
-            group.leave()
+            DispatchQueue.main.async {
+                self.loadCategoryIndex()
+            }
         }
-        group.enter()
-        ADMIN_VIEW_MODEL.productBeforeAddData(onSuccess: { (success) in
-            group.leave()
-        }) { (failure) in
-            group.leave()
-        }
-        group.notify(queue: DispatchQueue.main) {
-            self.loadCategoryIndex()
-         }
     }
     func loadBannerView() {
         /*

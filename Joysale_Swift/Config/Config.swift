@@ -17,7 +17,7 @@ let API_PASSWORD = "0RWK9XM8"
 
 //let GOOGLE_API_KEY = "AIzaSyBPKdfZs9pGzxPQ4MHM3iUPVAKDWC31fPw"    //check while running this from pms  need to change
 //let GOOGLE_API_KEY = "AIzaSyA2lLglPIdWyLvCn7bTTbqiDYG_ua5kAuI"  //Gardencatch
-let GOOGLE_CLIENT_KEY = "916288168071-o66c5t13r06rsie4jtn300qvvaph0gr2.apps.googleusercontent.com"    //Gardencatch              //need to add
+let GOOGLE_CLIENT_KEY = "751543825019-fe28f9e63rdonmvjrcvdq53iko2l7djg.apps.googleusercontent.com"    //Gardencatch              //need to add
 let GOOGLE_URL = "https://maps.google.com/maps/api/geocode/json?sensor=false"
 
 
@@ -32,12 +32,15 @@ let GOOGLE_URL = "https://maps.google.com/maps/api/geocode/json?sensor=false"
 let APP_RTC_URL = "http://yourturn_url:0000"
 
 //MARK: NEW DOMAIN CHANGES
-/*
-let BASE_URL = "https://farmfresh247.com/"
-let chatURL =  "https://farmfresh247.com:8081"
- */
-let BASE_URL = "https://appservices.hitasoft.in/farmfresh/"
-let chatURL =  "https://appservices.hitasoft.in:2089"
+
+let INITIAL_BASE_URL = "https://farmfresh247.com/"
+var BASE_URL = INITIAL_BASE_URL
+//let chatURL =  "https://farmfresh247.com:8081"
+let chatURL =  "https://farmfresh247.com:2087"
+let ADMIN_DATAS_SITE_URL = INITIAL_BASE_URL + "api/"
+ 
+//var BASE_URL = "https://appservices.hitasoft.in/farmfresh/"
+//let chatURL =  "https://appservices.hitasoft.in:2089"
 
 
 /*
@@ -48,16 +51,26 @@ let chatURL =  "https://appservices.hitasoft.in:8097"
 let APP_RTC_URL = "http://yourturn_url:0000"
 */
 //API SERVICE
-let SITE_URL = BASE_URL+"api/"
-let MEDIA_URL = BASE_URL+"media/user/"
-let UPLOAD_IMAGE_URL = BASE_URL+"api/uploadimage"
-let CHAT_IMAGE_URL = BASE_URL+"images/message/"
-let UPLOAD_AUDIO_URL = BASE_URL+"api/uploadaudio"
-let ADD_IMAGE_URL = BASE_URL+"media/item"
-let USER_URL = BASE_URL+"media/user"
-let WEB_ROOT_URL = BASE_URL+"tos.html"
-let RESIZE_MEDIA_URL = BASE_URL+"user/resized/40/"
-let PROFILE_URL = BASE_URL+"profile/"
+var SITE_URL = BASE_URL+"api/"
+var MEDIA_URL: String { BASE_URL + "media/user/" }
+var UPLOAD_IMAGE_URL: String { BASE_URL + "api/uploadimage" }
+var CHAT_IMAGE_URL: String { BASE_URL + "images/message/" }
+var UPLOAD_AUDIO_URL: String { BASE_URL + "api/uploadaudio" }
+var ADD_IMAGE_URL: String { BASE_URL + "media/item" }
+var USER_URL: String { BASE_URL + "media/user" }
+var WEB_ROOT_URL: String { BASE_URL + "tos.html" }
+var RESIZE_MEDIA_URL: String { BASE_URL + "user/resized/40/" }
+var PROFILE_URL: String { BASE_URL + "profile/" }
+
+func updateBaseURL(from apiUrl: String) {
+    guard !apiUrl.isEmpty else { return }
+    var url = apiUrl
+    if !url.hasSuffix("/") {
+        url += "/"
+    }
+    BASE_URL = url
+    SITE_URL = BASE_URL + "api/"
+}
 let INVITE_URL = "https://apps.apple.com/us/app/Farm Fresh 24/7/id1078268802"
 let INVITE_URL_2 = "https://gardencatch.com/buy"
 var REST_AUTH: [String : String] = ["api_username": "joySale", "api_password": "0RWK9XM8"]

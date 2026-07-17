@@ -230,10 +230,11 @@ class HomeViewController: UIViewController, customLocationDelegate {
             self.collectionView.reloadData()
             self.collectionView.bringSubviewToFront(self.refreshControl)
             //self.loadBannerAddOns()
+            self.loadData()
         }) { (failure) in
             self.collectionView.reloadData()
+            self.loadData()
         }
-        self.loadData()
     }
     func loadData() {
         if !indicatorView.isAnimating {

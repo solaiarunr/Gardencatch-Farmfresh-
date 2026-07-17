@@ -35,6 +35,7 @@ class AdminResultModel{
     var bannerData : [BannerDatumModel]!
     var block : String!
     var buynow : String!
+    var api_url : String!
     var category : [CategoryModel]!
     var chatTemplate : [ChatTemplateModel]!
     var distance : String!
@@ -74,6 +75,7 @@ class AdminResultModel{
         }
         block = json["block"].stringValue
         buynow = json["buynow"].stringValue
+        api_url = json["api_url"].stringValue
         category = [CategoryModel]()
         let categoryArray = json["category"].arrayValue
         for categoryJson in categoryArray{

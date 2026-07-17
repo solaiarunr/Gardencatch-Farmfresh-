@@ -19,7 +19,7 @@ class TOSModel{
             return
         }
         message = json["message"].string ?? json["result"].stringValue
-        status = json["status"].boolValue
+        status = json["status"].string == "true" || json["status"].boolValue
     }
 }
 class HelpModel {
@@ -37,7 +37,7 @@ class HelpModel {
             let value = HelpResultModel(fromJson: resultJson)
             result.append(value)
         }
-        status = json["status"].boolValue
+        status = json["status"].string == "true" || json["status"].boolValue
     }
 }
 class HelpResultModel {

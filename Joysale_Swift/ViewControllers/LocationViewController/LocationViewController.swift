@@ -309,7 +309,13 @@
                 self.lat = "\(coordinates.latitude)"
                 self.long = "\(coordinates.longitude)"
                 self.updateLocation(coordinates) { (location) in
-                    self.searchTextField.text = location
+                    //self.searchTextField.text = location
+                    if self.viewType == "profile" {
+                        self.searchTextField.text = "\(self.city), \(self.state), \(self.country)"
+                    }
+                    else {
+                        self.searchTextField.text = location
+                    }
                 }
             }
         }

@@ -21,7 +21,7 @@ class CallParsingFunction {
     }
     public func postDataCall(subURl: String, params: Parameters, onSuccess success: @escaping (JSON) -> Void, onFailure failure: @escaping (_ error: Error?) -> Void)
     {
-        let BaseUrl = SITE_URL+subURl
+        let BaseUrl = (subURl == ADMIN_DATAS_URL ? ADMIN_DATAS_SITE_URL : SITE_URL) + subURl
         var parameters = params
         parameters.merge(REST_AUTH){(_, new) in new}
         print("BASEURL: \(BaseUrl)")

@@ -94,7 +94,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.loadAdminData()
         self.registerForPushNotification(application)
         self.setInitialViewController()
-        
+        if let options = FirebaseApp.app()?.options {
+            print("Project ID: \(options.projectID ?? "")")
+            print("Google App ID: \(options.googleAppID)")
+            print("API Key: \(options.apiKey ?? "")")
+        }
         
         // Navigation title color
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: APP_FONT_REGULAR, size: 20) ?? UIFont.systemFont(ofSize: 20), NSAttributedString.Key.foregroundColor: UIColor(named: "whitecolor") ?? .black]
@@ -214,39 +218,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func loadAdminData() {
-        
-        let group = DispatchGroup()
-        group.enter()
-        
         ADMIN_VIEW_MODEL.getAdminData(onSuccess: { (success) in
             StripeAPI.defaultPublishableKey = (ADMIN_VIEW_MODEL.adminModel?.result.stripePublicKey ?? "")
             self.GoogelMapKey = ADMIN_VIEW_MODEL.adminModel?.result.googlemapkey_ios ?? ""
             GMSServices.provideAPIKey(self.GoogelMapKey)
             GMSPlacesClient.provideAPIKey(self.GoogelMapKey)
             //Stripe.setDefaultPublishableKey(ADMIN_VIEW_MODEL.adminModel?.result.stripePublicKey ?? "")
-            group.leave()
-        }) { (failure) in
-            group.leave()
-        }
-        group.enter()
-        ADMIN_VIEW_MODEL.productBeforeAddData(onSuccess: { (success) in
-            group.leave()
-        }) { (failure) in
-            group.leave()
-        }
-        group.notify(queue: DispatchQueue.main) {
-            if ADMIN_VIEW_MODEL.productBeforeModel?.result != nil && ADMIN_VIEW_MODEL.adminModel?.result != nil{
-                if FILTER_DATA.location != "" && FILTER_DATA.location.lowercased() != "worldwide" {
-                    FILTER_DATA.distance = (ADMIN_VIEW_MODEL.productBeforeModel?.result.distance ?? "")
-                    FILTER_DATA.isDistanceSlider = false
-                    FILTER_DATA.distance_type = (ADMIN_VIEW_MODEL.adminModel?.result.distanceType ?? "")
-                }
-                DispatchQueue.main.async {
-                    if ADMIN_VIEW_MODEL.adminModel?.status ?? false && (ADMIN_VIEW_MODEL.adminModel?.result.adminPaymentType ?? "") == "braintree"{
-                        ADMIN_VIEW_MODEL.getBraintreeToken(currency_code: (ADMIN_VIEW_MODEL.adminModel?.result.adminCurrencyCode.trimmingCharacters(in: .whitespaces) ?? ""))
+            ADMIN_VIEW_MODEL.productBeforeAddData(onSuccess: { (success) in
+                if ADMIN_VIEW_MODEL.productBeforeModel?.result != nil && ADMIN_VIEW_MODEL.adminModel?.result != nil {
+                    if FILTER_DATA.location != "" && FILTER_DATA.location.lowercased() != "worldwide" {
+                        FILTER_DATA.distance = (ADMIN_VIEW_MODEL.productBeforeModel?.result.distance ?? "")
+                        FILTER_DATA.isDistanceSlider = false
+                        FILTER_DATA.distance_type = (ADMIN_VIEW_MODEL.adminModel?.result.distanceType ?? "")
+                    }
+                    DispatchQueue.main.async {
+                        if ADMIN_VIEW_MODEL.adminModel?.status ?? false && (ADMIN_VIEW_MODEL.adminModel?.result.adminPaymentType ?? "") == "braintree" {
+                            ADMIN_VIEW_MODEL.getBraintreeToken(currency_code: (ADMIN_VIEW_MODEL.adminModel?.result.adminCurrencyCode.trimmingCharacters(in: .whitespaces) ?? ""))
+                        }
                     }
                 }
+            }) { (failure) in
             }
+        }) { (failure) in
         }
     }
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -390,13 +383,19 @@ extension AppDelegate: UNUserNotificationCenterDelegate,MessagingDelegate {
     }
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let FIRAUTH = Auth.auth()
+        #if DEBUG
+        FIRAUTH.setAPNSToken(deviceToken, type: AuthAPNSTokenType.sandbox)
+        #else
         FIRAUTH.setAPNSToken(deviceToken, type: AuthAPNSTokenType.prod)
-        //FIRAUTH.setAPNSToken(deviceToken, type: AuthAPNSTokenType.sandbox)
+        #endif
+        
          Messaging.messaging().apnsToken = deviceToken
         self.deviceTokenString = deviceToken.hexString
     }
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print(error.localizedDescription)
+          print("❌ Failed to register for remote notifications")
+           print(error)
+           print(error.localizedDescription)
     }
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         UserDefaultModule.shared.setFCMToken(fcm_token: "\(fcmToken ?? "")")

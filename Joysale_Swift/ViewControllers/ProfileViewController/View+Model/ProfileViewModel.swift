@@ -141,6 +141,9 @@ class ProfileViewModel {
         else if isFromFB == 2 {
             parameter["mobile_no"] = mobile_no
             parameter["show_mobile_no"] = "\(show_mobile_no)"
+            parameter["country_name"] = "\(country_name)"
+            parameter["city_name"] = "\(city_name)"
+            parameter["state_name"] = "\(state_name)"
         }
         else {
             parameter = ["user_id":user_id, "full_name": full_name, "user_img": userImage, "facebook_id": facebook_id, "country_name": country_name, "city_name": city_name, "state_name": state_name, "show_mobile_no": "\(show_mobile_no)"]

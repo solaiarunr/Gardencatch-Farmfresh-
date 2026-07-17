@@ -118,7 +118,7 @@ class EditProfileTableViewCell: UITableViewCell {
                     self.textField.tag = 21
                     self.textField.text = profileData.location
                     self.textField.placeholder = getLanguage["location"] ?? "Location"
-                    self.textField.isUserInteractionEnabled = true
+                    self.textField.isUserInteractionEnabled = false
                 }
                 else {
                     self.descLabel.isHidden = true

@@ -186,7 +186,6 @@
 		4052CEC1248E67190086AC85 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4052CEC0248E67190086AC85 /* AuthenticationViewModel.swift */; };
 		40534C3A24D0468700258633 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40534C3924D0468700258633 /* SafariServices.framework */; };
 		40549B5C24909890008BF217 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40549B5B24909890008BF217 /* AuthenticationServices.framework */; };
-		40549B5E2490A870008BF217 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 40549B5D2490A870008BF217 /* GoogleService-Info.plist */; };
 		40549B622490C45E008BF217 /* FloatingTF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40549B612490C45E008BF217 /* FloatingTF.swift */; };
 		40549B652490D02A008BF217 /* LoginModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40549B642490D02A008BF217 /* LoginModel.swift */; };
 		4056665D24A34F71003C86D0 /* ItemDetailsChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4056665C24A34F71003C86D0 /* ItemDetailsChatModel.swift */; };
@@ -257,8 +256,6 @@
 		407FDDA824A7665C000B4D32 /* StripeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 407FDDA624A7665C000B4D32 /* StripeViewController.xib */; };
 		4084C84A248E07C700857BBA /* Proxima Nova Bold.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 4084C848248E07C700857BBA /* Proxima Nova Bold.OTF */; };
 		4084C84B248E07C700857BBA /* Proxima Nova Regular.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 4084C849248E07C700857BBA /* Proxima Nova Regular.OTF */; };
-		40F0A0A32487A00100F0NT03 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 40F0A0A12487A00100F0NT01 /* Roboto-Regular.ttf */; };
-		40F0A0A42487A00100F0NT04 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 40F0A0A22487A00100F0NT02 /* Roboto-Bold.ttf */; };
 		4084C850248E0A3F00857BBA /* English.json in Resources */ = {isa = PBXBuildFile; fileRef = 4084C84D248E0A3F00857BBA /* English.json */; };
 		4084C851248E0A3F00857BBA /* French.json in Resources */ = {isa = PBXBuildFile; fileRef = 4084C84E248E0A3F00857BBA /* French.json */; };
 		40AEC48B24AB842E004C74BD /* ChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40AEC48A24AB842E004C74BD /* ChatModel.swift */; };
@@ -285,6 +282,8 @@
 		40DF47D624EAAF9A00744805 /* JoysaleAudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40DF47D524EAAF9A00744805 /* JoysaleAudioRecorder.swift */; };
 		40E467F524EBDF6D00802AB9 /* AudioTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E467F324EBDF6D00802AB9 /* AudioTableViewCell.swift */; };
 		40E467F624EBDF6D00802AB9 /* AudioTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 40E467F424EBDF6D00802AB9 /* AudioTableViewCell.xib */; };
+		40F0A0A32487A00100F0NT03 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 40F0A0A12487A00100F0NT01 /* Roboto-Regular.ttf */; };
+		40F0A0A42487A00100F0NT04 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 40F0A0A22487A00100F0NT02 /* Roboto-Bold.ttf */; };
 		5069EBD53E2A53A92FB675AA /* Pods_Joysale_Swift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00E66FEF0A31D97312D35667 /* Pods_Joysale_Swift.framework */; };
 		99777F4E25D3C05000FCD5EA /* SmartReplyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99777F4D25D3C05000FCD5EA /* SmartReplyCollectionViewCell.swift */; };
 		99777F5125D3C06400FCD5EA /* SmartReplyCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 99777F5025D3C06300FCD5EA /* SmartReplyCollectionViewCell.xib */; };
@@ -301,6 +300,7 @@
 		B6DE459A2FC720A300F7D8B1 /* PremiumListVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE45972FC720A300F7D8B1 /* PremiumListVc.swift */; };
 		B6DE459C2FC733A700F7D8B1 /* GetMembershipPromotionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE459B2FC7339F00F7D8B1 /* GetMembershipPromotionModel.swift */; };
 		B6F4319C2FC96C7E00A76894 /* SubscriptionDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F4319B2FC96C7E00A76894 /* SubscriptionDetailsModel.swift */; };
+		D8B997B63009CA1500E4BD70 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8B997B53009CA1500E4BD70 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -485,7 +485,6 @@
 		4052CEC0248E67190086AC85 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		40534C3924D0468700258633 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		40549B5B24909890008BF217 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
-		40549B5D2490A870008BF217 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		40549B5F2490ABC5008BF217 /* Joysale_Swift.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Joysale_Swift.entitlements; sourceTree = "<group>"; };
 		40549B612490C45E008BF217 /* FloatingTF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FloatingTF.swift; sourceTree = "<group>"; };
 		40549B642490D02A008BF217 /* LoginModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginModel.swift; sourceTree = "<group>"; };
@@ -557,8 +556,6 @@
 		407FDDA624A7665C000B4D32 /* StripeViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StripeViewController.xib; sourceTree = "<group>"; };
 		4084C848248E07C700857BBA /* Proxima Nova Bold.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima Nova Bold.OTF"; sourceTree = "<group>"; };
 		4084C849248E07C700857BBA /* Proxima Nova Regular.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Proxima Nova Regular.OTF"; sourceTree = "<group>"; };
-		40F0A0A12487A00100F0NT01 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
-		40F0A0A22487A00100F0NT02 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		4084C84D248E0A3F00857BBA /* English.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = English.json; sourceTree = "<group>"; };
 		4084C84E248E0A3F00857BBA /* French.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = French.json; sourceTree = "<group>"; };
 		40AEC48A24AB842E004C74BD /* ChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModel.swift; sourceTree = "<group>"; };
@@ -588,6 +585,8 @@
 		40DF47D524EAAF9A00744805 /* JoysaleAudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoysaleAudioRecorder.swift; sourceTree = "<group>"; };
 		40E467F324EBDF6D00802AB9 /* AudioTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioTableViewCell.swift; sourceTree = "<group>"; };
 		40E467F424EBDF6D00802AB9 /* AudioTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AudioTableViewCell.xib; sourceTree = "<group>"; };
+		40F0A0A12487A00100F0NT01 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
+		40F0A0A22487A00100F0NT02 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		52CA88FDAFC383168E693F2A /* Pods-Joysale_Swift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joysale_Swift.release.xcconfig"; path = "Target Support Files/Pods-Joysale_Swift/Pods-Joysale_Swift.release.xcconfig"; sourceTree = "<group>"; };
 		9952803B25DF867300114D78 /* Joysale-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Joysale-Bridging-Header.h"; sourceTree = "<group>"; };
 		99777F4D25D3C05000FCD5EA /* SmartReplyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartReplyCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -605,6 +604,7 @@
 		B6DE45982FC720A300F7D8B1 /* PremiumListVc.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PremiumListVc.xib; sourceTree = "<group>"; };
 		B6DE459B2FC7339F00F7D8B1 /* GetMembershipPromotionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMembershipPromotionModel.swift; sourceTree = "<group>"; };
 		B6F4319B2FC96C7E00A76894 /* SubscriptionDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionDetailsModel.swift; sourceTree = "<group>"; };
+		D8B997B53009CA1500E4BD70 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2249,7 +2249,7 @@
 				4084C841248E041C00857BBA /* ViewControllers */,
 				40C2B0A6248A7CA40035A1C2 /* AppDelegate.swift */,
 				40C2B0B7248A7CA90035A1C2 /* Info.plist */,
-				40549B5D2490A870008BF217 /* GoogleService-Info.plist */,
+				D8B997B53009CA1500E4BD70 /* GoogleService-Info.plist */,
 				40C2B0AF248A7CA40035A1C2 /* Joysale_Swift.xcdatamodeld */,
 				406027222491E66100719206 /* Launch Screen.storyboard */,
 			);
@@ -2459,6 +2459,7 @@
 				40739B2724ACA01300D848AF /* ChatSubTableViewCell.xib in Resources */,
 				4026B2912494E1F500AD4B1C /* FilterHeaderTableViewCell.xib in Resources */,
 				407B14B824C0943A00B21103 /* BannerListTableViewCell.xib in Resources */,
+				D8B997B63009CA1500E4BD70 /* GoogleService-Info.plist in Resources */,
 				40E467F624EBDF6D00802AB9 /* AudioTableViewCell.xib in Resources */,
 				40381C4624C558FC00884ED2 /* MyPromotionViewController.xib in Resources */,
 				4041137224C8181B00B6D9FF /* PromotionOptionTableViewCell.xib in Resources */,
@@ -2519,7 +2520,6 @@
 				40F0A0A32487A00100F0NT03 /* Roboto-Regular.ttf in Resources */,
 				40F0A0A42487A00100F0NT04 /* Roboto-Bold.ttf in Resources */,
 				3D34EAA42755F7FA00D91146 /* WriteReviewViewController.xib in Resources */,
-				40549B5E2490A870008BF217 /* GoogleService-Info.plist in Resources */,
 				4038162A2497888B00722F22 /* HomeCatogoryCollectionViewCell.xib in Resources */,
 				401A19FD24D2D8F10072F671 /* CommentViewController.xib in Resources */,
 				4056D88C24A9CDDF0005E1E0 /* ChatListViewController.xib in Resources */,

@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to your location to provide location-based services.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -32,10 +34,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.googleusercontent.apps.916288168071-o66c5t13r06rsie4jtn300qvvaph0gr2</string>
+			<string>com.googleusercontent.apps.751543825019-fe28f9e63rdonmvjrcvdq53iko2l7djg</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.916288168071-o66c5t13r06rsie4jtn300qvvaph0gr2</string>
+				<string>com.googleusercontent.apps.751543825019-fe28f9e63rdonmvjrcvdq53iko2l7djg</string>
 			</array>
 		</dict>
 		<dict>
