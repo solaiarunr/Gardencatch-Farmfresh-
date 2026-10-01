@@ -426,7 +426,7 @@ class TabbarController: UITabBarController, UITabBarControllerDelegate {
         container.clipsToBounds = false
 
         let button = UIButton(type: .custom)
-        button.setImage(self.scaledNavigationImage(named: "notifybell", size: 22), for: .normal)
+        button.setImage(self.scaledNavigationImage(named: "NotifyBell", size: 22), for: .normal)
         button.tintColor = UIColor(named: "whitecolor")
         button.addTarget(self, action: #selector(self.notificationButtonAct), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false

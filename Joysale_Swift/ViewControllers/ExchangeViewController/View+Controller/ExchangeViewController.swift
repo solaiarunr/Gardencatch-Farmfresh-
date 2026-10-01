@@ -31,7 +31,6 @@ class ExchangeViewController: UIViewController {
         super.viewDidLoad()
         self.view.addSubview(indicatorView)
         self.configUI()
-        // Do any additional setup after loading the view.
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
           return .lightContent
@@ -54,17 +53,27 @@ class ExchangeViewController: UIViewController {
         }
     }
     func configUI() {
+        self.title = nil
+        self.navigationItem.title = nil
         self.navigationController?.NavigationBarWithBackButtonAndTitle(title: getLanguage["exchangebuy"] ?? "", fColor: "whitecolor", fontName: UIFont(name: APP_FONT_REGULAR, size: 20), imageName: "detail_back", isLeft: true, vc: self, transparantView: false)
 
         self.noItemStackView.isHidden = true
         self.noItemTitleLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .center, text: "sorry")
         self.noItemDesLabel.config(color: UIColor(named: "SecondaryTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .center, text: "noItem")
 
+        self.cancelButton.isHidden = false
         self.createButton.config(color: UIColor(named: "AppThemeColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .center, title: "create")
         self.createButton.setBorder(color: UIColor(named: "AppThemeColor"))
+        self.createButton.backgroundColor = .white
+        self.createButton.layer.cornerRadius = 3
+        self.createButton.clipsToBounds = true
+
         self.cancelButton.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .center, title: "cancel")
         self.cancelButton.cornerViewMiniumRadius()
-        self.cancelButton.backgroundColor = (UIColor(named: "AppThemeColor") ?? .white)
+        self.cancelButton.backgroundColor = UIColor(named: "AppThemeColor") ?? .white
+        self.cancelButton.clipsToBounds = true
+
+        self.definesPresentationContext = true
         self.collectionView.register(UINib(nibName: "ExchangeCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "ExchangeCollectionViewCell")
         self.loadData()
     }
@@ -108,28 +117,47 @@ class ExchangeViewController: UIViewController {
         }
     }
     @IBAction func createButtonAct(_ sender: UIButton) {
-        if "\(self.selectedItem?.id ?? 0)" != "0" {
-            Utility.shared.startAnimation(viewController: self)
-            self.viewModel.createExchangeAct(user_id: (UserDefaultModule.shared.getUserData()?.user_id ?? ""), myitem_id: "\(self.itemDetails?.id ?? 0)", exchangeitem_id: "\(self.selectedItem?.id ?? 0)", onSuccess: { (success) in
-                Utility.shared.stopAnimation(viewController: self)
-                let alert = UIAlertController(title: getLanguage["alert"], message: getLanguage[(self.viewModel.exchangeMessageModel?.message ?? "")] ?? (self.viewModel.exchangeMessageModel?.message ?? ""), preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: getLanguage["ok"] ?? "", style: .default, handler: { (UIAlertAction) in
-                    if (self.viewModel.exchangeMessageModel?.status ?? false) {
-                        let pageObj = ExchangeListViewController()
-                        pageObj.isTabbar = true
-                        pageObj.selectedIndex = 1
-                        self.navigationController?.pushViewController(pageObj, animated: true)
-                    }
-                }))
-                self.present(alert, animated: true, completion: nil)
-            }) { (failure) in
-                Utility.shared.stopAnimation(viewController: self)
-            }
-        }
-        else {
+        guard let selected = self.selectedItem, selected.id != 0 else {
             let alert = UIAlertController(title: nil, message: getLanguage["please_select_exchange"] ?? "", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: getLanguage["ok"], style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
+            return
+        }
+        let pageObj = ExchangeProductConfirmViewController()
+        pageObj.wantedItem = self.itemDetails
+        pageObj.offerItem = selected
+        pageObj.modalPresentationStyle = .overFullScreen
+        pageObj.modalTransitionStyle = .crossDissolve
+        pageObj.onCreateExchange = { [weak self] wantedQty, offerQty in
+            self?.submitExchange(wantedQty: wantedQty, offerQty: offerQty)
+        }
+        if let nav = self.navigationController {
+            nav.present(pageObj, animated: true, completion: nil)
+        } else {
+            self.present(pageObj, animated: true, completion: nil)
+        }
+    }
+
+    private func submitExchange(wantedQty: Int, offerQty: Int) {
+        Utility.shared.startAnimation(viewController: self)
+        self.viewModel.createExchangeAct(user_id: (UserDefaultModule.shared.getUserData()?.user_id ?? ""), myitem_id: "\(self.itemDetails?.id ?? 0)", exchangeitem_id: "\(self.selectedItem?.id ?? 0)", myitem_qty: "\(wantedQty)", exchangeitem_qty: "\(offerQty)", onSuccess: { (success) in
+            Utility.shared.stopAnimation(viewController: self)
+            let rawMsg = self.viewModel.exchangeMessageModel?.message ?? ""
+            let message = getLanguage[rawMsg] ?? rawMsg
+            let alert = UIAlertController(title: getLanguage["alert"], message: message, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: getLanguage["ok"] ?? "", style: .default, handler: { (UIAlertAction) in
+                let isStatusTrue = self.viewModel.exchangeMessageModel?.status ?? false
+                let isAlreadyExist = rawMsg.lowercased().contains("already exist")
+                if isStatusTrue && !isAlreadyExist {
+                    let pageObj = ExchangeListViewController()
+                    pageObj.isTabbar = true
+                    pageObj.selectedIndex = 1
+                    self.navigationController?.pushViewController(pageObj, animated: true)
+                }
+            }))
+            self.present(alert, animated: true, completion: nil)
+        }) { (failure) in
+            Utility.shared.stopAnimation(viewController: self)
         }
     }
     

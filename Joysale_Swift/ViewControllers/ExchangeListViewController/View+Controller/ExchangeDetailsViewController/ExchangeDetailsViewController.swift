@@ -62,7 +62,7 @@
     var audioPlayer = AVAudioPlayer()
     var timer = Timer()
     var counter = 0
- 
+     var sourceIdVal = ""
      override func viewDidLoad() {
          super.viewDidLoad()
          self.view.addSubview(indicatorView)
@@ -110,19 +110,26 @@
          } else {
              self.tableView.addSubview(refreshControl)
          }
+          sourceIdVal = self.exchangeData?.isCashExchange ?? false ? "\(self.exchangeData?.cashExchangeId ?? 0)" : "\(self.exchangeData?.exchangeId ?? 0)"
+  print("sourceIdVal",sourceIdVal)
+         let isPending = (exchangeData?.status ?? "").lowercased() == "pending"
          if (exchangeData?.type ?? "") == "outgoing" {
-             if (exchangeData?.status ?? "") == "Pending" {
+             if isPending {
                  self.cancelButton.setTitle(getLanguage["cancel"] ?? "", for: .normal)
+                 self.acceptButton.isHidden = true
+             }else if (exchangeData?.status ?? "").lowercased() == "accepted"{
+                 self.cancelButton.isHidden = true
                  self.acceptButton.isHidden = true
              }
              else {
-                 self.cancelButton.setTitle(getLanguage["failed"] ?? "", for: .normal)
-                 self.acceptButton.setTitle(getLanguage["success"] ?? "", for: .normal)
-                 self.acceptButton.isHidden = false
+//                 self.cancelButton.setTitle(getLanguage["failed"] ?? "", for: .normal)
+//                 self.acceptButton.setTitle(getLanguage["success"] ?? "", for: .normal)
+//                 self.acceptButton.isHidden = false
              }
+             
          }
          else if (exchangeData?.type ?? "") == "incoming" {
-             if (exchangeData?.status ?? "") == "Pending" {
+             if isPending {
                  self.cancelButton.setTitle(getLanguage["decline"] ?? "", for: .normal)
                  self.acceptButton.setTitle(getLanguage["accept"] ?? "", for: .normal)
              }
@@ -132,6 +139,18 @@
              }
              self.acceptButton.isHidden = false
          }
+         if (exchangeData?.type ?? "") == "outgoing" {
+             if self.exchangeData?.isCashExchange == true {
+                 self.cancelButton.isHidden = true
+                 self.acceptButton.isHidden = true
+             }
+         }
+         if self.acceptButton.isHidden && self.cancelButton.isHidden {
+             let actionHeader = self.acceptButton.superview?.superview
+             actionHeader?.isHidden = true
+             actionHeader?.constraints.first { $0.firstAttribute == .height }?.constant = 0
+         }
+       
          CURRENT_CHAT = exchangeData?.exchangerName ?? ""
          SocketIOManager.sharedInstance.delegate = self
          SocketIOManager.sharedInstance.connect(true)
@@ -193,7 +212,7 @@
          else {
  //            self.textView.resignFirstResponder()
              if self.textView.text != "" && textView.tag == 1{
-                 self.sendChat(message: self.textView.text!, current_latitude: "", current_longitude: "", image_url: "", source_id: "\(self.exchangeData?.exchangeId ?? 0)", type: "normal", viewUrl: "", message_content: "1")
+                 self.sendChat(message: self.textView.text!, current_latitude: "", current_longitude: "", image_url: "", source_id: sourceIdVal, type: "normal", viewUrl: "", message_content: "1")
              }
              else {
                  let alert = UIAlertController(title: nil, message: getLanguage["type_your_message"] ?? "", preferredStyle: .alert)
@@ -214,7 +233,7 @@
      func loadData() {
          Utility.shared.startAnimation(viewController: self)
          self.chatModelArray.removeAll()
-         self.viewModel.getChatData(sender_id: (UserDefaultModule.shared.getUserData()?.user_id ?? ""), receiver_id: self.receiverId, type: "exchange", source_id: "\(self.exchangeData?.exchangeId ?? 0)", offset: "0", limit: "20", onSuccess: { (success) in
+         self.viewModel.getChatData(sender_id: (UserDefaultModule.shared.getUserData()?.user_id ?? ""), receiver_id: self.receiverId, type: "exchange", source_id: sourceIdVal, offset: "0", limit: "20", onSuccess: { (success) in
              if success {
                  self.chatModelArray = self.viewModel.chatModel?.chats ?? [ChildChatModel]()
                  self.tableView.reloadData()
@@ -230,7 +249,7 @@
          })
      }
      func sendChat(message: String,  current_latitude: String, current_longitude: String, image_url: String, source_id: String, type: String, viewUrl: String, audioDuration: String = "", message_content: String = "1") {
-         SocketIOManager.sharedInstance.messageTyping(message: "untype", senderId: "\(self.exchangeData?.exchangerUsername ?? "")", exchage_type: true, sourceId: "\(self.exchangeData?.exchangeId ?? 0)")
+         SocketIOManager.sharedInstance.messageTyping(message: "untype", senderId: "\(self.exchangeData?.exchangerUsername ?? "")", exchage_type: true, sourceId: sourceIdVal)
          
          //        self.textView.endEditing(true)
          let timeStamp = Date().timeIntervalSince1970
@@ -257,9 +276,10 @@
       }
     @IBAction func acceptDeclineButtonAct(_ sender: UIButton) {
          var status = ""
+         let isPending = (self.exchangeData?.status ?? "").lowercased() == "pending"
          
          if sender == acceptButton {
-             if (self.exchangeData?.status ?? "") == "Pending" && (exchangeData?.type ?? "") != "outgoing" {
+             if isPending && (exchangeData?.type ?? "") != "outgoing" {
                  status = "accept"
              }
              else {
@@ -267,7 +287,7 @@
              }
          }
          else {
-             if (self.exchangeData?.status ?? "") == "Pending" {
+             if isPending {
                  if (exchangeData?.type ?? "") == "outgoing" {
                      status = "cancel"
                  }
@@ -279,8 +299,12 @@
                  status = "failed"
              }
          }
+         if self.exchangeData?.isCashExchange == true {
+             self.updateCashExchange(status: status)
+             return
+         }
          Utility.shared.startAnimation(viewController: self)
-         self.viewModel.updateExchangeStatus(user_id: (UserDefaultModule.shared.getUserData()?.user_id ?? ""), exchange_id: "\(self.exchangeData?.exchangeId ?? 0)", status: status, onSuccess: { (success) in
+         self.viewModel.updateExchangeStatus(user_id: (UserDefaultModule.shared.getUserData()?.user_id ?? ""), exchange_id: sourceIdVal, status: status, onSuccess: { (success) in
              Utility.shared.stopAnimation(viewController: self)
              let alert = UIAlertController(title: getLanguage["alert"] ?? "", message: getLanguage["Exchange_updated_successfully"], preferredStyle: .alert)
              alert.addAction(UIAlertAction(title: getLanguage["ok"] ?? "", style: .cancel, handler: { (UIAlertAction) in
@@ -315,17 +339,64 @@
              self.present(alert, animated: true, completion: nil)
          }
      }
+
+     private func updateCashExchange(status: String) {
+         guard status == "accept" || status == "decline" || status == "success" else { return }
+         let cashExchangeId = self.exchangeData?.cashExchangeId ?? Int(sourceIdVal) ?? 0
+         Utility.shared.startAnimation(viewController: self)
+         self.viewModel.updateCashExchangeStatus(
+             user_id: UserDefaultModule.shared.getUserData()?.user_id ?? "",
+             cash_exchange_id: cashExchangeId,
+             status: status,
+             onSuccess: { (success) in
+                 Utility.shared.stopAnimation(viewController: self)
+                 if success {
+                     if status == "success" {
+                         if let token = self.viewModel.cashReceiptToken, !token.isEmpty {
+                             self.exchangeData?.receiptToken = token
+                         }
+                         if let url = self.viewModel.cashReceiptUrl, !url.isEmpty {
+                             self.exchangeData?.receiptUrl = url
+                         }
+                     }
+                     let messageKey: String
+                     if status == "accept" {
+                         messageKey = "offer_accepted"
+                     } else if status == "decline" {
+                         messageKey = "offer_declined"
+                     } else {
+                         messageKey = "success"
+                     }
+                     let alert = UIAlertController(title: getLanguage["alert"] ?? "", message: getLanguage[messageKey] ?? status, preferredStyle: .alert)
+                     alert.addAction(UIAlertAction(title: getLanguage["ok"] ?? "", style: .cancel, handler: { _ in
+                         self.exchangeDelgate?.updateExchangeStatus(status)
+                         self.navigationController?.popViewController(animated: true)
+                     }))
+                     self.present(alert, animated: true, completion: nil)
+                 } else {
+                     let serverMessage = self.viewModel.tosModel?.message ?? ""
+                     let alert = UIAlertController(title: getLanguage["alert"] ?? "", message: getLanguage[serverMessage] ?? serverMessage, preferredStyle: .alert)
+                     alert.addAction(UIAlertAction(title: getLanguage["ok"] ?? "", style: .cancel, handler: nil))
+                     self.present(alert, animated: true, completion: nil)
+                 }
+             }) { (failure) in
+                 Utility.shared.stopAnimation(viewController: self)
+                 let alert = UIAlertController(title: getLanguage["alert"] ?? "", message: getLanguage["Status Already Updated"], preferredStyle: .alert)
+                 alert.addAction(UIAlertAction(title: getLanguage["ok"] ?? "", style: .cancel, handler: nil))
+                 self.present(alert, animated: true, completion: nil)
+             }
+     }
  }
  extension ExchangeDetailsViewController: customLocationDelegate{
     func locationAct(city: String, state: String, country: String, countryCode: String,lat: String, long: String, location: String){
 
-        self.sendChat(message: "", current_latitude: lat, current_longitude: long, image_url: "", source_id: "\(self.exchangeData?.exchangeId ?? 0)", type: "share_location", viewUrl: "", message_content: "3")
+        self.sendChat(message: "", current_latitude: lat, current_longitude: long, image_url: "", source_id: sourceIdVal, type: "share_location", viewUrl: "", message_content: "3")
 
     }
   }
  extension ExchangeDetailsViewController: UITextViewDelegate {
      func textViewDidChange(_ textView: UITextView) {
-         SocketIOManager.sharedInstance.messageTyping(message: "type", senderId: "\(self.exchangeData?.exchangerUsername ?? "")", exchage_type: true, sourceId: "\(self.exchangeData?.exchangeId ?? 0)")
+         SocketIOManager.sharedInstance.messageTyping(message: "type", senderId: "\(self.exchangeData?.exchangerUsername ?? "")", exchage_type: true, sourceId: sourceIdVal)
            textViewAct(textView)
      }
      func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -350,7 +421,7 @@
          //        textViewAct(textView)
          textViewDidChange(textView)
          DispatchQueue.main.async {
-             SocketIOManager.sharedInstance.messageTyping(message: "untype", senderId: "\(self.exchangeData?.exchangerUsername ?? "")", exchage_type: true, sourceId: "\(self.exchangeData?.exchangeId ?? 0)")
+             SocketIOManager.sharedInstance.messageTyping(message: "untype", senderId: "\(self.exchangeData?.exchangerUsername ?? "")", exchage_type: true, sourceId: self.sourceIdVal)
          }
         if textView.text == "" {
             textView.text = getLanguage["writemessage"]
@@ -439,7 +510,7 @@
                  DispatchQueue.global(qos: .background).async {
                      self.offSet = self.chatModelArray.count
                      print("self.offSet\(self.offSet)")
-                     self.viewModel.getChatData(sender_id: (UserDefaultModule.shared.getUserData()?.user_id ?? ""), receiver_id: self.receiverId, type: "exchange", source_id: "\(self.exchangeData?.exchangeId ?? 0)", offset: "\(self.offSet)", limit: "20", onSuccess: { (success) in
+                     self.viewModel.getChatData(sender_id: (UserDefaultModule.shared.getUserData()?.user_id ?? ""), receiver_id: self.receiverId, type: "exchange", source_id: self.sourceIdVal, offset: "\(self.offSet)", limit: "20", onSuccess: { (success) in
                          if success {
                              self.chatModelArray = ((self.viewModel.chatModel?.chats ?? [ChildChatModel]()) + self.chatModelArray)
                          }
@@ -472,7 +543,7 @@
                  DispatchQueue.main.async {
                      self.navigationController?.isNavigationBarHidden = false
                     print("View_urlView_url\(success["Image","View_url"].stringValue)")
-                     self.sendChat(message: "", current_latitude: "", current_longitude: "", image_url: success["Image","View_url"].stringValue, source_id: "\(self.exchangeData?.exchangeId ?? 0)", type: "image", viewUrl: success["Image","Name"].stringValue, message_content: "2")
+                     self.sendChat(message: "", current_latitude: "", current_longitude: "", image_url: success["Image","View_url"].stringValue, source_id: self.sourceIdVal, type: "image", viewUrl: success["Image","Name"].stringValue, message_content: "2")
                  }
              }) { (failure) in
                  
@@ -490,7 +561,7 @@
      func getSocketInfo(dict:JSON, type: String) {
          if type == "message" {
              self.viewModel.getChatData(sender_id:
-                 (UserDefaultModule.shared.getUserData()?.user_id ?? ""), receiver_id: self.receiverId, type: "exchange", source_id: "\(self.exchangeData?.exchangeId ?? 0)", offset: "0", limit: "20", onSuccess: { (success) in
+                 (UserDefaultModule.shared.getUserData()?.user_id ?? ""), receiver_id: self.receiverId, type: "exchange", source_id: sourceIdVal, offset: "0", limit: "20", onSuccess: { (success) in
                      if success {
                          self.chatModelArray = self.viewModel.chatModel?.chats ?? [ChildChatModel]()
                      }

@@ -85,7 +85,7 @@ class ExchangeListViewController: MXSegmentedPagerController {
         segmentedPager.segmentedControl.textColor = (UIColor(named: "AppTextColor") ?? .white)
         segmentedPager.segmentedControl.font = (UIFont(name: APP_FONT_REGULAR, size: 15) ?? UIFont.systemFont(ofSize: 15))
         segmentedPager.segmentedControl.selectedTextColor = (UIColor(named: "AppThemeColor") ?? .white)
-        segmentedPager.segmentedControl.indicator.lineView.backgroundColor = (UIColor(named: "clearcolor") ?? .white)
+        segmentedPager.segmentedControl.indicator.lineView.backgroundColor = (UIColor(named: "AppThemeColor") ?? .systemGreen)
         segmentedPager.parallaxHeader.height = 0
         DispatchQueue.main.asyncAfter(deadline: .now()+1) {
             self.segmentedPager.segmentedControl.select(index: self.selectedIndex, animated: true)

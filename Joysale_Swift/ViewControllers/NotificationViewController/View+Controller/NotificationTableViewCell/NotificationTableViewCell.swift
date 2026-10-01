@@ -126,6 +126,27 @@ class NotificationTableViewCell: UITableViewCell {
             else if result.message.contains("failed your exchange request on") {
                 content = getLanguage["failed_your_exchange_request_on"] ?? ""
             }
+            else if result.message.contains("offered cash for your product") {
+                content = getLanguage["offered_cash_for_your_product"] ?? "offered cash for your product"
+            }
+            else if result.message.contains("accepted your cash exchange request") {
+                content = getLanguage["accepted_your_cash_exchange_request"] ?? "accepted your cash exchange request"
+            }
+            else if result.message.contains("declined your cash exchange request") {
+                content = getLanguage["declined_your_cash_exchange_request"] ?? "declined your cash exchange request"
+            }
+            else if result.message.contains("canceled your cash exchange request") || result.message.contains("cancelled your cash exchange request") {
+                content = getLanguage["canceled_your_cash_exchange_request"] ?? "canceled your cash exchange request"
+            }
+            else if result.message.contains("successed your cash exchange request") || result.message.contains("succeeded your cash exchange request") {
+                content = getLanguage["successed_your_cash_exchange_request"] ?? "completed your cash exchange request"
+            }
+            else if result.message.contains("failed your cash exchange request") {
+                content = getLanguage["failed_your_cash_exchange_request"] ?? "failed your cash exchange request"
+            }
+            else {
+                content = getLanguage[result.message] ?? result.message
+            }
             message = result.itemTitle.html2String
         }
         else if result.type == "comment" {

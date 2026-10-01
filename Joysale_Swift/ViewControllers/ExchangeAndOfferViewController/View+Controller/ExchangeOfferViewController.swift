@@ -31,9 +31,10 @@ class ExchangeOfferViewController: UIViewController {
     func configUI() {
         self.userImageView.cornerViewRadius()
         self.userNameLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "")
-//        self.priceTextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "type_your_offer", font: UIFont(name: APP_FONT_REGULAR, size: 15))
         self.priceTextField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "type_your_offer", font: UIFont(name: APP_FONT_REGULAR, size: 15), placeHolder_color: "Placeholdercolor")
+        self.priceTextField.addDoneButtonOnKeyboard()
         self.descTextView.config(color: UIColor(named: "Placeholdercolor") ?? .white, font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "type_your_message")
+        self.descTextView.addDoneButtonOnKeyboard()
         self.sendButton.cornerViewMiniumRadius()
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow(sender:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide(sender:)), name: UIResponder.keyboardWillHideNotification, object: nil)

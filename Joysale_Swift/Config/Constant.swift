@@ -21,6 +21,8 @@ let APP_FONT_REGULAR = "Roboto-Regular"
 var DEFAULT_LANGUAGE = "english"
 var DEFAULT_LANGUAGE_CODE = "en"
 var BRAINTREE_TOKEN = ""
+let APP_FONT_Medium = "Roboto_Condensed-Medium"
+
 
 //var BUYNOW_MODEL_FLAG = false
 var BUYNOW_MODEL_FLAG = true

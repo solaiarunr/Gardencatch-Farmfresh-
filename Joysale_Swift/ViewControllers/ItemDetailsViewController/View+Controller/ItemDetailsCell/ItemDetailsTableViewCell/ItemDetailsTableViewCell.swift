@@ -42,6 +42,10 @@
      @IBOutlet weak var memberShipImageViewleading: NSLayoutConstraint!
      @IBOutlet weak var adButtonWidth: NSLayoutConstraint!
      
+     @IBOutlet weak var QunView: UIView!
+     
+     @IBOutlet weak var QuanLbl: UILabel!
+     
      // item Description
      var item_description = ""
      
@@ -56,7 +60,9 @@
          self.viewLikeCommentStackView.isHidden = true
          self.detailsDescriptionStackView.isHidden = true
          self.adButton.cornerMiniumRadius(2)
-         
+         self.QunView.layer.cornerRadius = 6
+         self.QunView.clipsToBounds = true
+         self.QuanLbl.config(color: UIColor(named: "quantitycolor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .center, text: "")
          self.adButton.config(color: UIColor(named: "whitecolor"), font: UIFont(name: APP_FONT_REGULAR, size: 16), align: .center, title: "")
          self.itemNameLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 22), align: .left, text: "")
          self.priceLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_BOLD, size: 18), align: .left, text: "")
@@ -85,6 +91,7 @@
          self.textView.isHidden = true
          self.adButton.isHidden = true
          self.memberShipView.isHidden = true
+         self.QuanLbl.text = "Quantity: \(item.quantity ?? 0)"
          if index.section == 0 {
              self.itemDetailsStackView.isHidden = false
              self.itemNameLabel.text = item.itemTitle

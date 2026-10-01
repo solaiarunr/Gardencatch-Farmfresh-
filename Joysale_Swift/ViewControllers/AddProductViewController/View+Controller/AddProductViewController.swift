@@ -187,6 +187,9 @@ class AddProductViewController: UIViewController, customLocationDelegate {
         else if !ADD_EDIT_ITEM_MODEL.giving_away && ADD_EDIT_ITEM_MODEL.currency == "" {
             message = "currencycodenotselected"
         }
+        else if (ADD_EDIT_ITEM_MODEL.quantity ?? 0) <= 0 {
+            message = "Please Enter quantity"
+        }
         else if ADD_EDIT_ITEM_MODEL.category == "" {
             message = "select_category"
         }
@@ -483,20 +486,20 @@ extension AddProductViewController: AddProductPopupDelegate{
 }
 extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 6 {
+        if section == 7 {
             return self.filterData.count
         }
-        if section == 8 && ((self.selectedCategory?.productCondition ?? "") == "enable" || ((self.selectedCategory?.exchangeBuy ?? "") == "enable") || ((self.selectedCategory?.makeOffer ?? "") == "enable")) {
+        if section == 9 && ((self.selectedCategory?.productCondition ?? "") == "enable" || ((self.selectedCategory?.exchangeBuy ?? "") == "enable") || ((self.selectedCategory?.makeOffer ?? "") == "enable")) {
             return 3
         }
-        if section == 9 {
+        if section == 10 {
             return 2
         }
         return 1
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 0 || indexPath.section == 1 || indexPath.section == 2 || indexPath.section == 5 || indexPath.section == 7 || indexPath.section == 10 {
-            // Section == 0 -> image scroll, Section == 1 -> Product title, Section == 2 -> description, Section == 5 -> Category, Section == 7 -> Location, Section == 10 -> Youtube link
+        if indexPath.section == 0 || indexPath.section == 1 || indexPath.section == 2 || indexPath.section == 5 || indexPath.section == 6 || indexPath.section == 8 || indexPath.section == 11 {
+            // 0 image, 1 title, 2 description, 5 quantity, 6 category, 8 location, 11 youtube
             return UITableView.automaticDimension
         }
         else if indexPath.section == 3 {
@@ -513,16 +516,16 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
                 return UITableView.automaticDimension
             }
         }
-        else if indexPath.section == 6 && self.filterData.count > 0 {
+        else if indexPath.section == 7 && self.filterData.count > 0 {
             // Category Filter
             return UITableView.automaticDimension
         }
-        else if indexPath.section == 8 {
+        else if indexPath.section == 9 {
             if (indexPath.row == 0 && (self.selectedCategory?.productCondition ?? "") == "enable") || (indexPath.row == 1 && ((self.selectedCategory?.exchangeBuy ?? "") == "enable")) || (indexPath.row == 2 && (self.selectedCategory?.makeOffer ?? "") == "enable" && !ADD_EDIT_ITEM_MODEL.giving_away) {
                 return UITableView.automaticDimension
             }
         }
-        else if indexPath.section == 9 {
+        else if indexPath.section == 10 {
             if indexPath.row == 0 {
                 if (self.selectedCategory?.instantBuy ?? "" == "enable" && !ADD_EDIT_ITEM_MODEL.giving_away) {
                     return UITableView.automaticDimension
@@ -538,7 +541,7 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
         return 0
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == 0 || section == 1 || section == 2 || section == 5 || section == 7 || section == 10 {
+        if section == 0 || section == 1 || section == 2 || section == 5 || section == 6 || section == 8 || section == 11 {
             return 8
         }
         else if section == 3 {
@@ -552,11 +555,11 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
                 return 8
             }
         }
-        else if section == 6 && self.filterData.count > 0 {
+        else if section == 7 && self.filterData.count > 0 {
             // Category Filter
             return 8
         }
-        else if section == 8 && ((self.selectedCategory?.productCondition ?? "") == "enable" || ((self.selectedCategory?.exchangeBuy ?? "") == "enable") || ((self.selectedCategory?.makeOffer ?? "") == "enable" && !ADD_EDIT_ITEM_MODEL.giving_away)) {
+        else if section == 9 && ((self.selectedCategory?.productCondition ?? "") == "enable" || ((self.selectedCategory?.exchangeBuy ?? "") == "enable") || ((self.selectedCategory?.makeOffer ?? "") == "enable" && !ADD_EDIT_ITEM_MODEL.giving_away)) {
             return 8
         }
         else if (self.selectedCategory?.instantBuy ?? "" == "enable" && !ADD_EDIT_ITEM_MODEL.giving_away) {
@@ -565,7 +568,7 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
         return 0
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 11
+        return 12
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -574,7 +577,7 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
         if indexPath.section == 0 {
             cell.loadImageData(imageArr: self.imageArray)
         }
-        else if indexPath.section == 6 && self.filterData.count > 0 {
+        else if indexPath.section == 7 && self.filterData.count > 0 {
             self.updateFilterData = Utility.shared.filterStringToDict(ADD_EDIT_ITEM_MODEL.filters)
             cell.updateFilterData = self.updateFilterData
             cell.loadFilterData(self.filterData[indexPath.row], index: indexPath)
@@ -593,12 +596,12 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
             // Price Section
             cell.isHidden = true
         }
-        else if indexPath.section == 8 {
+        else if indexPath.section == 9 {
             if (indexPath.row == 0 && (self.selectedCategory?.productCondition ?? "") != "enable") || (indexPath.row == 1 && ((self.selectedCategory?.exchangeBuy ?? "") != "enable")) || (indexPath.row == 2 && ((self.selectedCategory?.makeOffer ?? "") != "enable" || ADD_EDIT_ITEM_MODEL.giving_away)) {
                 cell.isHidden = true
             }
         }
-        else if indexPath.section == 9 && ((indexPath.row == 0 && (self.selectedCategory?.instantBuy ?? "") != "enable" || ADD_EDIT_ITEM_MODEL.giving_away) || (indexPath.row == 1 && !ADD_EDIT_ITEM_MODEL.instant_buy)) {
+        else if indexPath.section == 10 && ((indexPath.row == 0 && (self.selectedCategory?.instantBuy ?? "") != "enable" || ADD_EDIT_ITEM_MODEL.giving_away) || (indexPath.row == 1 && !ADD_EDIT_ITEM_MODEL.instant_buy)) {
             cell.isHidden = true
         }
         cell.switchControl.addTarget(self, action: #selector(self.switchAct(_:)), for: .touchUpInside)
@@ -615,7 +618,7 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
             ADD_EDIT_ITEM_MODEL.make_offer = (sender.isOn == true) ? 2 : 0
             ADD_EDIT_ITEM_MODEL.instant_buy = false
         }
-        else if section == 8 {
+        else if section == 9 {
             if row == 1 {
                 // Update Exchange to Buy Value
                 ADD_EDIT_ITEM_MODEL.exchange_to_buy = sender.isOn
@@ -626,7 +629,7 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
                 ADD_EDIT_ITEM_MODEL.make_offer = offerVal
             }
         }
-        else if section == 9 {
+        else if section == 10 {
             ADD_EDIT_ITEM_MODEL.instant_buy = sender.isOn
         }
         self.tableView.reloadData()
@@ -651,7 +654,7 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.view.endEditing(true)
         self.updateFilterData = Utility.shared.filterStringToDict(ADD_EDIT_ITEM_MODEL.filters ?? "")
-        if indexPath.section == 5 {
+        if indexPath.section == 6 {
             let pageObj = CategoryViewController()
             pageObj.isFromFilter = false
             pageObj.CategoryDetails = CategoryDetailsModel(Category_id: ADD_EDIT_ITEM_MODEL.category, subcategory_id: ADD_EDIT_ITEM_MODEL.subcategory, child_category_id: ADD_EDIT_ITEM_MODEL.child_category)
@@ -659,7 +662,7 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
             pageObj.categoryViewType = 1
             self.navigationController?.pushViewController(pageObj, animated: true)
         }
-        else if indexPath.section == 6{
+        else if indexPath.section == 7{
             if self.filterData[indexPath.row].type != "range" {
                 let pageObj = ProductConditionViewController()
                 pageObj.isProductCondition = false
@@ -669,7 +672,7 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
                 self.navigationController?.pushViewController(pageObj, animated: true)
             }
         }
-        else if indexPath.section == 7 {
+        else if indexPath.section == 8 {
             // MARK: Mabbox Addon
             /*
             let pageObj = MapViewController()
@@ -688,7 +691,7 @@ extension AddProductViewController: UITableViewDelegate, UITableViewDataSource {
             self.navigationController?.pushViewController(pageObj, animated: true)
     
         }
-        else if indexPath.section == 8  && indexPath.row == 0{
+        else if indexPath.section == 9  && indexPath.row == 0{
             let pageObj = ProductConditionViewController()
             pageObj.productDelegate = self
             pageObj.selectedProductCondition = ADD_EDIT_ITEM_MODEL.item_condition

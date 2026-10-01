@@ -12,6 +12,8 @@ class ChatViewModel {
     
     var profileModel: ProfileModel?
     var tosModel: TOSModel?
+    var cashReceiptToken: String?
+    var cashReceiptUrl: String?
     var itemChatModel: ItemDetailsChatModel?
     var chatModel: ChatModel?
     var chatListModel: ChatListModel?
@@ -130,6 +132,43 @@ class ChatViewModel {
             print(response)
             let rootClass = TOSModel.init(fromJson: response)
             self.tosModel = rootClass
+            success(rootClass.status ?? false)
+        }) { (error) in
+            failure(error?.localizedDescription ?? "")
+        }
+    }
+
+    /// POST /api/cashexchangeaccept, /api/cashexchangedecline, /api/cashexchangecomplete
+    /// status: "accept" | "decline" | "success" (complete)
+    public func updateCashExchangeStatus(user_id: String, cash_exchange_id: Int, status: String, onSuccess success: @escaping (Bool) -> Void, onFailure failure: @escaping (String) -> Void) {
+        let endpoint: String
+        switch status {
+        case "accept":
+            endpoint = CASH_EXCHANGE_ACCEPT_URL
+        case "decline":
+            endpoint = CASH_EXCHANGE_DECLINE_URL
+        case "success":
+            endpoint = CASH_EXCHANGE_COMPLETE_URL
+        default:
+            failure("")
+            return
+        }
+        let parameter: [String: Any] = [
+            "user_id": Int(user_id) ?? 0,
+            "cash_exchange_id": cash_exchange_id
+        ]
+        CallParsingFunction().postDataCall(subURl: endpoint, params: parameter, onSuccess: { (response) in
+            print(response)
+            let rootClass = TOSModel.init(fromJson: response)
+            self.tosModel = rootClass
+            let receiptToken = response["receipt_token"].stringValue.isEmpty
+                ? response["result"]["receipt_token"].stringValue
+                : response["receipt_token"].stringValue
+            let receiptUrl = response["receipt_url"].stringValue.isEmpty
+                ? response["result"]["receipt_url"].stringValue
+                : response["receipt_url"].stringValue
+            self.cashReceiptToken = receiptToken.isEmpty ? nil : receiptToken
+            self.cashReceiptUrl = receiptUrl.isEmpty ? nil : receiptUrl
             success(rootClass.status ?? false)
         }) { (error) in
             failure(error?.localizedDescription ?? "")

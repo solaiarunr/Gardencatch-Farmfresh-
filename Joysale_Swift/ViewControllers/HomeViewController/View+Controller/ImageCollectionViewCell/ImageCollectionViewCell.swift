@@ -26,6 +26,9 @@ class ImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var memberShipViewWidth: NSLayoutConstraint!
     @IBOutlet weak var memberShipImageViewWidth: NSLayoutConstraint!
     @IBOutlet weak var memberShipImageViewleading: NSLayoutConstraint!
+    
+    
+    @IBOutlet weak var quantity: UILabel!
     private let gradientLayer: CAGradientLayer = {
         let gradient = CAGradientLayer()
         gradient.colors = [UIColor.black.withAlphaComponent(0.5).cgColor, UIColor.clear]
@@ -40,9 +43,9 @@ class ImageCollectionViewCell: UICollectionViewCell {
     }
     
     func configUI() {
-        
         self.statusButton.cornerMiniumRadius(2)
         self.shadowView.cornerViewMiniumRadius()
+        self.quantity.config(color: UIColor(named: "quantitycolor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .right, text: "")
         self.priceLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_BOLD, size: 14), align: .left, text: "")
         self.productTitleLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .left, text: "")
         self.locationLabel.config(color: UIColor(named: "ThirdryTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 12), align: .left, text: "")
@@ -211,6 +214,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
         self.locationLabel.text = itemData.location
         self.imageViewHeightConst.constant = self.frame.width
         self.dateButton.layer.insertSublayer(gradientLayer, at: 0)
+        self.quantity.text = "Quantity : \(itemData.quantity ?? 0)"
     }
     override func layoutSubviews() {
         self.imageViewHeightConst.constant = self.frame.width

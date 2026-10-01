@@ -46,7 +46,12 @@ class ExchangeCollectionViewCell: UICollectionViewCell {
         self.dateButton.layer.insertSublayer(gradientLayer, at: 0)
         self.memberShipView.cornerViewMiniumRadius()
         self.memberShipView.isHidden = true
+        self.exchangeImageView.layer.cornerRadius = 0
+        self.exchangeImageView.clipsToBounds = true
+        self.selectedView.layer.cornerRadius = 0
+        self.selectedView.backgroundColor = UIColor(named: "TransparentBlack")
     }
+
     func loadData(_ item: ItemModel) {
         self.exchangeImageView.sd_setImage(with: URL(string: item.photos?.first?.itemUrlMain350 ?? "")) { (image, error, cache, url) in
             if error != nil {

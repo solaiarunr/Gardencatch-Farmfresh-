@@ -35,7 +35,9 @@ class MyExchangeViewController: UIViewController {
         self.noItemDesLabel.config(color: UIColor(named: "SecondaryTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 14), align: .center, text: "noExhanges")
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.register(UINib(nibName: "MyExchangeTableViewCell", bundle: nil), forCellReuseIdentifier: "MyExchangeTableViewCell")
+        self.tableView.estimatedRowHeight = 280
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.register(MyExchangeTableViewCell.self, forCellReuseIdentifier: "MyExchangeTableViewCell")
         if #available(iOS 10.0, *) {
             self.tableView.refreshControl = refreshControl
         } else {
@@ -89,17 +91,22 @@ extension MyExchangeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyExchangeTableViewCell") as! MyExchangeTableViewCell
         self.noItemStackView.isHidden = true
+        cell.delegate = self
+        cell.index = indexPath.section
         if let exchangeData = self.viewModel.resultModel?.result.exchange[indexPath.section] {
             cell.loadData(exchangeData)
+            cell.exchangerImageView.isUserInteractionEnabled = !exchangeData.isCashExchange
         }
         cell.userImageView.isUserInteractionEnabled = true
         cell.userImageView.tag = indexPath.section
+        cell.userImageView.gestureRecognizers?.forEach { cell.userImageView.removeGestureRecognizer($0) }
         cell.userImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.userImageAct(_:))))
-        cell.exchangerImageView.isUserInteractionEnabled = true
         cell.exchangerImageView.tag = indexPath.section
+        cell.exchangerImageView.gestureRecognizers?.forEach { cell.exchangerImageView.removeGestureRecognizer($0) }
         cell.exchangerImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.exchangeProductDetailsAct)))
         cell.myProductImageView.isUserInteractionEnabled = true
         cell.myProductImageView.tag = indexPath.section
+        cell.myProductImageView.gestureRecognizers?.forEach { cell.myProductImageView.removeGestureRecognizer($0) }
         cell.myProductImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.myProductDetailsAct)))
 
         return cell
@@ -116,7 +123,10 @@ extension MyExchangeViewController: UITableViewDelegate, UITableViewDataSource {
     @objc func exchangeProductDetailsAct(_ sender: UITapGestureRecognizer) {
         if let imageView = sender.view {
             if let exchangeData = self.viewModel.resultModel?.result.exchange[imageView.tag] {
-                self.productDetailsAct("\(exchangeData.exchangeProduct.itemId ?? 0)")
+                if exchangeData.isCashExchange { return }
+                let itemId = exchangeData.exchangeProduct.itemId ?? 0
+                guard itemId > 0 else { return }
+                self.productDetailsAct("\(itemId)")
             }
         }
     }
@@ -145,18 +155,40 @@ extension MyExchangeViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if self.view.tag == 0 || self.view.tag == 1 {
-            let pageObj = ExchangeDetailsViewController()
-            pageObj.exchangeDelgate = self
-            if let exchangeData = self.viewModel.resultModel?.result.exchange[indexPath.section] {
-                pageObj.receiverId = "\(exchangeData.exchangerId ?? 0)"
-                pageObj.chatId = "\(exchangeData.exchangeId ?? 0)"
-                pageObj.exchangeData = exchangeData
-            }
-            self.delegate.navigationController.pushViewController(pageObj, animated: true)
-        }
+        self.openExchangeDetails(at: indexPath.section)
+    }
+
+    private func openExchangeDetails(at index: Int) {
+        guard self.view.tag == 0 || self.view.tag == 1 else { return }
+        guard let exchangeData = self.viewModel.resultModel?.result.exchange[index] else { return }
+        let pageObj = ExchangeDetailsViewController()
+        pageObj.exchangeDelgate = self
+        let receiver = (exchangeData.exchangerId != nil && exchangeData.exchangerId != 0)
+            ? exchangeData.exchangerId!
+            : (exchangeData.requestByMe == true ? (exchangeData.sellerId ?? 0) : (exchangeData.buyerId ?? 0))
+        let chatIdVal = (exchangeData.exchangeId != nil && exchangeData.exchangeId != 0)
+            ? exchangeData.exchangeId!
+            : (exchangeData.cashExchangeId ?? 0)
+        pageObj.receiverId = "\(receiver)"
+        pageObj.chatId = "\(chatIdVal)"
+        pageObj.exchangeData = exchangeData
+        self.delegate.navigationController.pushViewController(pageObj, animated: true)
     }
 }
+
+extension MyExchangeViewController: MyExchangeTableViewCellDelegate {
+    func didTapViewDetail(at index: Int) {
+        guard let exchangeData = self.viewModel.resultModel?.result.exchange[index] else { return }
+        if exchangeData.isCashExchange {
+            let pageObj = CashExchangeHistoryDetailsViewController()
+            pageObj.cashExchangeId = exchangeData.cashExchangeId ?? 0
+            self.delegate.navigationController.pushViewController(pageObj, animated: true)
+            return
+        }
+        self.openExchangeDetails(at: index)
+    }
+}
+
 extension MyExchangeViewController: ExchangeDetailsDelgate {
     func updateExchangeStatus(_ status: String) {
         self.loadData()

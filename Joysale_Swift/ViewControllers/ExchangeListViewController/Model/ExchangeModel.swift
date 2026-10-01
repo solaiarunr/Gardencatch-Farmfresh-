@@ -54,6 +54,23 @@ class ExchangeListModel {
     var requestByMe : Bool!
     var status : String!
     var type : String!
+    var exchangeType : String!
+    var cashExchangeId : Int!
+    var cashAmount : Double!
+    var price : String!
+    var quantity : Int!
+    var buyer : String!
+    var buyerId : Int!
+    var seller : String!
+    var sellerId : Int!
+    var initiatedOn : String!
+    var completedOn : String!
+    var receiptUrl : String!
+    var receiptToken : String!
+
+    var isCashExchange: Bool {
+        return (exchangeType ?? "").lowercased() == "cash"
+    }
 
     init(fromJson json: JSON!){
         if json.isEmpty{
@@ -63,6 +80,8 @@ class ExchangeListModel {
         let exchangeProductJson = json["exchange_product"]
         if !exchangeProductJson.isEmpty{
             exchangeProduct = ExchangeProductModel(fromJson: exchangeProductJson)
+        } else {
+            exchangeProduct = ExchangeProductModel(fromJson: JSON([:]))
         }
         exchangeTime = json["exchange_time"].stringValue
         exchangerId = json["exchanger_id"].intValue
@@ -72,10 +91,25 @@ class ExchangeListModel {
         let myProductJson = json["my_product"]
         if !myProductJson.isEmpty{
             myProduct = MyProductModel(fromJson: myProductJson)
+        } else {
+            myProduct = MyProductModel(fromJson: JSON([:]))
         }
         requestByMe = json["request_by_me"].boolValue
         status = json["status"].stringValue
         type = json["type"].stringValue
+        exchangeType = json["exchange_type"].stringValue
+        cashExchangeId = json["cash_exchange_id"].intValue
+        cashAmount = json["cash_amount"].doubleValue
+        price = json["price"].stringValue
+        quantity = json["quantity"].intValue
+        buyer = json["buyer"].stringValue
+        buyerId = json["buyer_id"].intValue
+        seller = json["seller"].stringValue
+        sellerId = json["seller_id"].intValue
+        initiatedOn = json["initiated_on"].stringValue
+        completedOn = json["completed_on"].stringValue
+        receiptUrl = json["receipt_url"].stringValue
+        receiptToken = json["receipt_token"].stringValue
     }
 }
 class MyProductModel {
@@ -83,6 +117,7 @@ class MyProductModel {
     var itemId : Int!
     var itemImage : String!
     var itemName : String!
+    var quantity : Int!
 
     init(fromJson json: JSON!){
         if json.isEmpty{
@@ -91,6 +126,10 @@ class MyProductModel {
         itemId = json["item_id"].intValue
         itemImage = json["item_image"].stringValue
         itemName = json["item_name"].stringValue
+        quantity = json["quantity"].intValue
+        if quantity == 0, let str = json["quantity"].string, let parsed = Int(str) {
+            quantity = parsed
+        }
     }
 }
 class ExchangeProductModel {
@@ -98,6 +137,7 @@ class ExchangeProductModel {
     var itemId : Int!
     var itemImage : String!
     var itemName : String!
+    var quantity : Int!
 
     init(fromJson json: JSON!){
         if json.isEmpty{
@@ -106,5 +146,9 @@ class ExchangeProductModel {
         itemId = json["item_id"].intValue
         itemImage = json["item_image"].stringValue
         itemName = json["item_name"].stringValue
+        quantity = json["quantity"].intValue
+        if quantity == 0, let str = json["quantity"].string, let parsed = Int(str) {
+            quantity = parsed
+        }
     }
 }

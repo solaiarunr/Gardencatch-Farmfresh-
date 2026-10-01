@@ -219,7 +219,8 @@ class AddEditViewModel {
     var filters: String!
     var youtube_link: String!
     var child_category: String!
-    init(item_id: String = "0", item_name: String = "", item_des: String = "", price: String = "", size: String = "0", category: String = "", subcategory: String = "", chat_to_buy: String = "0", exchange_to_buy: Bool = false, currency: String = "", lat: String = "", lon: String = "", address: String = "", shipping_time: String = "", remove_img: String = "", product_img: String = "", shipping_detail: String = "", item_condition: String = "", make_offer: Int = 0, instant_buy: Bool = false, paypal_id: String = "", shipping_cost: String = "", country_id: String = "", giving_away: Bool = false, sold: Bool = false, filters: String = "", youtube_link: String = "", child_category: String = "", state:String = "") {
+    var quantity: Int!
+    init(item_id: String = "0", item_name: String = "", item_des: String = "", price: String = "", size: String = "0", category: String = "", subcategory: String = "", chat_to_buy: String = "0", exchange_to_buy: Bool = false, currency: String = "", lat: String = "", lon: String = "", address: String = "", shipping_time: String = "", remove_img: String = "", product_img: String = "", shipping_detail: String = "", item_condition: String = "", make_offer: Int = 0, instant_buy: Bool = false, paypal_id: String = "", shipping_cost: String = "", country_id: String = "", giving_away: Bool = false, sold: Bool = false, filters: String = "", youtube_link: String = "", child_category: String = "", state:String = "", quantity: Int = 0) {
         self.item_id = item_id
         self.item_name = item_name
         self.item_des = item_des
@@ -249,5 +250,6 @@ class AddEditViewModel {
         self.youtube_link = youtube_link
         self.child_category = child_category
         self.state = state
+        self.quantity = quantity
     }
 }

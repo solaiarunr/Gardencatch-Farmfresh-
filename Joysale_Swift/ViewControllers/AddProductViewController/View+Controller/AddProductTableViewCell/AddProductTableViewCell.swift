@@ -23,10 +23,15 @@
      @IBOutlet weak var titleLabel: UILabel!
      @IBOutlet weak var textView: UITextView!
      @IBOutlet weak var textField: UITextField!
+     @IBOutlet weak var quantityStepperStackView: UIStackView!
+     @IBOutlet weak var quantityMinusButton: UIButton!
+     @IBOutlet weak var quantityPlusButton: UIButton!
+     @IBOutlet weak var quantityValueLabel: UILabel!
      var imageArray = [AddProductImageModel]()
      var updateFilterData: UpdateFilterModel?
      var filterData: ProductFilterModel?
      var delegate: AddProductDelegate?
+     private let maxQuantity = 999
      override func awakeFromNib() {
          super.awakeFromNib()
          self.configUI()
@@ -37,6 +42,16 @@
          self.rightTextField.config(color: UIColor(named: "AppTextColor"), align: .right, placeHolder: "", font: UIFont(name: APP_FONT_REGULAR, size: 15))
          self.titleLabel.config(color: UIColor(named: "AppTextColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .left, text: "")
          self.dropDownButton.config(color: UIColor(named: "AppThemeColor"), font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .right, title: "")
+         let quantityTextColor = UIColor().hexValue(hex: "444444")
+         self.quantityValueLabel.config(color: quantityTextColor, font: UIFont(name: APP_FONT_REGULAR, size: 15), align: .center, text: "00")
+         self.quantityMinusButton.tintColor = quantityTextColor
+         self.quantityPlusButton.tintColor = quantityTextColor
+         self.quantityMinusButton.setImage(UIImage(named: "minusssico")?.withRenderingMode(.alwaysTemplate), for: .normal)
+         self.quantityPlusButton.setImage(UIImage(named: "plusiconn")?.withRenderingMode(.alwaysTemplate), for: .normal)
+         self.quantityMinusButton.clipsToBounds = true
+         self.quantityPlusButton.clipsToBounds = true
+         self.quantityMinusButton.addTarget(self, action: #selector(quantityMinusAct), for: .touchUpInside)
+         self.quantityPlusButton.addTarget(self, action: #selector(quantityPlusAct), for: .touchUpInside)
          self.textField.addDoneButtonOnKeyboard()
          self.textField.delegate = self
          self.rightTextField.addDoneButtonOnKeyboard()
@@ -60,6 +75,7 @@
          self.textField.isHidden = true
          self.textView.isHidden = true
          self.detailStackView.isHidden = true
+         self.quantityStepperStackView.isHidden = true
          self.collectionView.reloadData()
      }
      func loadFilterData(_ filterData: ProductFilterModel, index: IndexPath) {
@@ -80,6 +96,7 @@
          self.dropDownButton.isHidden = true
          self.priceSeparatorView.isHidden = true
          self.switchControl.isHidden = true
+         self.quantityStepperStackView.isHidden = true
          self.rightTextField.isHidden = false
          self.titleLabel.text = filterData.label
          
@@ -121,6 +138,7 @@
          self.dropDownButton.isHidden = true
          self.priceSeparatorView.isHidden = true
          self.switchControl.isHidden = true
+         self.quantityStepperStackView.isHidden = true
          self.rightTextField.placeholder = ""
          self.rightTextField.isUserInteractionEnabled = false
          self.rightTextField.keyboardType = .default
@@ -168,9 +186,16 @@
                  self.dropDownButton.setTitle(ADMIN_VIEW_MODEL.productBeforeModel?.result.currency.first?.symbol ?? "", for: .normal)
                  ADD_EDIT_ITEM_MODEL.currency = ADMIN_VIEW_MODEL.productBeforeModel?.result.currency.first?.symbol ?? ""
              }
-             
          }
          else if index.section == 5 {
+             self.detailStackView.isHidden = false
+             self.quantityStepperStackView.isHidden = false
+             self.titleLabel.text = getLanguage["quantity"] ?? "Quantity"
+             self.titleLabel.textColor = UIColor().hexValue(hex: "444444")
+             self.quantityValueLabel.textColor = UIColor().hexValue(hex: "444444")
+             self.updateQuantityLabel()
+         }
+         else if index.section == 6 {
              self.detailStackView.isHidden = false
              self.rightTextField.isHidden = false
              self.titleLabel.text = getLanguage["category"] ?? ""
@@ -189,7 +214,7 @@
              }
              self.rightImageView.isHidden = false
          }
-         else if index.section == 7 {
+         else if index.section == 8 {
              self.detailStackView.isHidden = false
              self.detailStackView.isHidden = false
              self.rightTextField.isHidden = false
@@ -198,7 +223,7 @@
              self.rightTextField.text = ADD_EDIT_ITEM_MODEL.address
              self.rightImageView.isHidden = false
          }
-         else if index.section == 8 {
+         else if index.section == 9 {
              self.detailStackView.isHidden = false
              if index.row == 0 {
                  self.rightTextField.isHidden = false
@@ -220,7 +245,7 @@
                  self.titleLabel.text = getLanguage["fixedprice"] ?? ""
              }
          }
-         else if index.section == 9 {
+         else if index.section == 10 {
              self.detailStackView.isHidden = false
              if index.row == 0 {
                  self.switchControl.isHidden = false
@@ -236,12 +261,34 @@
                  self.rightTextField.text = ADD_EDIT_ITEM_MODEL.shipping_cost
              }
          }
-         else if index.section == 10 {
+         else if index.section == 11 {
              self.textField.isHidden = false
              self.textField.config(color: UIColor(named: "AppTextColor"), align: .left, placeHolder: "optional", font: UIFont(name: APP_FONT_REGULAR, size: 15))
              self.textField.text = ADD_EDIT_ITEM_MODEL.youtube_link
          }
      }
+     
+     private func updateQuantityLabel() {
+         let value = max(0, ADD_EDIT_ITEM_MODEL.quantity ?? 0)
+         self.quantityValueLabel.text = String(format: "%02d", value)
+     }
+     
+     @objc private func quantityMinusAct() {
+         let current = ADD_EDIT_ITEM_MODEL.quantity ?? 0
+         if current > 0 {
+             ADD_EDIT_ITEM_MODEL.quantity = current - 1
+             self.updateQuantityLabel()
+         }
+     }
+     
+     @objc private func quantityPlusAct() {
+         let current = ADD_EDIT_ITEM_MODEL.quantity ?? 0
+         if current < maxQuantity {
+             ADD_EDIT_ITEM_MODEL.quantity = current + 1
+             self.updateQuantityLabel()
+         }
+     }
+     
      override func setSelected(_ selected: Bool, animated: Bool) {
          super.setSelected(selected, animated: animated)
 
@@ -317,7 +364,7 @@
          else if section == 4 && textField == rightTextField{
              ADD_EDIT_ITEM_MODEL.price = textField.text!
          }
-         else if section == 6 && textField == rightTextField {
+         else if section == 7 && textField == rightTextField {
              let updateValue = Utility.shared.filterStringToDict(ADD_EDIT_ITEM_MODEL.filters)
              if updateValue.range.count > 0 && updateValue.range.contains(where: {$0.id == filterData?.id ?? ""}) {
                  updateValue.range.removeAll(where: {$0.id == filterData?.id ?? ""})
@@ -326,10 +373,10 @@
              
              ADD_EDIT_ITEM_MODEL.filters = Utility.shared.filterDictToString(updateValue)
          }
-         else if section == 9 && textField == rightTextField {
+         else if section == 10 && textField == rightTextField {
              ADD_EDIT_ITEM_MODEL.shipping_cost = textField.text!
          }
-         else if section == 10 && textField == self.textField {
+         else if section == 11 && textField == self.textField {
              ADD_EDIT_ITEM_MODEL.youtube_link = textField.text!
          }
      }
@@ -347,7 +394,7 @@
              }
               return true
          }
-         else if section == 6 {
+         else if section == 7 {
              let allowedCharacters = CharacterSet(charactersIn:".0123456789")//Here change this characters based on your requirement
              let characterSet = CharacterSet(charactersIn: string)
              if allowedCharacters.isSuperset(of: characterSet) {
@@ -357,7 +404,7 @@
                  return false
              }
          }
-         if section == 4 && textField == rightTextField || section == 9 && textField == rightTextField {
+         if section == 4 && textField == rightTextField || section == 10 && textField == rightTextField {
              let amountString: NSString = textField.text! as NSString
              let newString: NSString = amountString.replacingCharacters(in: range, with: string) as NSString
              let regex = "\\d{0,\(ADMIN_VIEW_MODEL.adminModel?.result.priceRange.beforeDecimalNotation ?? "5")}(\\.\\d{0,\(ADMIN_VIEW_MODEL.adminModel?.result.priceRange.afterDecimalNotation ?? "2")})?"

@@ -263,7 +263,7 @@ class ItemDetailsViewController: UIViewController {
                     formattedCurrency = currencyArray.count > 1 ? "\(currencyArray[1])-\(currencyArray[0])" : (itemDetails?.currencyCode ?? "")
                 }
 
-                let addEditModel = AddEditViewModel(item_id: "\(itemDetails?.id ?? 0)", item_name: itemDetails?.itemTitle ?? "", item_des: (itemDetails?.itemDescription ?? ""), price: "\(itemDetails?.price ?? "0")", size: itemDetails?.size ?? "", category: "\(itemDetails?.categoryId ?? 0)", subcategory: itemDetails?.subcatId ?? "", chat_to_buy: "0", exchange_to_buy: (itemDetails?.exchangeBuy ?? "0") == "0" ? false : true, currency: "\(ADMIN_VIEW_MODEL.productBeforeModel?.result.currency.filter({$0.symbol == formattedCurrency}).first?.symbol ?? "")", lat: "\(itemDetails?.latitude ?? 0)", lon: "\(itemDetails?.longitude ?? 0)", address: itemDetails?.location ?? "", shipping_time: itemDetails?.shippingTime ?? "", remove_img: "", product_img: productImage, shipping_detail: "", item_condition: "\(ADMIN_VIEW_MODEL.productBeforeModel?.result.productCondition.filter({$0.name == (itemDetails?.itemCondition ?? "")}).first?.id ?? 0)", make_offer: Int(itemDetails?.makeOffer ?? "0") ?? 0, instant_buy: itemDetails?.instantBuy ?? "0" == "0" ? false : true, paypal_id: "", shipping_cost: itemDetails?.shippingCost ?? "", country_id: (itemDetails?.countryId ?? ""), giving_away: (itemDetails?.price ?? "0") == "0" ? true : false, sold: (itemDetails?.itemStatus ?? "") == "sold" ? true : false, filters: changeFilterDict(), youtube_link: itemDetails?.youtubeLink ?? "", child_category: "\(itemDetails?.childCategoryId ?? "0")")
+                let addEditModel = AddEditViewModel(item_id: "\(itemDetails?.id ?? 0)", item_name: itemDetails?.itemTitle ?? "", item_des: (itemDetails?.itemDescription ?? ""), price: "\(itemDetails?.price ?? "0")", size: itemDetails?.size ?? "", category: "\(itemDetails?.categoryId ?? 0)", subcategory: itemDetails?.subcatId ?? "", chat_to_buy: "0", exchange_to_buy: (itemDetails?.exchangeBuy ?? "0") == "0" ? false : true, currency: "\(ADMIN_VIEW_MODEL.productBeforeModel?.result.currency.filter({$0.symbol == formattedCurrency}).first?.symbol ?? "")", lat: "\(itemDetails?.latitude ?? 0)", lon: "\(itemDetails?.longitude ?? 0)", address: itemDetails?.location ?? "", shipping_time: itemDetails?.shippingTime ?? "", remove_img: "", product_img: productImage, shipping_detail: "", item_condition: "\(ADMIN_VIEW_MODEL.productBeforeModel?.result.productCondition.filter({$0.name == (itemDetails?.itemCondition ?? "")}).first?.id ?? 0)", make_offer: Int(itemDetails?.makeOffer ?? "0") ?? 0, instant_buy: itemDetails?.instantBuy ?? "0" == "0" ? false : true, paypal_id: "", shipping_cost: itemDetails?.shippingCost ?? "", country_id: (itemDetails?.countryId ?? ""), giving_away: (itemDetails?.price ?? "0") == "0" ? true : false, sold: (itemDetails?.itemStatus ?? "") == "sold" ? true : false, filters: changeFilterDict(), youtube_link: itemDetails?.youtubeLink ?? "", child_category: "\(itemDetails?.childCategoryId ?? "0")", quantity: itemDetails?.quantity ?? 0)
                 ADD_EDIT_ITEM_MODEL = addEditModel
                 self.navigationController?.pushViewController(pageObj, animated: true)
             }
@@ -423,11 +423,67 @@ class ItemDetailsViewController: UIViewController {
             self.present(alert, animated: true, completion: nil)
         }
         else {
-            let pageObj = ExchangeViewController()
+            let pageObj = OfferTypeViewController()
             pageObj.itemDetails = self.itemDetails
-            self.navigationController?.pushViewController(pageObj, animated: true)
+            pageObj.modalPresentationStyle = .overCurrentContext
+            pageObj.modalTransitionStyle = .crossDissolve
+            pageObj.onConfirm = { [weak self] offerType in
+                guard let self = self else { return }
+                if offerType == .cash {
+                    let cashVC = ExchangeCashConfirmViewController()
+                    cashVC.wantedItem = self.itemDetails
+                    cashVC.modalPresentationStyle = .overFullScreen
+                    cashVC.modalTransitionStyle = .crossDissolve
+                    cashVC.onCreateExchange = { [weak self] wantedQty, cashAmount in
+                        self?.submitCashExchange(wantedQty: wantedQty, cashAmount: cashAmount)
+                    }
+                    if let nav = self.navigationController {
+                        nav.present(cashVC, animated: true, completion: nil)
+                    } else {
+                        self.present(cashVC, animated: true, completion: nil)
+                    }
+                } else {
+                    let exchangeVC = ExchangeViewController()
+                    exchangeVC.itemDetails = self.itemDetails
+                    self.navigationController?.pushViewController(exchangeVC, animated: true)
+                }
+            }
+            self.navigationController?.present(pageObj, animated: true, completion: nil)
         }
     }
+
+    private func submitCashExchange(wantedQty: Int, cashAmount: String) {
+        Utility.shared.startAnimation(viewController: self)
+        let exchangeVM = ExchangeViewModel()
+        exchangeVM.createCashExchangeRequest(
+            user_id: (UserDefaultModule.shared.getUserData()?.user_id ?? ""),
+            product_id: "\(self.itemDetails?.id ?? 0)",
+            seller_user_id: (self.itemDetails?.sellerId ?? ""),
+            quantity: wantedQty,
+            cash_amount: Double(cashAmount) ?? 0,
+            onSuccess: { (success) in
+                Utility.shared.stopAnimation(viewController: self)
+                let rawMsg = exchangeVM.exchangeMessageModel?.message ?? ""
+                let message = getLanguage[rawMsg] ?? rawMsg
+                let alert = UIAlertController(title: getLanguage["alert"], message: message, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: getLanguage["ok"] ?? "", style: .default, handler: { _ in
+                    let isStatusTrue = exchangeVM.exchangeMessageModel?.status ?? false
+                    let isAlreadyExist = rawMsg.lowercased().contains("already exist")
+                    if isStatusTrue && !isAlreadyExist {
+                        let pageObj = ExchangeListViewController()
+                        pageObj.isTabbar = true
+                        pageObj.selectedIndex = 1
+                        self.navigationController?.pushViewController(pageObj, animated: true)
+                    }
+                }))
+                self.present(alert, animated: true, completion: nil)
+            },
+            onFailure: { _ in
+                Utility.shared.stopAnimation(viewController: self)
+            }
+        )
+    }
+
     func reportAct(_ reportVal: Int) {
         var reportTitle = ""
         if reportVal == 0 {

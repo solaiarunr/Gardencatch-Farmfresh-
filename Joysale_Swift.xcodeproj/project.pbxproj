@@ -294,12 +294,19 @@
 		B61CE8312F77E05000156BC8 /* PremiumAdvc.xib in Resources */ = {isa = PBXBuildFile; fileRef = B61CE82E2F77E05000156BC8 /* PremiumAdvc.xib */; };
 		B61CE8342F77E20D00156BC8 /* PreAdcellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B61CE8322F77E20D00156BC8 /* PreAdcellTableViewCell.swift */; };
 		B61CE8352F77E20D00156BC8 /* PreAdcellTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B61CE8332F77E20D00156BC8 /* PreAdcellTableViewCell.xib */; };
+		B63ACCCF30612514006BC3E6 /* Inter_18pt-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B63ACCCE30612514006BC3E6 /* Inter_18pt-Medium.ttf */; };
+		B6CA830E3066878E00650A4C /* Roboto_Condensed-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B6CA830D3066878E00650A4C /* Roboto_Condensed-Medium.ttf */; };
 		B6DE45952FC71EC200F7D8B1 /* CreatePremiumvc.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6DE45932FC71EC200F7D8B1 /* CreatePremiumvc.xib */; };
 		B6DE45962FC71EC200F7D8B1 /* CreatePremiumvc.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE45922FC71EC200F7D8B1 /* CreatePremiumvc.swift */; };
 		B6DE45992FC720A300F7D8B1 /* PremiumListVc.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6DE45982FC720A300F7D8B1 /* PremiumListVc.xib */; };
 		B6DE459A2FC720A300F7D8B1 /* PremiumListVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE45972FC720A300F7D8B1 /* PremiumListVc.swift */; };
 		B6DE459C2FC733A700F7D8B1 /* GetMembershipPromotionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DE459B2FC7339F00F7D8B1 /* GetMembershipPromotionModel.swift */; };
 		B6F4319C2FC96C7E00A76894 /* SubscriptionDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F4319B2FC96C7E00A76894 /* SubscriptionDetailsModel.swift */; };
+		B7E1F0012FC8000100E00101 /* OfferTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E1F0022FC8000100E00102 /* OfferTypeViewController.swift */; };
+		B7E1F0032FC8000100E00103 /* ExchangeProductConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E1F0042FC8000100E00104 /* ExchangeProductConfirmViewController.swift */; };
+		B7E1F0052FC8000100E00105 /* ExchangeCashConfirmViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E1F0062FC8000100E00106 /* ExchangeCashConfirmViewController.swift */; };
+		B7E1F0102FC8000100E00110 /* CashExchangeHistoryDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E1F0112FC8000100E00111 /* CashExchangeHistoryDetailsModel.swift */; };
+		B7E1F0122FC8000100E00112 /* CashExchangeHistoryDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7E1F0132FC8000100E00113 /* CashExchangeHistoryDetailsViewController.swift */; };
 		D8B997B63009CA1500E4BD70 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8B997B53009CA1500E4BD70 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -598,12 +605,19 @@
 		B61CE82E2F77E05000156BC8 /* PremiumAdvc.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PremiumAdvc.xib; sourceTree = "<group>"; };
 		B61CE8322F77E20D00156BC8 /* PreAdcellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreAdcellTableViewCell.swift; sourceTree = "<group>"; };
 		B61CE8332F77E20D00156BC8 /* PreAdcellTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PreAdcellTableViewCell.xib; sourceTree = "<group>"; };
+		B63ACCCE30612514006BC3E6 /* Inter_18pt-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter_18pt-Medium.ttf"; sourceTree = "<group>"; };
+		B6CA830D3066878E00650A4C /* Roboto_Condensed-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto_Condensed-Medium.ttf"; sourceTree = "<group>"; };
 		B6DE45922FC71EC200F7D8B1 /* CreatePremiumvc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePremiumvc.swift; sourceTree = "<group>"; };
 		B6DE45932FC71EC200F7D8B1 /* CreatePremiumvc.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CreatePremiumvc.xib; sourceTree = "<group>"; };
 		B6DE45972FC720A300F7D8B1 /* PremiumListVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PremiumListVc.swift; sourceTree = "<group>"; };
 		B6DE45982FC720A300F7D8B1 /* PremiumListVc.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PremiumListVc.xib; sourceTree = "<group>"; };
 		B6DE459B2FC7339F00F7D8B1 /* GetMembershipPromotionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMembershipPromotionModel.swift; sourceTree = "<group>"; };
 		B6F4319B2FC96C7E00A76894 /* SubscriptionDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionDetailsModel.swift; sourceTree = "<group>"; };
+		B7E1F0022FC8000100E00102 /* OfferTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferTypeViewController.swift; sourceTree = "<group>"; };
+		B7E1F0042FC8000100E00104 /* ExchangeProductConfirmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeProductConfirmViewController.swift; sourceTree = "<group>"; };
+		B7E1F0062FC8000100E00106 /* ExchangeCashConfirmViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeCashConfirmViewController.swift; sourceTree = "<group>"; };
+		B7E1F0112FC8000100E00111 /* CashExchangeHistoryDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashExchangeHistoryDetailsModel.swift; sourceTree = "<group>"; };
+		B7E1F0132FC8000100E00113 /* CashExchangeHistoryDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashExchangeHistoryDetailsViewController.swift; sourceTree = "<group>"; };
 		D8B997B53009CA1500E4BD70 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1121,6 +1135,7 @@
 			isa = PBXGroup;
 			children = (
 				4034F9D824AF5E6E001BE520 /* ExchangeModel.swift */,
+				B7E1F0112FC8000100E00111 /* CashExchangeHistoryDetailsModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1130,6 +1145,7 @@
 			children = (
 				4023142D24AF78FB002F37E1 /* ExchangeDetailsViewController */,
 				4034F9CB24AF4F59001BE520 /* MyExchangeViewController */,
+				B7E1F0132FC8000100E00113 /* CashExchangeHistoryDetailsViewController.swift */,
 				4034F9C724AF4F50001BE520 /* ExchangeListViewController.swift */,
 				4034F9C824AF4F50001BE520 /* ExchangeListViewController.xib */,
 			);
@@ -1735,6 +1751,9 @@
 				4056D87F24A9B0D60005E1E0 /* ExchangeCollectionViewCell */,
 				4056D87B24A9AC900005E1E0 /* ExchangeViewController.swift */,
 				4056D87C24A9AC900005E1E0 /* ExchangeViewController.xib */,
+				B7E1F0022FC8000100E00102 /* OfferTypeViewController.swift */,
+				B7E1F0042FC8000100E00104 /* ExchangeProductConfirmViewController.swift */,
+				B7E1F0062FC8000100E00106 /* ExchangeCashConfirmViewController.swift */,
 			);
 			path = "View+Controller";
 			sourceTree = "<group>";
@@ -1810,7 +1829,9 @@
 			isa = PBXGroup;
 			children = (
 				4084C848248E07C700857BBA /* Proxima Nova Bold.OTF */,
+				B6CA830D3066878E00650A4C /* Roboto_Condensed-Medium.ttf */,
 				4084C849248E07C700857BBA /* Proxima Nova Regular.OTF */,
+				B63ACCCE30612514006BC3E6 /* Inter_18pt-Medium.ttf */,
 				40F0A0A12487A00100F0NT01 /* Roboto-Regular.ttf */,
 				40F0A0A22487A00100F0NT02 /* Roboto-Bold.ttf */,
 			);
@@ -2467,6 +2488,7 @@
 				406027372492063F00719206 /* TabbarController.xib in Resources */,
 				403CADD424BF466B00147132 /* LanguageViewController.xib in Resources */,
 				404632EE248F96AC0067C2AD /* LoginViewController.xib in Resources */,
+				B63ACCCF30612514006BC3E6 /* Inter_18pt-Medium.ttf in Resources */,
 				404024AE24CEB56400E295C8 /* ProductConditionViewController.xib in Resources */,
 				4056D88324A9B0FB0005E1E0 /* ExchangeCollectionViewCell.xib in Resources */,
 				4072F9AE24C95E9E00AD7F77 /* CameraViewController.xib in Resources */,
@@ -2512,6 +2534,7 @@
 				4049D46124C16B2F00112372 /* BannerDetailsViewController.xib in Resources */,
 				4060279A2492284D00719206 /* AddProductViewController.xib in Resources */,
 				4020962D24A0621100CD3623 /* itemDetailsImageTableViewCell.xib in Resources */,
+				B6CA830E3066878E00650A4C /* Roboto_Condensed-Medium.ttf in Resources */,
 				3D34EA922755F7FA00D91146 /* MyOrderSegmentViewController.xib in Resources */,
 				40BE18A324B9DB67007A68DD /* ListAndLikeViewController.xib in Resources */,
 				4020963824A06E9700CD3623 /* ItemDetailsMapTableViewCell.xib in Resources */,
@@ -2692,6 +2715,11 @@
 				4052CEB7248E30B00086AC85 /* HSImgView+UIImageView.swift in Sources */,
 				403CFF8F24C01EE500DFD34C /* NotificationViewController.swift in Sources */,
 				4056D87D24A9AC900005E1E0 /* ExchangeViewController.swift in Sources */,
+				B7E1F0012FC8000100E00101 /* OfferTypeViewController.swift in Sources */,
+				B7E1F0032FC8000100E00103 /* ExchangeProductConfirmViewController.swift in Sources */,
+				B7E1F0052FC8000100E00105 /* ExchangeCashConfirmViewController.swift in Sources */,
+				B7E1F0102FC8000100E00110 /* CashExchangeHistoryDetailsModel.swift in Sources */,
+				B7E1F0122FC8000100E00112 /* CashExchangeHistoryDetailsViewController.swift in Sources */,
 				4052CEC1248E67190086AC85 /* AuthenticationViewModel.swift in Sources */,
 				4052CEA0248E29940086AC85 /* UserDefaultModule.swift in Sources */,
 				405AAD7824CC7C9600663A5A /* InviteViewController.swift in Sources */,
@@ -2969,12 +2997,12 @@
 				DEVELOPMENT_TEAM = AJU4DUCT69;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Joysale_Swift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.18;
+				MARKETING_VERSION = 2.0.19;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.gardencatch;
 				PRODUCT_NAME = "Farm Fresh";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -3000,12 +3028,12 @@
 				DEVELOPMENT_TEAM = AJU4DUCT69;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Joysale_Swift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.18;
+				MARKETING_VERSION = 2.0.19;
 				PRODUCT_BUNDLE_IDENTIFIER = com.app.gardencatch;
 				PRODUCT_NAME = "Farm Fresh";
 				PROVISIONING_PROFILE_SPECIFIER = "";

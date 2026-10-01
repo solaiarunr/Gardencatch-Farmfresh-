@@ -33,10 +33,10 @@ let APP_RTC_URL = "http://yourturn_url:0000"
 
 //MARK: NEW DOMAIN CHANGES
 
-let INITIAL_BASE_URL = "https://farmfresh247.com/"
+let INITIAL_BASE_URL = "https://farmfresh247.com/dev/"
 var BASE_URL = INITIAL_BASE_URL
 //let chatURL =  "https://farmfresh247.com:8081"
-let chatURL =  "https://farmfresh247.com:2087"
+let chatURL =  "https://farmfresh247.com:2088"
 let ADMIN_DATAS_SITE_URL = INITIAL_BASE_URL + "api/"
  
 //var BASE_URL = "https://appservices.hitasoft.in/farmfresh/"
@@ -68,7 +68,7 @@ func updateBaseURL(from apiUrl: String) {
     if !url.hasSuffix("/") {
         url += "/"
     }
-    BASE_URL = url
+    BASE_URL = "https://farmfresh247.com/dev/"
     SITE_URL = BASE_URL + "api/"
 }
 let INVITE_URL = "https://apps.apple.com/us/app/Farm Fresh 24/7/id1078268802"
@@ -130,7 +130,11 @@ let UPDATE_VIEW_URL = "updateview"
 
 let ADD_SHIPPING_URL = "addshipping"
 let CREATE_EXCHANGE_URL = "createexchange"
-
+let CASH_EXCHANGE_REQUEST_URL = "cashexchangerequest"
+let CASH_EXCHANGE_HISTORY_DETAILS_URL = "cashexchangedetails"
+let CASH_EXCHANGE_ACCEPT_URL = "cashexchangeaccept"
+let CASH_EXCHANGE_DECLINE_URL = "cashexchangedecline"
+let CASH_EXCHANGE_COMPLETE_URL = "cashexchangecomplete"
 // Chat URLS
 let MESSAGE_URL = "messages"
 let GET_CHAT_URL = "getchat"
